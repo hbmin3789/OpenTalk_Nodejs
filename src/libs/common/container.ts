@@ -23,7 +23,8 @@ export class container{
             var msg = (Container.curUser.getUserID().length == 0) ? "userID" : "connect";
             this.socket.send(JSON.stringify({
                 message: msg,
-                userID: this.curUser.getUserID()
+                userID: this.curUser.getUserID(),
+                userName: this.curUser.getUserName()
             }));
         }
     }

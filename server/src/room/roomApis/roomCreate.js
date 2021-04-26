@@ -24,7 +24,7 @@ const createRoomApi = (ws, data) => {
     enterRoom(data.userID, newRoom.roomID);
     
     ws.send(JSON.stringify({
-        message: 'roomCreate',
+        message: 'createRoom',
         data: newRoom
     }));
 

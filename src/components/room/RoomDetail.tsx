@@ -1,10 +1,17 @@
 import React, {ReactNode} from 'react';
 import styled from 'styled-components';
 import RoomInfo from '../../libs/room/roomInfo';
+import UserInfo from '../../libs/user/userInfo';
 
 type Props = {
     children: ReactNode;
     room: RoomInfo;
+    OnQuitBtnPressed: () => void;
+};
+
+class User {
+    userName = "";
+    isAdmin = false;
 };
 
 const RoomDetailBackground = styled.div`{
@@ -22,13 +29,20 @@ const UserListView = styled.ul`{
 
 const ChatTextBlock = styled.a`{
 
-}`
+}`;
 
 const ChatInput = styled.input`{
 
-}`
+}`;
 
-export const RoomDetail = ({room}: Props) => {
+const QuitButton = styled.button`{
+
+}`;
+
+export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
+
+    var [userList, setUserList] = React.useState<Array<User>>();
+
     return (
         <RoomDetailBackground>
             <RoomTitle>{room.roomName}</RoomTitle>
@@ -38,6 +52,7 @@ export const RoomDetail = ({room}: Props) => {
             <ChatTextBlock>
             </ChatTextBlock>
             <ChatInput></ChatInput>
+            <QuitButton onClick={()=>OnQuitBtnPressed()}></QuitButton>
         </RoomDetailBackground>
     );
 }

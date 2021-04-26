@@ -6,20 +6,19 @@ import RoomInfo from '../../libs/room/roomInfo';
 import axios from 'axios';
 import Container, { container } from '../../libs/common/container';
 import User, { UserInfo } from '../../libs/user/userInfo';
-import { SetOnGetRoomListEvent, 
-    SetOnRoomCreate, SetOnRoomEnterEvent} from '../../libs/network/websocketEvents';
+import { setSocketEvent } from '../../libs/network/websocketEvents';
 import {useHistory} from 'react-router-dom';
-import {RequestRoomList} from '../../libs/network/webSocket';
 import RoomDetail from './RoomDetail';
 
 const Background = styled.div`{
     position: absolute;
     width: 100%;
     height: 100%;
-    display: flex;
+    display: inline-flex;
 }`;
 
 const RoomListNavigation = styled.div`{
+    flex-shrink: 0;
     height: 100%;
     background-color: #dddddd;
     width: 25%;
@@ -28,7 +27,7 @@ const RoomListNavigation = styled.div`{
 const Title = styled.a`{
     display: block;
     text-align: center;
-    font-size: 4rem;
+    font-size: 2rem;
     font-family: opentalk-bold;
 }`;
 
@@ -81,7 +80,13 @@ const ListViewItem = styled.li`{
 }`;
 
 const CreateRoomButton = styled.button`{
+}`;
 
+const EmptyRoom = styled.div`{
+    text-align: center;
+    align-self: center;
+    flex-grow: 1;
+    font-family: opentalk-bold;
 }`;
 
 let loaded;
@@ -91,27 +96,31 @@ export const RoomList = () => {
     var [selectedRoom, setSelectedRoom] = React.useState<RoomInfo>();
     var [roomList, setRoomList] = React.useState<Array<RoomInfo>>(new Array<RoomInfo>());
 
-    SetOnGetRoomListEvent((data: any) => {
+    setSocketEvent('roomList',(data: any) => {
         setRoomList(data.roomList);
     });
 
-    SetOnRoomCreate((data: any) => {
+    setSocketEvent('createRoom', (data: any) => {
         Container.curRoomID = data.data.curRoomID;
-        console.log("************Room Created*************");
-        console.log(data.data);
-        onRoomClicked(data.data);
+        setSelectedRoom(data.data);
     });
 
-    SetOnRoomEnterEvent((data: any) => {
+    setSocketEvent('enterRoom', (data: any) => {
         setSelectedRoom(data.data);
         console.log("room enter");
         console.log(data.data);
     });
 
+    setSocketEvent('roomCreated', (data: any) => {
+
+    });
+
     var history = useHistory();
 
-    window.addEventListener('load',()=>{
-        RequestRoomList();
+    window.addEventListener('nv-enter',()=>{
+        Container.socket.send(JSON.stringify({
+            message: "getRoomList"
+        }));
     });
 
     const onRoomCreateClicked = () => {
@@ -159,9 +168,10 @@ export const RoomList = () => {
                 </ListView>
             </RoomListNavigation>
             {(selectedRoom) ? 
-            <RoomDetail room={selectedRoom}>
+            <RoomDetail room={selectedRoom} 
+                        OnQuitBtnPressed={()=>setSelectedRoom(undefined)}>
 
-            </RoomDetail> : <div></div>}
+            </RoomDetail> : <EmptyRoom>방을 만들거나 참여해보세요!</EmptyRoom>}
         </Background>
     )
 };

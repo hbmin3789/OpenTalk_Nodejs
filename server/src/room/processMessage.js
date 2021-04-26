@@ -1,6 +1,7 @@
 var createRoom = require('./roomApis/roomCreate');
 var quitRoom = require('./roomApis/quitRoom');
 var enterRoom = require('./roomApis/enterRoom');
+var getUserName = require('../services/userList');
 
 
 //클라이언트에서 온 메시지 처리
@@ -19,12 +20,23 @@ const ProcessMessage = (ws, data) => {
             break;
         case "getRoomList":
             console.log("roomList : " + JSON.stringify(room.getRoomList()));
-            ws.send(JSON.stringify({
+            sendWebSocketMsg(ws,{
                 message: "roomList",
                 roomList: room.getRoomList()
-            }));
+            });
             break;
+            case "userName":
+                console.log("getUserName");
+                sendWebSocketMsg(ws,{
+                    message: "userName",
+                    userID: data.userID,
+                    userName: getUserName(data.userID)
+                });
     }
+}
+
+const sendWebSocketMsg = (ws, data) => {
+    ws.send(JSON.stringify(data));
 }
 
 module.exports = ProcessMessage;
