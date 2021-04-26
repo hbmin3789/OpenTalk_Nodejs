@@ -26,7 +26,6 @@ const ProcessMessage = (ws, data) => {
             });
             break;
             case "userName":
-                console.log("getUserName");
                 sendWebSocketMsg(ws,{
                     message: "userName",
                     userID: data.userID,
@@ -36,6 +35,7 @@ const ProcessMessage = (ws, data) => {
 }
 
 const sendWebSocketMsg = (ws, data) => {
+    console.log("message to client : " + JSON.stringify(data));
     ws.send(JSON.stringify(data));
 }
 

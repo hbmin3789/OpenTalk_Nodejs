@@ -1,5 +1,6 @@
 const guid = require('../services/guid');
 const socketList = require('../network/webSocket');
+const {getUser} = require('../services/userList');
 var roomList = [];
 
 const getRoomList = () => roomList;
@@ -55,7 +56,7 @@ const enterRoom = (userID, roomID) => {
         var user = room.userList.find(x=>x === userID);
         //유저가 존재하지 않으면 유저 추가
         if(!user){
-            room.userList.push(userID);
+            room.userList.push(getUser(userID));
             return room;
         }
     }

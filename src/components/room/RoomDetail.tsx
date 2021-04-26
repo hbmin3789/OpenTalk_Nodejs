@@ -1,17 +1,13 @@
 import React, {ReactNode} from 'react';
 import styled from 'styled-components';
-import RoomInfo from '../../libs/room/roomInfo';
+import RoomInfo,{User} from '../../libs/room/roomInfo';
 import UserInfo from '../../libs/user/userInfo';
+import Container from '../../libs/common/container';
 
 type Props = {
     children: ReactNode;
     room: RoomInfo;
     OnQuitBtnPressed: () => void;
-};
-
-class User {
-    userName = "";
-    isAdmin = false;
 };
 
 const RoomDetailBackground = styled.div`{
@@ -47,7 +43,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         <RoomDetailBackground>
             <RoomTitle>{room.roomName}</RoomTitle>
             <UserListView>
-                {room.userList}
+                {room.userList.map(x=>x.userName)}
             </UserListView>
             <ChatTextBlock>
             </ChatTextBlock>

@@ -1,7 +1,13 @@
 import UserInfo from '../user/userInfo';
 
+export class User {
+    userName = "";
+    userID = "";
+    isAdmin = false;
+};
+
 export class RoomInfo {
-    userList: Array<UserInfo> = new Array<UserInfo>();
+    userList: Array<User> = new Array<User>();
     roomName: string = "";
     roomID: string = "";
     password: string = "";

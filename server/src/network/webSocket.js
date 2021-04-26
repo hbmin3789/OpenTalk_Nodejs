@@ -10,7 +10,7 @@ const InitWebSocket = () => {
         console.log('connected');
 
         ws.on('message', (msg) => {
-            console. log('message from client : ' + msg);
+            console.log('message from client : ' + msg);
             var data = JSON.parse(msg);
             switch(data.message){
                 //유저 아이디 최초 발급(브라우저당 GUID 발급)
@@ -21,13 +21,21 @@ const InitWebSocket = () => {
                         data: guid()
                     }
                     ws.send(JSON.stringify(resp));
-                    setUserName(msg.userID, msg.userName);
+                    setUserName(data.userID, data.userName);
                     socketList.push({userID: resp.data, socket: ws});
+                    ws.send(JSON.stringify({
+                        message: 'connect'
+                    }));
+                    console.log('connect Success');
                     break;
-                //유저가 이름을 바꾸고 다시 접속했을 때, 수정할 때
+                //다시 접속했을 때, 수정할 때
                 case "connect":
-                    setUserName(msg.userID, msg.userName);
-                    socketList.push({userID: msg.userID, socket: ws});
+                    setUserName(data.userID, data.userName);
+                    socketList.push({userID: data.userID, socket: ws});
+                    ws.send(JSON.stringify({
+                        message: 'connect'
+                    }));
+                    console.log('connect Success');
                     break;
                 default:
                     ProcessMessage(ws, data);

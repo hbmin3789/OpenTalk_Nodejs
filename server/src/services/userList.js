@@ -1,11 +1,13 @@
-const userList = {};
+var userList = {};
 
 const setUserName = (userID, userName) => {
-    userList[userID] = userName;
+    userList[userID] = {userID, userName};
+    console.log("add UserList : " + userID + userName);
+    console.log("userList : " + JSON.stringify(userList));
 };
 
-const getUserName = (userID) => {
+const getUser = (userID) => {
     return userList[userID];
 };
 
-module.exports = {setUserName, getUserName};
+module.exports = {setUserName, getUser};

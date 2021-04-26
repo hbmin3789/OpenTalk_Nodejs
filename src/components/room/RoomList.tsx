@@ -101,7 +101,7 @@ export const RoomList = () => {
     });
 
     setSocketEvent('createRoom', (data: any) => {
-        Container.curRoomID = data.data.curRoomID;
+        Container.curRoomID = data.data.roomID;
         setSelectedRoom(data.data);
     });
 
@@ -112,16 +112,12 @@ export const RoomList = () => {
     });
 
     setSocketEvent('roomCreated', (data: any) => {
-
-    });
-
-    var history = useHistory();
-
-    window.addEventListener('nv-enter',()=>{
         Container.socket.send(JSON.stringify({
             message: "getRoomList"
         }));
     });
+
+    var history = useHistory();
 
     const onRoomCreateClicked = () => {
         var msg = JSON.stringify({

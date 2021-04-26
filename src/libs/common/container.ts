@@ -1,7 +1,7 @@
 import UserInfo from '../user/userInfo';
 import { Cookies } from 'react-cookie';
 import stringResources from '../../assets/stringResources';
-import WebSocketEvents from '../network/websocketEvents';
+import WebSocketEvents, {setSocketEvent} from '../network/websocketEvents';
 import {useHistory} from 'react-router-dom';
 
 export class container{
@@ -20,6 +20,16 @@ export class container{
 
         this.socket.onopen = () => {
             console.log('webSocket Connected');
+            setSocketEvent('connect',()=>{
+                this.socket.send(JSON.stringify({
+                    message: "getRoomList"
+                }));
+            });
+            setSocketEvent('userID',()=>{
+                this.socket.send(JSON.stringify({
+                    message: "getRoomList"
+                }));
+            });
             var msg = (Container.curUser.getUserID().length == 0) ? "userID" : "connect";
             this.socket.send(JSON.stringify({
                 message: msg,
