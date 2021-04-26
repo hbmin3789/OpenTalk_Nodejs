@@ -57,7 +57,7 @@
     "test": "cross-env CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint ./src/",
-    "heroku-postbuild": "npx webpack"
+    "heroku-postbuild": "yarn install && yarn run build"
   },
   "browserslist": {
     "production": [
