@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import SignIn from './account/SignIn';
 import RoomList from './room/RoomList';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Container from '../libs/common/container';
 
 
 export const Main = () => {
@@ -16,8 +17,6 @@ export const Main = () => {
         }
         setIsMobile(false);
     });
-
-    
 
     return(
         <BrowserRouter>

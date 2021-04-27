@@ -12,7 +12,10 @@ export class UserInfo{
     };
     setUserID = (id: string) => {this.cookie.set(stringResources.userIDCookie, id)};
 
-    getUserName = () => this.cookie.get(stringResources.userNameCookie);
+    getUserName = () => {
+        var name = this.cookie.get(stringResources.userNameCookie);
+        return (name) ? name : "";
+    };
     setUserName = (name: string) => this.cookie.set(stringResources.userNameCookie,name);
 };
 

@@ -1,5 +1,9 @@
 const { enterRoom} = require('../roomManager');
+const getUserName = require('../../services/userList');
+
 const enterRoomApi = (ws, data) => {
+    var {socketList} = require('../../network/webSocket');
+
     console.log("enter Room : " + JSON.stringify(data));
     var room = enterRoom(data.userID, data.roomID);
     if(room){
@@ -9,6 +13,17 @@ const enterRoomApi = (ws, data) => {
         });
         console.log("messageToClient : " + JSON.stringify(sendData));
         ws.send(sendData);
+
+        room.userList.forEach(user => {
+            var item = socketList.find(x=>x.userID === user.userID);
+            item.socket.send(JSON.stringify({
+                message: 'userEnter',
+                data: {
+                    userName: getUserName.getUser(data.userID).userName,
+                    userID: data.userID,
+                }
+            }));
+        });
     }
 }
 

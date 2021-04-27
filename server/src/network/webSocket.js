@@ -2,7 +2,7 @@ var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer( { port: 8100 } );
 const guid = require('../services/guid');
 const ProcessMessage = require('../room/processMessage');
-const {setUserName} = require('../services/userList');
+const { setUserName } = require('../services/userList');
 const socketList = [];
 
 const InitWebSocket = () => {
@@ -21,12 +21,6 @@ const InitWebSocket = () => {
                         data: guid()
                     }
                     ws.send(JSON.stringify(resp));
-                    setUserName(data.userID, data.userName);
-                    socketList.push({userID: resp.data, socket: ws});
-                    ws.send(JSON.stringify({
-                        message: 'connect'
-                    }));
-                    console.log('connect Success');
                     break;
                 //다시 접속했을 때, 수정할 때
                 case "connect":
@@ -42,6 +36,13 @@ const InitWebSocket = () => {
                     break;
             }
         });
+
+        ws.onclose = () => {
+            console.log(ws + "disconnected");
+            var socket = socketList.find(x=>x.socket === ws);
+            var userID = socket.userID;
+            ProcessMessage(ws,{message: "disconnect", userID: userID});
+        };
     });
 };
 

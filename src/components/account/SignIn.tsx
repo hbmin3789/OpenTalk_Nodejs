@@ -5,6 +5,7 @@ import {FontSizes} from '../../assets/GlobalStyle';
 import { Cookies } from 'react-cookie';
 import stringResources from '../../assets/stringResources';
 import {Link, useHistory} from 'react-router-dom';
+import Container from '../../libs/common/container';
 
 
 const UserNameArea = styled.div`{
@@ -105,6 +106,11 @@ export const SignIn = ({isMobile}: Props) => {
     const onConfirm = () => {
         cookie.set(stringResources.userNameCookie, userName);
         history.push('/');
+        Container.socket.send(JSON.stringify({
+            message: 'connect',
+            userID: cookie.get(stringResources.userIDCookie),
+            userName: userName
+        }));
     }
 
     React.useEffect(()=>{
@@ -112,7 +118,7 @@ export const SignIn = ({isMobile}: Props) => {
             history.push('/');
             return;
         }
-        
+
         if(userName)
             (userName.length === 0) ? setConfirmEnabled(false) : setConfirmEnabled(true);
     });

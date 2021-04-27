@@ -53,7 +53,7 @@ const enterRoom = (userID, roomID) => {
     console.log(userID + " entered to " + roomID);
     var room = roomList.find(x => x.roomID === roomID);
     if(room){
-        var user = room.userList.find(x=>x === userID);
+        var user = room.userList.find(x=>x.userID === userID);
         //유저가 존재하지 않으면 유저 추가
         if(!user){
             room.userList.push(getUser(userID));
@@ -66,9 +66,15 @@ const enterRoom = (userID, roomID) => {
 const quitRoom = (userID, roomID) => {
     console.log(userID + " quit from " + roomID);
     var room = roomList.find(x => x.roomID === roomID);
-    var idx = room.userList.findIndex(x=>x === userID);
-    //TODO : 유저 퇴장을 웹소켓으로 알리기
-    room.userList.splice(idx);
+    if(room){
+        var idx = room.userList.findIndex(x=>x === userID);
+        room.userList.splice(idx);
+        if(room.userList.length === 0){
+            roomList.splice(room);
+            return undefined;
+        }
+    }
+    return room;
 }
 
 //유저가 방장이면 true리턴

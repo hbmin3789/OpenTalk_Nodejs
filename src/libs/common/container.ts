@@ -18,18 +18,21 @@ export class container{
             WebSocketEvents(ev.data);
         }
 
-        this.socket.onopen = () => {
+        this.socket.onopen = (resp) => {
             console.log('webSocket Connected');
+
             setSocketEvent('connect',()=>{
                 this.socket.send(JSON.stringify({
                     message: "getRoomList"
                 }));
             });
-            setSocketEvent('userID',()=>{
-                this.socket.send(JSON.stringify({
-                    message: "getRoomList"
-                }));
+
+            setSocketEvent('userID',(resp)=>{
+                var userID = resp.data;
+                if(userID)
+                    this.curUser.setUserID(userID);
             });
+
             var msg = (Container.curUser.getUserID().length == 0) ? "userID" : "connect";
             this.socket.send(JSON.stringify({
                 message: msg,

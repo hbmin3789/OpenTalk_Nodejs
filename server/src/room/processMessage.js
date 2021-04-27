@@ -2,7 +2,7 @@ var createRoom = require('./roomApis/roomCreate');
 var quitRoom = require('./roomApis/quitRoom');
 var enterRoom = require('./roomApis/enterRoom');
 var getUserName = require('../services/userList');
-
+var {getRoomList} = require('./roomManager.js');
 
 //클라이언트에서 온 메시지 처리
 const ProcessMessage = (ws, data) => {
@@ -13,7 +13,7 @@ const ProcessMessage = (ws, data) => {
             createRoom(ws, data.data);
             break;
         case "quitRoom":
-            quitRoom(data.data);
+            quitRoom(ws, data.data);
             break;
         case "enterRoom":
             enterRoom(ws, data.data);
@@ -31,6 +31,18 @@ const ProcessMessage = (ws, data) => {
                     userID: data.userID,
                     userName: getUserName(data.userID)
                 });
+                break;
+            case "disconnect":
+                var room = getRoomList().find(x=>{
+                    var user = x.userList.find(x=>x.userID === data);
+                    return (user);
+                });
+                if(room){
+                    var user = room.find(x=>x.userID === data);
+                    if(user)
+                        quitRoom(ws, {userID: user.userID, roomID: room.roomID});
+                }
+                break;
     }
 }
 

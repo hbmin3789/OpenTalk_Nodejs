@@ -118,6 +118,13 @@ export const RoomList = () => {
     });
 
     var history = useHistory();
+    let userName = Container.curUser.getUserName();
+
+    if(!userName || userName.length === 0){
+        console.log(history);
+        
+        history.push('/SignIn');
+    }
 
     const onRoomCreateClicked = () => {
         var msg = JSON.stringify({
@@ -165,7 +172,17 @@ export const RoomList = () => {
             </RoomListNavigation>
             {(selectedRoom) ? 
             <RoomDetail room={selectedRoom} 
-                        OnQuitBtnPressed={()=>setSelectedRoom(undefined)}>
+                        OnQuitBtnPressed={()=>{
+                            Container.socket.send(JSON.stringify({
+                                message: 'quitRoom',
+                                data: {
+                                    userID: Container.curUser.getUserID(),
+                                    roomID: selectedRoom?.roomID
+                                }
+                            }));
+                            Container.curRoomID = "";
+                            setSelectedRoom(undefined);
+                            }}>
 
             </RoomDetail> : <EmptyRoom>방을 만들거나 참여해보세요!</EmptyRoom>}
         </Background>
