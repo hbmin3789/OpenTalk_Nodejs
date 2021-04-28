@@ -8,6 +8,7 @@ InitWebSocket();
 
 app.use(cors());
 app.use('/api',api);
+app.use(express.static('public'));
 
 const port = 3002;
 app.listen(port, () => console.log(`Listening on port ${port}`));
