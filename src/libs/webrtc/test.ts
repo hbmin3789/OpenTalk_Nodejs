@@ -77,8 +77,16 @@ export async function start() {
 }
 
 export async function call() {
-
-  const configuration = {};
+  var myHostname = window.location.hostname;
+  const configuration = {
+    iceServers: [     // Information about ICE servers - Use your own!
+      {
+        urls: "turn:" + myHostname,  // A TURN server
+        username: "webrtc",
+        credential: "turnserver"
+      }
+    ]
+};
 
   pc1 = new RTCPeerConnection(configuration);
   pc1.addEventListener('icecandidate', e => onIceCandidate(pc1, e));
@@ -90,6 +98,7 @@ export async function call() {
   localStream.getTracks().forEach(track => pc1.addTrack(track, localStream));
 
   try {
+    //Create Offer -> 통화 시작
     const offer = await pc1.createOffer({offerToReceiveAudio: true,offerToReceiveVideo: true});
     await onCreateOfferSuccess(offer);
   } catch (e) {

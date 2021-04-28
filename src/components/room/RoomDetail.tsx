@@ -46,22 +46,24 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     setSocketEvent('userEnter', (resp)=>{
         if(resp.data.userID !== Container.curUser.getUserID()){
+            setUserList(old=>[...old, resp.data]);
             var user = resp.data as User;
             room.userList.push(user);
         }
+        console.log("enter");
     });
 
     useEffect(()=>{
-        console.log('effect');
-        
-        setUserList(room.userList);
+        console.log("effect");
     });
+    console.log("render");
 
     return (
         <RoomDetailBackground>
             <RoomTitle>{room.roomName}</RoomTitle>
-            <UserListView userList={userList}>
-            </UserListView>
+            <div>
+                {userList.map(x=>x.userName)}
+            </div>
             <ChatTextBlock>
             </ChatTextBlock>
             <ChatInput></ChatInput>
