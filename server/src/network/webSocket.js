@@ -6,6 +6,8 @@ const { setUserName } = require('../services/userList');
 const socketList = [];
 
 const InitWebSocket = () => {
+    var room = require('../room/roomManager');
+
     wss.on('connection', function(ws){
         console.log('connected');
 
@@ -31,6 +33,41 @@ const InitWebSocket = () => {
                     }));
                     console.log('connect Success');
                     break;
+                case "offer":
+                    console.log("offer user ID : " + data.userID);
+                    //자신이 있는 방의 모든 유저들에게 연결 요청
+                    //(안될거같은데 나중에수정)
+                    var selectedRoom = room.getRoomList()
+                                           .find(x=>x.userList.find(x=>x.userID === data.userID));
+                    selectedRoom.userList.forEach(x=>{
+                        findSocket(x.userID).socket.send(JSON.stringify({
+                            message: "offer",
+                            offer: data.offer
+                        }));
+                    });
+                    break;
+                case 'icecandidate':
+                    console.log("IceCandidate user ID : " + data.userID);
+                    var selectedRoom = room.getRoomList()
+                                           .find(x=>x.userList.find(x=>x.userID === data.userID));
+                                           selectedRoom.userList.forEach(x=>{
+                        findSocket(x.userID).socket.send(JSON.stringify({
+                            message: "icecandidate",
+                            icecandidate: data.candidate
+                        }));
+                    });
+                    break;
+                case "answer":
+                    console.log("answer user ID : " + data.userID);
+                    var selectedRoom = room.getRoomList()
+                                           .find(x=>x.userList.find(x=>x.userID === data.userID));
+                                           selectedRoom.userList.forEach(x=>{
+                        findSocket(x.userID).socket.send(JSON.stringify({
+                            message: "answer",
+                            answer: data.answer
+                        }));
+                    });
+                    break;
                 default:
                     ProcessMessage(ws, data);
                     break;
@@ -40,7 +77,8 @@ const InitWebSocket = () => {
         ws.onclose = () => {
             console.log(ws + "disconnected");
             var socket = socketList.find(x=>x.socket === ws);
-            var userID = socket.userID;
+            if(socket)
+                var userID = socket.userID;
             ProcessMessage(ws,{message: "disconnect", userID: userID});
         };
     });
@@ -59,6 +97,8 @@ const sendMessage = (msg, userID, data) => {
 const broadCastMessage = (data) => {
     socketList.forEach(x => x.socket.send(data));
 };
+
+const findSocket = (userID) => socketList.find(x=>x.userID === userID);
 
 function onRoomCreated() {
     socketList.forEach(x => {

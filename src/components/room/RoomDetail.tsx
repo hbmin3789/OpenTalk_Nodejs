@@ -5,6 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
+import {InitCallManager, Call} from '../../libs/webrtc/callManager';
 
 type Props = {
     children: ReactNode;
@@ -36,7 +37,8 @@ const QuitButton = styled.button`{
 }`;
 
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
-
+    var localVideoRef = React.useRef<HTMLVideoElement>(null);
+    var remoteVideoRef = React.useRef<HTMLVideoElement>(null);
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
     setSocketEvent('userLeave', (resp)=>{
@@ -55,6 +57,9 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     useEffect(()=>{
         console.log("effect");
+        if(localVideoRef && remoteVideoRef)
+        if(localVideoRef.current && remoteVideoRef.current)
+            InitCallManager(localVideoRef.current,remoteVideoRef.current);
     });
     console.log("render");
 
@@ -64,6 +69,11 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             <div>
                 {userList.map(x=>x.userName)}
             </div>
+            <video ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></video>
+            <video ref={remoteVideoRef} playsInline={true} autoPlay={true}></video>
+            <button onClick={()=>{
+              Call();
+            }}>Call</button>
             <ChatTextBlock>
             </ChatTextBlock>
             <ChatInput></ChatInput>

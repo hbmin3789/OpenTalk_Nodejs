@@ -78,15 +78,7 @@ export async function start() {
 
 export async function call() {
   var myHostname = window.location.hostname;
-  const configuration = {
-    iceServers: [     // Information about ICE servers - Use your own!
-      {
-        urls: "turn:" + myHostname,  // A TURN server
-        username: "webrtc",
-        credential: "turnserver"
-      }
-    ]
-};
+  const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
   pc1 = new RTCPeerConnection(configuration);
   pc1.addEventListener('icecandidate', e => onIceCandidate(pc1, e));
@@ -100,6 +92,10 @@ export async function call() {
   try {
     //Create Offer -> 통화 시작
     const offer = await pc1.createOffer({offerToReceiveAudio: true,offerToReceiveVideo: true});
+    //setRemoteDescription -> Description이 상대방 캠 스트림같은거인듯?
+    //이걸 해주면 그때부터 스트리밍이 가능한데 어떻게 하는지는 더 봐야함
+    //var offer = pc.createOffer를 Caller가 보내고, setLocalDescription으로 자신의 스트림 설정
+    //var answer = pc1.createAnswer를 Callee가 Caller에게 보내고 offer를 setRemoteDescription으로 설정
     await onCreateOfferSuccess(offer);
   } catch (e) {
     console.log(`Failed to create session description: ${e.toString()}`);

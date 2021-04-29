@@ -25,24 +25,24 @@ const ProcessMessage = (ws, data) => {
                 roomList: room.getRoomList()
             });
             break;
-            case "userName":
-                sendWebSocketMsg(ws,{
-                    message: "userName",
-                    userID: data.userID,
-                    userName: getUserName(data.userID)
-                });
-                break;
-            case "disconnect":
-                var room = getRoomList().find(x=>{
-                    var user = x.userList.find(x=>x.userID === data);
-                    return (user);
-                });
-                if(room){
-                    var user = room.find(x=>x.userID === data);
-                    if(user)
-                        quitRoom(ws, {userID: user.userID, roomID: room.roomID});
-                }
-                break;
+        case "userName":
+            sendWebSocketMsg(ws,{
+                message: "userName",
+                userID: data.userID,
+                userName: getUserName(data.userID)
+            });
+            break;
+        case "disconnect":
+            var room = getRoomList().find(x=>{
+                var user = x.userList.find(x=>x.userID === data);
+                return (user);
+            });
+            if(room){
+                var user = room.find(x=>x.userID === data);
+                if(user)
+                    quitRoom(ws, {userID: user.userID, roomID: room.roomID});
+            }
+            break;
     }
 }
 
