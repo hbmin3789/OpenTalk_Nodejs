@@ -21,7 +21,9 @@ export const InitCallManager = async (localVideo: HTMLVideoElement, remoteVideo:
         localVideo.srcObject = stream;
         localStream = stream;
     } catch (e) {
-        alert(`getUserMedia() error: ${e.name}`);
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: { exact: "environment" } } });
+        localVideo.srcObject = stream;
+        localStream = stream;
     }
 
     const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]};
