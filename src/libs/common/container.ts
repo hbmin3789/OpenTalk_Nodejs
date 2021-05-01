@@ -10,7 +10,7 @@ export class container{
      curRoomID: string = "";
 
      constructor(){
-        this.socket = new WebSocket("ws://192.168.0.100:8100");
+        this.socket = new WebSocket("ws://prescript.kro.kr");
         this.curUser = new UserInfo();
 
         this.socket.onmessage = (ev) => {
