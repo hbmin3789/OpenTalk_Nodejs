@@ -36,13 +36,11 @@ const ProcessMessage = (ws, data) => {
             try{
                 var room = getRoomList().find(x=>{
                     var user = x.userList.find(x=>x.userID === data);
-                    return (user);
-                });
-                if(room){
-                    var user = room.find(x=>x.userID === data);
                     if(user)
-                        quitRoom(ws, {userID: user.userID, roomID: room.roomID});
-                }
+                        return x;
+                });
+                if(room)
+                    quitRoom(ws, {userID: data.userID, roomID: room.roomID});
             }catch{
                 
             }
