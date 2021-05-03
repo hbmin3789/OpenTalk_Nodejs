@@ -38,6 +38,7 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
         if (remoteVideo.srcObject !== e.streams[0]) {
             remoteVideo.srcObject = e.streams[0];
             console.log('received remote stream');
+            console.log(e);
           }
     });
 
