@@ -59,7 +59,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         console.log("effect");
         if(localVideoRef && remoteVideoRef)
         if(localVideoRef.current && remoteVideoRef.current)
-            InitCallManager(localVideoRef.current,remoteVideoRef.current);
+            InitCallManager(localVideoRef.current, remoteVideoRef.current);
     });
     console.log("render");
 
