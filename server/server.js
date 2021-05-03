@@ -16,5 +16,5 @@ const options = {
   cert: fs.readFileSync(__dirname + '/cert/prescript.kro.kr_202105031X76.crt.pem')
 };
 
-const server = https.createServer(options, app).listen(3030);
+const server = https.createServer(options, app).listen(443);
 InitWebSocket(server);
