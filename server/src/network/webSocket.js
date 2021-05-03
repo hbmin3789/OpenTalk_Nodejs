@@ -1,13 +1,12 @@
 var WebSocketServer = require('ws').Server;
-var wss = new WebSocketServer( { port: 8100 } );
 const guid = require('../services/guid');
 const ProcessMessage = require('../room/processMessage');
 const { setUserName } = require('../services/userList');
 const socketList = [];
 
-const InitWebSocket = () => {
+const InitWebSocket = (server) => {
+    var wss = new WebSocketServer( { server: server } );
     var room = require('../room/roomManager');
-
     wss.on('connection', function(ws){
         console.log('connected');
 
