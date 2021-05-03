@@ -18,23 +18,32 @@ export const requestConnection = () => {
 export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVideoElement) => {
     localVideo = lVideo;
     remoteVideo = rVideo;
+
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
         localVideo.srcObject = stream;
         localStream = stream;
+        const videoTracks = localStream.getVideoTracks();
+        const audioTracks = localStream.getAudioTracks();
+        if (videoTracks.length > 0) {
+            console.log(`Using video device: ${videoTracks[0].label}`);
+        }
+        if (audioTracks.length > 0) {
+            console.log(`Using audio device: ${audioTracks[0].label}`);
+        }
     } catch (e) {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: { exact: "environment" } } });
         localVideo.srcObject = stream;
         localStream = stream;
     }
 
-    const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]};
+    const configuration = {};
 
     pc = new RTCPeerConnection(configuration);
     localStream.getTracks().forEach(x=>pc.addTrack(x,localStream));
     addIceCandidatePC(pc);
 
-    pc.addEventListener('track',(e: RTCTrackEvent)=>{
+    pc.addEventListener('track', (e: RTCTrackEvent)=>{
         if (remoteVideo.srcObject !== e.streams[0]) {
             remoteVideo.srcObject = e.streams[0];
             console.log('received remote stream');
@@ -42,7 +51,7 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
           }
     });
 
-    pc.addEventListener('connectionstatechange', event => {
+    pc.addEventListener('iceconnectionstatechange', event => {
         if (pc.connectionState === 'connected') {
             console.log('peer connected');
         }
