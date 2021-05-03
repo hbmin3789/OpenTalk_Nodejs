@@ -35,10 +35,13 @@ const InitWebSocket = (server) => {
                 case "offer":
                     console.log("offer user ID : " + data.userID);
                     //자신이 있는 방의 모든 유저들에게 연결 요청
+                    //자신은 뺌
                     //(안될거같은데 나중에수정)
                     var selectedRoom = room.getRoomList()
                                            .find(x=>x.userList.find(x=>x.userID === data.userID));
                     selectedRoom.userList.forEach(x=>{
+                        if(x.userID === data.userID)
+                            return;
                         findSocket(x.userID).socket.send(JSON.stringify({
                             message: "offer",
                             offer: data.offer
@@ -60,7 +63,9 @@ const InitWebSocket = (server) => {
                     console.log("answer user ID : " + data.userID);
                     var selectedRoom = room.getRoomList()
                                            .find(x=>x.userList.find(x=>x.userID === data.userID));
-                                           selectedRoom.userList.forEach(x=>{
+                    selectedRoom.userList.forEach(x=>{
+                        if(x.userID === data.userID)
+                            return;
                         findSocket(x.userID).socket.send(JSON.stringify({
                             message: "answer",
                             answer: data.answer
