@@ -11,8 +11,9 @@ app.use(cors());
 app.use('/api',api);
 
 const options = {
-  key: fs.readFileSync(__dirname + '/cert/rootca.key'),
-  cert: fs.readFileSync(__dirname + '/cert/rootca.crt')
+  ca: fs.readFileSync(__dirname + '/cert/prescript.kro.kr_202105031X76.key.pem'),
+  key: fs.readFileSync(__dirname + '/cert/prescript.kro.kr_202105031X76.key.pem'),
+  cert: fs.readFileSync(__dirname + '/cert/prescript.kro.kr_202105031X76.crt.pem')
 };
 
 const server = https.createServer(options, app).listen(3030);

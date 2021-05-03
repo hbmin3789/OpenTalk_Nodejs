@@ -21,7 +21,7 @@ export class container{
         this.socket.onopen = (resp) => {
             console.log('webSocket Connected');
 
-            setSocketEvent('connect',()=>{
+            setSocketEvent('connect', ()=>{
                 this.socket.send(JSON.stringify({
                     message: "getRoomList"
                 }));
