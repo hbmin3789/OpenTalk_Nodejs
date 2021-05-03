@@ -18,3 +18,4 @@ const options = {
 
 const server = https.createServer(options, app).listen(443);
 InitWebSocket(server);
+console.log("start server at port 443");
