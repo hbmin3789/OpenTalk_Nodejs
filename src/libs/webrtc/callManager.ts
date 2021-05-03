@@ -15,7 +15,9 @@ export const requestConnection = () => {
 };
 
 
-export const InitCallManager = async (localVideo: HTMLVideoElement, remoteVideo: HTMLVideoElement) => {
+export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVideoElement) => {
+    localVideo = lVideo;
+    remoteVideo = rVideo;
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
         localVideo.srcObject = stream;
