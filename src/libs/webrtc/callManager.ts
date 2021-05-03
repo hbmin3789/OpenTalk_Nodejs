@@ -8,7 +8,6 @@ let localStream: MediaStream;
 let pc: RTCPeerConnection;
 
 export const requestConnection = () => {
-
     Container.socket.send(JSON.stringify({
 
     }));
@@ -18,6 +17,8 @@ export const requestConnection = () => {
 export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVideoElement) => {
     localVideo = lVideo;
     remoteVideo = rVideo;
+    console.log(localVideo);
+    console.log(remoteVideo);
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
