@@ -56,7 +56,7 @@
   },
   "scripts": {
     "start": "npm-run-all --parallel start:**",
-    "start:client": "cross-env HTTPS=true react-scripts start",
+    "start-cli:client": "cross-env HTTPS=true react-scripts start",
     "start:server": "node ./server/server.js",
     "build": "react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom",
