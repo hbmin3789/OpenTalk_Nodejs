@@ -1,3 +1,4 @@
+import { Media } from 'reactstrap';
 import Container from '../common/container';
 import {setSocketEvent} from '../network/websocketEvents';
 
@@ -5,6 +6,7 @@ var localVideo: HTMLVideoElement;
 var remoteVideo: HTMLVideoElement;
 
 let localStream: MediaStream;
+let remoteStream: MediaStream;
 let pc: RTCPeerConnection;
 
 export const requestConnection = () => {
@@ -46,12 +48,15 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
         }]};
 
     pc = new RTCPeerConnection(configuration);
-    localStream.getTracks().forEach(x=>pc.addTrack(x,localStream));
+    localStream.getTracks().forEach(x=>pc.addTrack(x, localStream));
     addIceCandidatePC(pc);
 
     pc.ontrack = e => {
         if (remoteVideo.srcObject !== e.streams[0]) {
-            remoteVideo.srcObject = e.streams[0];
+            e.streams[0].getTracks().forEach(track => {
+                remoteStream.addTrack(track);
+            });
+            remoteVideo.srcObject = remoteStream;
             console.log('received remote stream');
             console.log(e);
           }
