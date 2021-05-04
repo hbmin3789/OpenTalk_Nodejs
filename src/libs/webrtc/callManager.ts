@@ -40,7 +40,10 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
 
     const configuration = { iceServers: [
         {
-             urls: ["stun:stun.prescript.kro.kr:5349", "turn:turn.prescript.kro.kr:5349"]
+             urls: ["stun:stun.ourcodeworld.com:5349", 
+             "turn:turn.ourcodeworld.com:5349","stun.l.google.com:19302",
+            "stun1.l.google.com:19302","stun2.l.google.com:19302","stun3.l.google.com:19302",
+        "stun4.l.google.com:19302"]
         }]};
 
     pc = new RTCPeerConnection(configuration);
