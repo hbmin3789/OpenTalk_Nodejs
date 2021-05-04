@@ -52,14 +52,12 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
     addIceCandidatePC(pc);
 
     pc.ontrack = e => {
-        if (remoteVideo.srcObject !== e.streams[0]) {
-            e.streams[0].getTracks().forEach(track => {
-                remoteStream.addTrack(track);
-            });
-            remoteVideo.srcObject = remoteStream;
-            console.log('received remote stream');
-            console.log(e);
-          }
+        e.track.onmute = () => {
+            if (remoteVideo.srcObject !== e.streams[0]) {
+                remoteVideo.srcObject = e.streams[0];
+                console.log('received remote stream');
+              }
+        }
     };
 
     pc.addEventListener('iceconnectionstatechange', event => {
