@@ -38,7 +38,10 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
         localStream = stream;
     }
 
-    const configuration = { iceServers: [{ "urls": "stun:stun.1.google.com:19302" }]};
+    const configuration = { iceServers: [
+        {
+             urls: ["stun:stun.prescript.kro.kr:5349", "turn:turn.prescript.kro.kr:5349"]
+        }]};
 
     pc = new RTCPeerConnection(configuration);
     localStream.getTracks().forEach(x=>pc.addTrack(x,localStream));
