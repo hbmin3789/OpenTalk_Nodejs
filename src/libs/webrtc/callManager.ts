@@ -38,19 +38,19 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
         localStream = stream;
     }
 
-    const configuration = {};
+    const configuration = { iceServers: [{ "urls": "stun:stun.1.google.com:19302" }]};
 
     pc = new RTCPeerConnection(configuration);
     localStream.getTracks().forEach(x=>pc.addTrack(x,localStream));
     addIceCandidatePC(pc);
 
-    pc.addEventListener('track', (e: RTCTrackEvent)=>{
+    pc.ontrack = e => {
         if (remoteVideo.srcObject !== e.streams[0]) {
-            remoteVideo.srcObject = e.streams[0];
+            localVideo.srcObject = e.streams[0];
             console.log('received remote stream');
             console.log(e);
           }
-    });
+    };
 
     pc.addEventListener('iceconnectionstatechange', event => {
         if (pc.connectionState === 'connected') {
