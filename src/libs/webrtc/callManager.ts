@@ -15,7 +15,6 @@ export const requestConnection = () => {
     }));
 };
 
-
 export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVideoElement) => {
     localVideo = lVideo;
     remoteVideo = rVideo;
@@ -147,6 +146,10 @@ export const createOffer = () => {
         }));
     });
 }
+
+export const Hangup = () => {
+    pc.close();
+};
 
 export const Call = () => {
     createOffer();

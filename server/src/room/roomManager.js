@@ -54,7 +54,6 @@ const enterRoom = (userID, roomID) => {
     var room = roomList.find(x => x.roomID === roomID);
     if(room){
         var user = room.userList.find(x=>x.userID === userID);
-        //유저가 존재하지 않으면 유저 추가
         if(!user){
             room.userList.push(getUser(userID));
             return room;

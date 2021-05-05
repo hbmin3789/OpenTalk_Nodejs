@@ -114,8 +114,15 @@ function onRoomCreated() {
     });
 };
 
+function onAdminChanged(room) {
+    var s = socketList.find(x=>x.userID === room.userList[0].userID);
+    s.send(JSON.stringify({
+        message: 'setAdmin'
+    }))
+}
+
 module.exports = {
-    InitWebSocket, 
+    InitWebSocket, onAdminChanged,
     onRoomCreated, sendMessage, broadCastMessage,
     socketList
 };

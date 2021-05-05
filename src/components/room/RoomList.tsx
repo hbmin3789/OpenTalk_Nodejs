@@ -9,6 +9,7 @@ import User, { UserInfo } from '../../libs/user/userInfo';
 import { setSocketEvent } from '../../libs/network/websocketEvents';
 import {useHistory} from 'react-router-dom';
 import RoomDetail from './RoomDetail';
+import {Hangup} from '../../libs/webrtc/callManager';
 
 const Background = styled.div`{
     position: absolute;
@@ -138,14 +139,33 @@ export const RoomList = () => {
     }
 
     const onRoomClicked = (room: RoomInfo) => {
-        Container.socket.send(JSON.stringify({
-            message: "enterRoom",
-            data: {
-                roomID: room.roomID,
-                password: "",
-                userID: Container.curUser.getUserID(),
-            }
-        }));
+        if(selectedRoom?.roomID === room.roomID){
+            return;
+        }
+
+        if(selectedRoom === undefined){
+            Container.socket.send(JSON.stringify({
+                message: "enterRoom",
+                data: {
+                    roomID: room.roomID,
+                    password: "",
+                    userID: Container.curUser.getUserID(),
+                }
+            }));
+        }
+        
+        else{
+            Container.socket.send(JSON.stringify({
+                message: "changeRoom",
+                data: {
+                    curRoomID: selectedRoom.roomID,
+                    newRoomID: room.roomID,
+                    password: "",
+                    userID: Container.curUser.getUserID(),
+                }
+            }));
+        }
+        
     }
 
     return (
@@ -182,6 +202,7 @@ export const RoomList = () => {
                             }));
                             Container.curRoomID = "";
                             setSelectedRoom(undefined);
+                            Hangup();
                             }}>
 
             </RoomDetail> : <EmptyRoom>방을 만들거나 참여해보세요!</EmptyRoom>}
