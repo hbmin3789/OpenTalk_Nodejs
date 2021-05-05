@@ -70,6 +70,7 @@ const quitRoom = (userID, roomID) => {
         room.userList.splice(idx);
         if(room.userList.length === 0){
             roomList.splice(room);
+            console.log(roomList);
             return undefined;
         }
     }
