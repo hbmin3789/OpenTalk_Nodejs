@@ -68,7 +68,7 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
             }]
       };
 
-    pc = new RTCPeerConnection(configuration);
+    pc = new RTCPeerConnection(configuration as any);
     localStream.getTracks().forEach(x=>pc.addTrack(x, localStream));
     addIceCandidatePC(pc);
 
