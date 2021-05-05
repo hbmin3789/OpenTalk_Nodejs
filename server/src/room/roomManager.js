@@ -41,8 +41,8 @@ const deleteRoom = (roomID) => {
     var room = roomList[idx];
 
     //유저 퇴장처리
-    room.userList.forEach(userID => {
-        quitRoom(userID, roomID);
+    room.userList.forEach(user => {
+        quitRoom(user.userID, roomID);
     });
 
     roomList.splice(idx);
@@ -66,13 +66,16 @@ const quitRoom = (userID, roomID) => {
     console.log(userID + " quit from " + roomID);
     var room = roomList.find(x => x.roomID === roomID);
     if(room){
-        var idx = room.userList.findIndex(x=>x === userID);
+        var idx = room.userList.findIndex(x=>x.userID === userID);
         room.userList.splice(idx);
         if(room.userList.length === 0){
             var idx = roomList.findIndex(x=>x===room);
             roomList.splice(idx);
-            console.log(roomList);
             return undefined;
+        }else{
+            if(room.adminID === userID){
+                room.adminID = room.userList[0].userID;
+            }
         }
     }
     return room;
