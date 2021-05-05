@@ -68,11 +68,11 @@ const quitRoom = (userID, roomID) => {
     if(room){
         var idx = room.userList.findIndex(x=>x.userID === userID);
         room.userList.splice(idx);
-        if(room.userList.length === 0){
+        if(room.userList.length === 0) {
             var idx = roomList.findIndex(x=>x===room);
             roomList.splice(idx);
             return undefined;
-        }else{
+        } else {
             if(room.adminID === userID){
                 room.adminID = room.userList[0].userID;
             }

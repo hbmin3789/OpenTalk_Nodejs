@@ -1,13 +1,44 @@
 import { Media } from 'reactstrap';
 import Container from '../common/container';
 import {setSocketEvent} from '../network/websocketEvents';
+import { User } from '../room/roomInfo';
 
-var localVideo: HTMLVideoElement;
-var remoteVideo: HTMLVideoElement;
+let videoList: HTMLDivElement;
 
+let localVideo: HTMLVideoElement;
 let localStream: MediaStream;
-let remoteStream: MediaStream;
-let pc: RTCPeerConnection;
+
+let peers : { [name: string]: RTCPeerConnection } = {};
+let videos: any[] = [];
+
+const configuration = {
+    'iceServers': [
+        {urls:'stun:stun01.sipphone.com'},
+        {urls:'stun:stun.ekiga.net'},
+        {urls:'stun:stun.fwdnet.net'},
+        {urls:'stun:stun.ideasip.com'},
+        {urls:'stun:stun.iptel.org'},
+        {urls:'stun:stun.rixtelecom.se'},
+        {urls:'stun:stun.schlund.de'},
+        {urls:'stun:stun.l.google.com:19302'},
+        {urls:'stun:stun1.l.google.com:19302'},
+        {urls:'stun:stun2.l.google.com:19302'},
+        {urls:'stun:stun3.l.google.com:19302'},
+        {urls:'stun:stun4.l.google.com:19302'},
+        {urls:'stun:stunserver.org'},
+        {urls:'stun:stun.softjoys.com'},
+        {urls:'stun:stun.voiparound.com'},
+        {urls:'stun:stun.voipbuster.com'},
+        {urls:'stun:stun.voipstunt.com'},
+        {urls:'stun:stun.voxgratia.org'},
+        {urls:'stun:stun.xten.com'},
+        {
+            urls: 'turn:numb.viagenie.ca',
+            credential: 'als0511als!',
+            username: 'hbmin3789@gmail.com'
+        }]
+  };
+
 
 export const requestConnection = () => {
     Container.socket.send(JSON.stringify({
@@ -15,11 +46,9 @@ export const requestConnection = () => {
     }));
 };
 
-export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVideoElement) => {
+export const InitCallManager = async (lVideo: HTMLVideoElement) => {
     localVideo = lVideo;
-    remoteVideo = rVideo;
     console.log(localVideo);
-    console.log(remoteVideo);
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
@@ -37,55 +66,10 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: { exact: "environment" } } });
         localVideo.srcObject = stream;
         localStream = stream;
-    }
-
-    const configuration = {
-        'iceServers': [
-            {urls:'stun:stun01.sipphone.com'},
-            {urls:'stun:stun.ekiga.net'},
-            {urls:'stun:stun.fwdnet.net'},
-            {urls:'stun:stun.ideasip.com'},
-            {urls:'stun:stun.iptel.org'},
-            {urls:'stun:stun.rixtelecom.se'},
-            {urls:'stun:stun.schlund.de'},
-            {urls:'stun:stun.l.google.com:19302'},
-            {urls:'stun:stun1.l.google.com:19302'},
-            {urls:'stun:stun2.l.google.com:19302'},
-            {urls:'stun:stun3.l.google.com:19302'},
-            {urls:'stun:stun4.l.google.com:19302'},
-            {urls:'stun:stunserver.org'},
-            {urls:'stun:stun.softjoys.com'},
-            {urls:'stun:stun.voiparound.com'},
-            {urls:'stun:stun.voipbuster.com'},
-            {urls:'stun:stun.voipstunt.com'},
-            {urls:'stun:stun.voxgratia.org'},
-            {urls:'stun:stun.xten.com'},
-            {
-                urls: 'turn:numb.viagenie.ca',
-                credential: 'als0511als!',
-                username: 'hbmin3789@gmail.com'
-            }]
-      };
-
-    pc = new RTCPeerConnection(configuration);
-    localStream.getTracks().forEach(x=>pc.addTrack(x, localStream));
-    addIceCandidatePC(pc);
-
-    pc.ontrack = e => {
-        if (remoteVideo.srcObject !== e.streams[0]) {
-            remoteVideo.srcObject = e.streams[0];
-            console.log('received remote stream');
-        }
-    };
-
-    pc.addEventListener('iceconnectionstatechange', event => {
-        if (pc.connectionState === 'connected') {
-            console.log('peer connected');
-        }
-    });
+    }    
 
     setSocketEvent('offer', async (data: any) => {
-
+        let pc = peers[data.userID];
         await pc.setRemoteDescription(data.offer);
         console.log("setDescription : remote");
 
@@ -96,19 +80,21 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
         Container.socket.send(JSON.stringify({
             message: "answer",
             answer: answer,
-            userID: Container.curUser.getUserID()
+            answerUserID: Container.curUser.getUserID(),
+            offerUserID: data.UserID
         }));
     });
 
     setSocketEvent('answer', async (data: any) => {
+        let pc = peers[data.userID];
         await pc.setRemoteDescription(data.answer);
         console.log("setDescription : remote");
     });
 
     setSocketEvent('icecandidate', (data: any) => {
+        let pc = peers[data.userID];
         pc.addIceCandidate(data.icecandidate);
     });
-    
 };
 
 const addIceCandidatePC = (pc: RTCPeerConnection) => {
@@ -136,10 +122,23 @@ const addIceCandidatePC = (pc: RTCPeerConnection) => {
     });
 }
 
-//Offer를 생성하여 상대 클라이언트에게 연결 요청을 보냅니다.
-export const createOffer = () => {
-    pc.createOffer().then((offer)=>{
-        pc.setLocalDescription(offer);
+export const Hangup = (userList: Array<User>) => {
+    userList.forEach(x=>{
+        try{
+            peers[x.userID].close();
+        }catch{
+
+        }
+    });
+};
+
+export function CallAllMember(userList: Array<User>) {
+    userList.forEach(x=>Call(x.userID));
+}
+
+export function Call(userID: string) {
+    peers[userID].createOffer().then((offer)=>{
+        peers[userID].setLocalDescription(offer);
         Container.socket.send(JSON.stringify({
             message: "offer",
             offer: offer,
@@ -148,10 +147,50 @@ export const createOffer = () => {
     });
 }
 
-export const Hangup = () => {
-    pc.close();
-};
 
-export const Call = () => {
-    createOffer();
+
+export const SetUserList = (userList: Array<User>) => {
+    peers = {};
+    let isStreamSet = false;
+    userList.forEach(x=>{
+        peers[x.userID] = new RTCPeerConnection(configuration);
+        if(!isStreamSet){
+            localStream.getTracks().forEach(s=>peers[x.userID].addTrack(s, localStream));
+            isStreamSet = true;
+        }
+        setPeerEventListener(peers[x.userID]);
+    });
+}
+
+const setPeerEventListener = (pc: RTCPeerConnection) => {
+    addIceCandidatePC(pc);
+
+    pc.addEventListener('iceconnectionstatechange', event => {
+        if (pc.connectionState === 'connected') {
+            console.log('peer connected');
+        }
+    });
+
+    pc.ontrack = e => {
+        var video = videos.find(x=>x.pc === pc);
+
+        if(video){
+            video = {pc: pc, stream: e.streams[0]};
+            videos.push(video);
+
+            var newVideo = new HTMLVideoElement();
+            newVideo.srcObject = video.stream;
+            videoList.appendChild(newVideo);
+
+            console.log('received remote stream');
+        } else {
+            if(video.stream !== e.streams[0]){
+                video.stream = e.streams[0];
+            }
+        }
+    };
+}
+
+export const SetVideoList = (videoListRef: HTMLDivElement) => {
+    videoList = videoListRef;
 };

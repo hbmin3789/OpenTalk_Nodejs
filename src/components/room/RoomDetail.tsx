@@ -5,7 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {InitCallManager, Call} from '../../libs/webrtc/callManager';
+import {SetVideoList, InitCallManager, Call} from '../../libs/webrtc/callManager';
 
 type Props = {
     children: ReactNode;
@@ -36,9 +36,13 @@ const QuitButton = styled.button`{
     top: 2%;
 }`;
 
+const VideoList = styled.div`{
+
+}`;
+
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
-    var remoteVideoRef = React.useRef<HTMLVideoElement>(null);
+    var videoListRef = React.useRef<HTMLDivElement>(null);
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
     setSocketEvent('userLeave', (resp)=>{
@@ -51,15 +55,17 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             setUserList(old=>[...old, resp.data]);
             var user = resp.data as User;
             room.userList.push(user);
+            Call(resp.data.userID);
         }
         console.log("enter");
     });
 
     useEffect(()=>{
         console.log("effect");
-        if(localVideoRef && remoteVideoRef)
-        if(localVideoRef.current && remoteVideoRef.current)
-            InitCallManager(localVideoRef.current, remoteVideoRef.current);
+        if(localVideoRef.current)
+            InitCallManager(localVideoRef.current);
+        if(videoListRef.current)
+            SetVideoList(videoListRef.current);
     });
     console.log("render");
 
@@ -69,11 +75,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             <div>
                 {userList.map(x=>x.userName)}
             </div>
-            <video ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></video>
-            <video ref={remoteVideoRef} playsInline={true} autoPlay={true}></video>
-            <button onClick={()=>{
-              Call();
-            }}>Call</button>
+            <VideoList ref={videoListRef}></VideoList>
             <ChatTextBlock>
             </ChatTextBlock>
             <ChatInput></ChatInput>

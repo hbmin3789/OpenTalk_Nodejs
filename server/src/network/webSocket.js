@@ -36,7 +36,10 @@ const InitWebSocket = (server) => {
                     console.log("offer user ID : " + data.userID);
                     //자신이 있는 방의 모든 유저들에게 연결 요청
                     //자신은 뺌
-                    //(안될거같은데 나중에수정)
+                    //자신의 ID를 넘겨줘서 Answer를 받음
+                    //서로 Offer, Answer가 되어야하는데 어차피 각각
+                    //Offer를 보내면 Answer가 한번씩 가서
+                    //상관없을듯
                     var selectedRoom = room.getRoomList()
                                            .find(x=>x.userList.find(x=>x.userID === data.userID));
                     selectedRoom.userList.forEach(x=>{
@@ -44,7 +47,8 @@ const InitWebSocket = (server) => {
                             return;
                         findSocket(x.userID).socket.send(JSON.stringify({
                             message: "offer",
-                            offer: data.offer
+                            offer: data.offer,
+                            userID: data.userID
                         }));
                     });
                     break;

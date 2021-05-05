@@ -195,6 +195,9 @@ export const RoomList = () => {
             {(selectedRoom) ? 
             <RoomDetail room={selectedRoom} 
                         OnQuitBtnPressed={()=>{
+                            if(selectedRoom)
+                                Hangup(selectedRoom.userList);
+
                             Container.socket.send(JSON.stringify({
                                 message: 'quitRoom',
                                 data: {
@@ -202,10 +205,10 @@ export const RoomList = () => {
                                     roomID: selectedRoom?.roomID
                                 }
                             }));
+
                             Container.curRoomID = "";
                             setSelectedRoom(undefined);
-                            Hangup();
-                            }}>
+                        }}>
 
             </RoomDetail> : <EmptyRoom>방을 만들거나 참여해보세요!</EmptyRoom>}
         </Background>
