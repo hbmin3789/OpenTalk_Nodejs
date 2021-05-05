@@ -73,11 +73,9 @@ export const InitCallManager = async (lVideo: HTMLVideoElement, rVideo: HTMLVide
     addIceCandidatePC(pc);
 
     pc.ontrack = e => {
-        e.track.onmute = () => {
-            if (remoteVideo.srcObject !== e.streams[0]) {
-                remoteVideo.srcObject = e.streams[0];
-                console.log('received remote stream');
-              }
+        if (remoteVideo.srcObject !== e.streams[0]) {
+            remoteVideo.srcObject = e.streams[0];
+            console.log('received remote stream');
         }
     };
 
