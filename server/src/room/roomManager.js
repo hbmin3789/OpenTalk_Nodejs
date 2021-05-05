@@ -69,7 +69,7 @@ const quitRoom = (userID, roomID) => {
         var idx = room.userList.findIndex(x=>x === userID);
         room.userList.splice(idx);
         if(room.userList.length === 0){
-            var idx = roomList.findIndex(room);
+            var idx = roomList.findIndex(x=>x===room);
             roomList.splice(idx);
             console.log(roomList);
             return undefined;
