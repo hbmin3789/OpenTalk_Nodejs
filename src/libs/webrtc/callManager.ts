@@ -115,7 +115,7 @@ const addIceCandidatePC = (pc: RTCPeerConnection) => {
     pc.addEventListener('icecandidate', event => {
         if (event.candidate) {
             Container.socket.send(JSON.stringify({
-                messsage: 'icecandidate',
+                message: 'icecandidate',
                 icecandidate: event.candidate
             }));
         }
