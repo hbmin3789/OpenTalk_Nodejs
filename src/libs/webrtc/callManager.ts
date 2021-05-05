@@ -116,7 +116,8 @@ const addIceCandidatePC = (pc: RTCPeerConnection) => {
         if (event.candidate) {
             Container.socket.send(JSON.stringify({
                 message: 'icecandidate',
-                icecandidate: event.candidate
+                icecandidate: event.candidate,
+                userID: Container.curUser.getUserID()
             }));
         }
     });
