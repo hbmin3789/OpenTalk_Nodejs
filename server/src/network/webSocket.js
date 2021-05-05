@@ -40,16 +40,14 @@ const InitWebSocket = (server) => {
                     //서로 Offer, Answer가 되어야하는데 어차피 각각
                     //Offer를 보내면 Answer가 한번씩 가서
                     //상관없을듯
-                    var selectedRoom = room.getRoomList()
-                                           .find(x=>x.userList.find(x=>x.userID === data.userID));
+                    findSocket(data.reqUserID).socket.send(JSON.stringify({
+                        message: "offer",
+                        offer: data.offer,
+                        userID: data.userID
+                    }));                                           
                     selectedRoom.userList.forEach(x=>{
                         if(x.userID === data.userID)
                             return;
-                        findSocket(x.userID).socket.send(JSON.stringify({
-                            message: "offer",
-                            offer: data.offer,
-                            userID: data.userID
-                        }));
                     });
                     break;
                 case 'icecandidate':
@@ -67,16 +65,11 @@ const InitWebSocket = (server) => {
                     break;
                 case "answer":
                     console.log("answer user ID : " + data.userID);
-                    var selectedRoom = room.getRoomList()
-                                           .find(x=>x.userList.find(x=>x.userID === data.userID));
-                    selectedRoom.userList.forEach(x=>{
-                        if(x.userID === data.userID)
-                            return;
-                        findSocket(x.userID).socket.send(JSON.stringify({
-                            message: "answer",
-                            answer: data.answer
-                        }));
-                    });
+                    findSocket(data.answerUserID).socket.send(JSON.stringify({
+                        message: "answer",
+                        answer: data.answer,
+                        userID: data.answerUserID
+                    }));
                     break;
                 default:
                     ProcessMessage(ws, data);

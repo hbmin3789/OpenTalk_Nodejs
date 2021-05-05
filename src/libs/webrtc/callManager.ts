@@ -136,30 +136,38 @@ export function CallAllMember(userList: Array<User>) {
     userList.forEach(x=>Call(x.userID));
 }
 
+export const OnUserEnter = (userID: string) => {
+    peers[userID] = new RTCPeerConnection(configuration);
+}
+
 export function Call(userID: string) {
     peers[userID].createOffer().then((offer)=>{
         peers[userID].setLocalDescription(offer);
         Container.socket.send(JSON.stringify({
             message: "offer",
             offer: offer,
-            userID: Container.curUser.getUserID()
+            userID: Container.curUser.getUserID(),
+            reqUserID: userID
         }));
     });
 }
 
 
-
 export const SetUserList = (userList: Array<User>) => {
     peers = {};
-    let isStreamSet = false;
+    let isLocalStreamSet = false;
     userList.forEach(x=>{
-        peers[x.userID] = new RTCPeerConnection(configuration);
-        if(!isStreamSet){
+        if(!isLocalStreamSet){
             localStream.getTracks().forEach(s=>peers[x.userID].addTrack(s, localStream));
-            isStreamSet = true;
+            isLocalStreamSet = true;
         }
-        setPeerEventListener(peers[x.userID]);
+        addUserList(x.userID);
     });
+}
+
+const addUserList = (userID: string) => {
+    peers[userID] = new RTCPeerConnection(configuration);
+    setPeerEventListener(peers[userID]);
 }
 
 const setPeerEventListener = (pc: RTCPeerConnection) => {
