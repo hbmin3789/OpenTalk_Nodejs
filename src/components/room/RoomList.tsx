@@ -170,6 +170,8 @@ export const RoomList = () => {
 
     return (
         <Background>
+            {(selectedRoom) ? 
+            <div></div> : 
             <RoomListNavigation>
                 <div>
                     <Title>
@@ -189,7 +191,7 @@ export const RoomList = () => {
                         {x.roomName}
                     </ListViewItem>) : <div></div>}
                 </ListView>
-            </RoomListNavigation>
+            </RoomListNavigation>}
             {(selectedRoom) ? 
             <RoomDetail room={selectedRoom} 
                         OnQuitBtnPressed={()=>{
