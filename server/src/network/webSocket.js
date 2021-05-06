@@ -92,7 +92,7 @@ const sendMessage = (msg, userID, data) => {
 };
 
 const broadCastMessage = (data) => {
-    socketList.forEach(x => x.socket.send(data));
+    socketList.forEach(x => x.socket.send(JSON.stringify(data)));
 };
 
 const findSocket = (userID) => socketList.find(x=>x.userID === userID);
