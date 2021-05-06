@@ -47,9 +47,14 @@ const MyVideo = styled.video`{
 let isSetVideo = false;
 
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
-    var localVideoRef = React.useRef<HTMLVideoElement>(null);
-    var videoListRef = React.useRef<HTMLDivElement>(null);
+    var localVideoRef = React.useRef<HTMLVideoElement>(new HTMLVideoElement());
+    var videoListRef = React.useRef<HTMLDivElement>(new HTMLDivElement());
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
+
+    if(videoListRef.current)
+        SetVideoList(videoListRef.current);
+    if(localVideoRef.current)
+        InitCallManager(localVideoRef.current);
 
     setSocketEvent('userLeave', (resp)=>{
         var newList = userList?.filter(x=>x.userID !== resp.userID);
@@ -59,7 +64,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     setSocketEvent('userEnter', (resp)=>{
         if(resp.data.userID !== Container.curUser.getUserID()){
             setUserList(old=>[...old, resp.data]);
-            
+
             var user = resp.data as User;
 
             room.userList.push(user);
@@ -70,13 +75,6 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         console.log("enter");
     });
 
-    useEffect(()=>{
-        console.log("effect");
-        if(videoListRef.current)
-            SetVideoList(videoListRef.current);
-        if(localVideoRef.current)
-            InitCallManager(localVideoRef.current);
-    });
     console.log("render");
 
     return (

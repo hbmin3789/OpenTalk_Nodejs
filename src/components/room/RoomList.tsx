@@ -107,7 +107,6 @@ export const RoomList = () => {
     });
 
     setSocketEvent('enterRoom', (data: any) => {
-        setSelectedRoom(data.data);
         console.log("room enter");
         console.log(data.data);
     });
@@ -139,6 +138,7 @@ export const RoomList = () => {
     }
 
     const onRoomClicked = (room: RoomInfo) => {
+        setSelectedRoom(room);
         if(selectedRoom?.roomID === room.roomID){
             return;
         }
