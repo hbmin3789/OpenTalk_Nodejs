@@ -5,7 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {addUserList, Call} from '../../libs/webrtc/callManager';
+import {addUserList, getLocalStream, Call} from '../../libs/webrtc/callManager';
 
 type Props = {
     children: ReactNode;
@@ -52,7 +52,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
     useEffect(()=>{
-
+        if(localVideoRef.current)
+            localVideoRef.current.srcObject = getLocalStream();
     });
 
     setSocketEvent('userLeave', (resp)=>{

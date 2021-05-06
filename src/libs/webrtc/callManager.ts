@@ -169,6 +169,10 @@ export const addUserList = (userID: string) => {
     setPeerEventListener(peers[userID]);
 }
 
+export const getLocalStream = () => {
+    return localStream;
+}
+
 const setPeerEventListener = (pc: RTCPeerConnection) => {
     addIceCandidatePC(pc);
 
