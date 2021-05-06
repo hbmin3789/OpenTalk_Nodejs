@@ -108,11 +108,10 @@ export const RoomList = () => {
 
     setSocketEvent('enterRoom', (data: any) => {
         console.log("room enter");
-
-        for(let i in data.data.userList){
-            var user = JSON.parse(i);
-            addUserList(user.userID);
-        }
+        var room = data.data as RoomInfo;
+        room.userList.forEach(x=>{
+            addUserList(x.userID);
+        })
 
         console.log(data.data);
     });
