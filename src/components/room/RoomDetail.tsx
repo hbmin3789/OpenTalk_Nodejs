@@ -51,6 +51,13 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var videoListRef = React.useRef<HTMLDivElement>(null);
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
+    userList.forEach(x=>{
+        if(x.userID === Container.curUser.getUserID())
+            return;
+        addUserList(x.userID);
+        console.log("add peer : " + x.userID);
+    });
+
     useEffect(()=>{
         if(localVideoRef.current)
             localVideoRef.current.srcObject = getLocalStream();
@@ -73,12 +80,6 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             Call(resp.data.userID);
         }
         console.log("enter");
-    });
-
-    room.userList.forEach(x=>{
-        if(x.userID === Container.curUser.getUserID())
-            return;
-        addUserList(x.userID);
     });
 
     console.log("render");
