@@ -55,7 +55,7 @@ const InitWebSocket = (server) => {
                     break;
                 case "answer":
                     console.log("answer user ID : " + data.userID);
-                    findSocket(data.caller).socket.send(JSON.stringify({
+                    findSocket(data.callee).socket.send(JSON.stringify({
                         message: "answer",
                         answer: data.answer,
                         callee: data.callee

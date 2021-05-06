@@ -97,7 +97,7 @@ export const InitCallManager = async () => {
     });
 
     setSocketEvent('answer', async (data: any) => {
-        let pc = peers.get(data.caller);
+        let pc = peers.get(data.callee);
         if(pc){
             await pc.setRemoteDescription(data.answer);
             console.log("setDescription : remote");   
