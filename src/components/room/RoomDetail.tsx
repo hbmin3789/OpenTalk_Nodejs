@@ -75,6 +75,12 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         console.log("enter");
     });
 
+    room.userList.forEach(x=>{
+        if(x.userID === Container.curUser.getUserID())
+            return;
+        addUserList(x.userID);
+    });
+
     console.log("render");
 
     return (
