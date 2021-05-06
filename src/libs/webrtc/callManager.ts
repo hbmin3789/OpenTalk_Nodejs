@@ -10,6 +10,7 @@ let localStream: MediaStream;
 
 let peers : { [name: string]: RTCPeerConnection } = {};
 let videos: any[] = [];
+let localPC: RTCPeerConnection;
 
 const configuration = {
     'iceServers': [
@@ -49,10 +50,12 @@ export const requestConnection = () => {
 export const InitCallManager = async (lVideo: HTMLVideoElement) => {
     localVideo = lVideo;
     console.log(localVideo);
+    localPC = new RTCPeerConnection();
+    localStream.getTracks().forEach(s=>localPC.addTrack(s, localStream));
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
-        
+
         localVideo.srcObject = stream;
         localStream = stream;
 
@@ -157,13 +160,9 @@ export function Call(userID: string) {
 
 export const SetUserList = (userList: Array<User>) => {
     peers = {};
-    let isLocalStreamSet = false;
     userList.forEach(x=>{
-        if(!isLocalStreamSet){
-            localStream.getTracks().forEach(s=>peers[x.userID].addTrack(s, localStream));
-            isLocalStreamSet = true;
-        }
         addUserList(x.userID);
+        localStream.getTracks().forEach(s=>peers[x.userID].addTrack(s, localStream));
     });
 }
 
