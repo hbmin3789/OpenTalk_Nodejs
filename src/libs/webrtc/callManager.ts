@@ -72,7 +72,7 @@ export const InitCallManager = async () => {
     }    
 
     setSocketEvent('offer', async (data: any) => {
-        let pc = peers[data.userID];
+        let pc = peers[data.caller];
         await pc.setRemoteDescription(data.offer);
         console.log("setDescription : remote");
 
@@ -83,13 +83,13 @@ export const InitCallManager = async () => {
         Container.socket.send(JSON.stringify({
             message: "answer",
             answer: answer,
-            answerUserID: Container.curUser.getUserID(),
-            offerUserID: data.UserID
+            callee: Container.curUser.getUserID(),
+            caller: data.UserID
         }));
     });
 
     setSocketEvent('answer', async (data: any) => {
-        let pc = peers[data.userID];
+        let pc = peers[data.caller];
         await pc.setRemoteDescription(data.answer);
         console.log("setDescription : remote");
     });
@@ -149,8 +149,8 @@ export function Call(userID: string) {
         Container.socket.send(JSON.stringify({
             message: "offer",
             offer: offer,
-            userID: Container.curUser.getUserID(),
-            reqUserID: userID
+            callee: userID,
+            caller: Container.curUser.getUserID()
         }));
     });
 }

@@ -33,11 +33,11 @@ const InitWebSocket = (server) => {
                     console.log('connect Success');
                     break;
                 case "offer":
-                    console.log("offer user ID : " + data.userID);
-                    findSocket(data.reqUserID).socket.send(JSON.stringify({
+                    console.log("offer user ID : " + data.caller);
+                    findSocket(data.callee).socket.send(JSON.stringify({
                         message: "offer",
                         offer: data.offer,
-                        userID: data.userID
+                        userID: data.caller
                     }));                                           
                     selectedRoom.userList.forEach(x=>{
                         if(x.userID === data.userID)
@@ -59,10 +59,10 @@ const InitWebSocket = (server) => {
                     break;
                 case "answer":
                     console.log("answer user ID : " + data.userID);
-                    findSocket(data.answerUserID).socket.send(JSON.stringify({
+                    findSocket(data.caller).socket.send(JSON.stringify({
                         message: "answer",
                         answer: data.answer,
-                        userID: data.answerUserID
+                        callee: data.callee
                     }));
                     break;
                 default:
