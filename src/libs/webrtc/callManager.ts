@@ -7,39 +7,38 @@ let OnRemoteVideoAdded: () =>  void;
 let OnRemoteVideoRemoved: () => void;
 
 let localStream: MediaStream;
-
-let peers : { [name: string]: RTCPeerConnection } = {};
+let peers = new Map<string, RTCPeerConnection>();
 let videos: any[] = [];
 let localPC: RTCPeerConnection;
 let videoList = [];
 
 const configuration = {
-    'iceServers': [
-        {urls:'stun:stun01.sipphone.com'},
-        {urls:'stun:stun.ekiga.net'},
-        {urls:'stun:stun.fwdnet.net'},
-        {urls:'stun:stun.ideasip.com'},
-        {urls:'stun:stun.iptel.org'},
-        {urls:'stun:stun.rixtelecom.se'},
-        {urls:'stun:stun.schlund.de'},
-        {urls:'stun:stun.l.google.com:19302'},
-        {urls:'stun:stun1.l.google.com:19302'},
-        {urls:'stun:stun2.l.google.com:19302'},
-        {urls:'stun:stun3.l.google.com:19302'},
-        {urls:'stun:stun4.l.google.com:19302'},
-        {urls:'stun:stunserver.org'},
-        {urls:'stun:stun.softjoys.com'},
-        {urls:'stun:stun.voiparound.com'},
-        {urls:'stun:stun.voipbuster.com'},
-        {urls:'stun:stun.voipstunt.com'},
-        {urls:'stun:stun.voxgratia.org'},
-        {urls:'stun:stun.xten.com'},
-        {
-            urls: 'turn:numb.viagenie.ca',
-            credential: 'als0511als!',
-            username: 'hbmin3789@gmail.com'
-        }]
-  };
+'iceServers': [
+    {urls:'stun:stun01.sipphone.com'},
+    {urls:'stun:stun.ekiga.net'},
+    {urls:'stun:stun.fwdnet.net'},
+    {urls:'stun:stun.ideasip.com'},
+    {urls:'stun:stun.iptel.org'},
+    {urls:'stun:stun.rixtelecom.se'},
+    {urls:'stun:stun.schlund.de'},
+    {urls:'stun:stun.l.google.com:19302'},
+    {urls:'stun:stun1.l.google.com:19302'},
+    {urls:'stun:stun2.l.google.com:19302'},
+    {urls:'stun:stun3.l.google.com:19302'},
+    {urls:'stun:stun4.l.google.com:19302'},
+    {urls:'stun:stunserver.org'},
+    {urls:'stun:stun.softjoys.com'},
+    {urls:'stun:stun.voiparound.com'},
+    {urls:'stun:stun.voipbuster.com'},
+    {urls:'stun:stun.voipstunt.com'},
+    {urls:'stun:stun.voxgratia.org'},
+    {urls:'stun:stun.xten.com'},
+    {
+        urls: 'turn:numb.viagenie.ca',
+        credential: 'als0511als!',
+        username: 'hbmin3789@gmail.com'
+    }]
+};
 
 
 export const requestConnection = () => {
@@ -77,31 +76,43 @@ export const InitCallManager = async () => {
         console.log("data : ");
         console.log(data);
         
-        let pc = peers[data.caller];
-        await pc.setRemoteDescription(data.offer);
-        console.log("setDescription : remote");
+        let pc = peers.get(data.caller);
+        if(pc){
+            await pc.setRemoteDescription(data.offer);
+            console.log("setDescription : remote");
 
-        const answer = await pc.createAnswer();
-        await pc.setLocalDescription(answer);
-        console.log("setDescription : local");
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+            console.log("setDescription : local");
 
-        Container.socket.send(JSON.stringify({
-            message: "answer",
-            answer: answer,
-            callee: Container.curUser.getUserID(),
-            caller: data.UserID
-        }));
+            Container.socket.send(JSON.stringify({
+                message: "answer",
+                answer: answer,
+                callee: Container.curUser.getUserID(),
+                caller: data.UserID
+            }));
+        }else{
+            console.log("Offer Create Error : peer undefined");
+        }
     });
 
     setSocketEvent('answer', async (data: any) => {
-        let pc = peers[data.caller];
-        await pc.setRemoteDescription(data.answer);
-        console.log("setDescription : remote");
+        let pc = peers.get(data.caller);
+        if(pc){
+            await pc.setRemoteDescription(data.answer);
+            console.log("setDescription : remote");   
+        } else {
+            console.log("Answer Create Error : peer undefined");
+        }
     });
 
     setSocketEvent('icecandidate', (data: any) => {
-        let pc = peers[data.userID];
-        pc.addIceCandidate(data.icecandidate);
+        let pc = peers.get(data.userID);
+        if(pc){
+            pc.addIceCandidate(data.icecandidate);
+        } else {
+            console.log("Icecandidate Event Error : peer undefined");
+        }
     });
 };
 
@@ -133,7 +144,7 @@ const addIceCandidatePC = (pc: RTCPeerConnection) => {
 export const Hangup = (userList: Array<User>) => {
     userList.forEach(x=>{
         try{
-            peers[x.userID].close();
+            peers.get(x.userID)?.close();
         }catch{
 
         }
@@ -145,33 +156,43 @@ export function CallAllMember(userList: Array<User>) {
 }
 
 export const OnUserEnter = (userID: string) => {
-    peers[userID] = new RTCPeerConnection(configuration);
+    peers.set(userID , new RTCPeerConnection(configuration));
 }
 
 export function Call(userID: string) {
-    peers[userID].createOffer().then((offer)=>{
-        peers[userID].setLocalDescription(offer);
-        Container.socket.send(JSON.stringify({
-            message: "offer",
-            offer: offer,
-            callee: userID,
-            caller: Container.curUser.getUserID()
-        }));
-    });
+    let pc = peers.get(userID);
+    if(pc) {
+        pc.createOffer().then((offer)=>{
+            if(pc){
+                pc.setLocalDescription(offer);
+                Container.socket.send(JSON.stringify({
+                    message: "offer",
+                    offer: offer,
+                    callee: userID,
+                    caller: Container.curUser.getUserID()
+                }));
+            }else{
+                console.log("Call Error : peer undefined");
+                return;
+            }
+        });
+    } else {
+        console.log("Call Error : peer undefined");
+    }
 }
 
 
 export const SetUserList = (userList: Array<User>) => {
-    peers = {};
+    peers = new Map<string, RTCPeerConnection>();
     userList.forEach(x=>{
         addUserList(x.userID);
-        localStream.getTracks().forEach(s=>peers[x.userID].addTrack(s, localStream));
     });
 }
 
 export const addUserList = (userID: string) => {
-    peers[userID] = new RTCPeerConnection(configuration);
-    setPeerEventListener(peers[userID]);
+    let newPC = new RTCPeerConnection(configuration);
+    peers.set(userID, newPC);
+    setPeerEventListener(newPC);
 }
 
 export const getLocalStream = () => {
