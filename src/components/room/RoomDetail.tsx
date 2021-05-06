@@ -68,7 +68,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             room.userList.push(user);
 
             //addUserList(resp.data.userID);
-            await Call(resp.data.userID);
+            //await Call(resp.data.userID);
         }
         console.log("enter");
     });
