@@ -9,7 +9,7 @@ import User, { UserInfo } from '../../libs/user/userInfo';
 import { setSocketEvent } from '../../libs/network/websocketEvents';
 import {useHistory} from 'react-router-dom';
 import RoomDetail from './RoomDetail';
-import {Hangup} from '../../libs/webrtc/callManager';
+import {addUserList, Hangup} from '../../libs/webrtc/callManager';
 
 const Background = styled.div`{
     position: absolute;
@@ -108,6 +108,12 @@ export const RoomList = () => {
 
     setSocketEvent('enterRoom', (data: any) => {
         console.log("room enter");
+
+        for(let i in data.data.userList){
+            var user = JSON.parse(i);
+            addUserList(user.userID);
+        }
+
         console.log(data.data);
     });
 

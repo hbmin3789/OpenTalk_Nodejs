@@ -182,9 +182,9 @@ export function Call(userID: string) {
 }
 
 export const addUserList = (userID: string) => {
+    console.log("peer add : " + userID);
     let newPC = new RTCPeerConnection(configuration);
     peers.set(userID, newPC);
-    console.log("peer add : " + userID);
     
     setPeerEventListener(newPC);
 }
