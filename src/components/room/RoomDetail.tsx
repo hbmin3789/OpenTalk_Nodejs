@@ -49,16 +49,14 @@ let isSetVideo = false;
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var videoListRef = React.useRef<HTMLDivElement>(null);
-    var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
     setSocketEvent('userLeave', (resp)=>{
-        var newList = userList?.filter(x=>x.userID !== resp.userID);
-        setUserList(newList);
+        var newList = room.userList.filter(x=>x.userID !== resp.userID);
+        room.userList = newList;
     });
 
     setSocketEvent('userEnter', (resp)=>{
         if(resp.data.userID !== Container.curUser.getUserID()){
-            setUserList(old=>[...old, resp.data]);
             var user = resp.data as User;
             room.userList.push(user);
             Call(resp.data.userID);
@@ -77,14 +75,14 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         }
     });
     console.log("render");
-    console.log(userList);
+    console.log(room.userList);
     
 
     return (
         <RoomDetailBackground>
             <RoomTitle>{room.roomName}</RoomTitle>
             <div>
-                {userList.map(x=>x.userName)}
+                {room.userList.map(x=>x.userName)}
             </div>
             <MyVideo ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></MyVideo>
             <VideoList ref={videoListRef}></VideoList>
