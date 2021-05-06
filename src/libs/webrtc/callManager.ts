@@ -159,25 +159,24 @@ export const OnUserEnter = (userID: string) => {
     peers.set(userID , new RTCPeerConnection(configuration));
 }
 
-export function Call(userID: string) {
+export async function Call(userID: string) {
     let pc = peers.get(userID);
     if(pc) {
         console.log("offer to :" + userID);
         
-        pc.createOffer().then((offer)=>{
-            if(pc){
-                pc.setLocalDescription(offer);
-                Container.socket.send(JSON.stringify({
-                    message: "offer",
-                    offer: offer,
-                    callee: userID,
-                    caller: Container.curUser.getUserID()
-                }));
-            }else{
-                console.log("Call Error : peer undefined");
-                return;
-            }
-        });
+        let offer = await pc.createOffer();
+        if(pc){
+            await pc.setLocalDescription(offer);
+            Container.socket.send(JSON.stringify({
+                message: "offer",
+                offer: offer,
+                callee: userID,
+                caller: Container.curUser.getUserID()
+            }));
+        }else{
+            console.log("Call Error : peer undefined");
+            return;
+        }
     } else {
         console.log("Call Error : peer undefined");
     }
