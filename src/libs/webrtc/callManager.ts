@@ -3,14 +3,15 @@ import Container from '../common/container';
 import {setSocketEvent} from '../network/websocketEvents';
 import { User } from '../room/roomInfo';
 
-let videoList: HTMLDivElement;
+let OnRemoteVideoAdded: () =>  void;
+let OnRemoteVideoRemoved: () => void;
 
-let localVideo: HTMLVideoElement;
 let localStream: MediaStream;
 
 let peers : { [name: string]: RTCPeerConnection } = {};
 let videos: any[] = [];
 let localPC: RTCPeerConnection;
+let videoList = [];
 
 const configuration = {
     'iceServers': [
@@ -47,15 +48,12 @@ export const requestConnection = () => {
     }));
 };
 
-export const InitCallManager = async (lVideo: HTMLVideoElement) => {
-    localVideo = lVideo;
-    console.log(localVideo);
+export const InitCallManager = async () => {
     localPC = new RTCPeerConnection();
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
 
-        localVideo.srcObject = stream;
         localStream = stream;
 
         localStream.getTracks().forEach(s=>localPC.addTrack(s, localStream));
@@ -70,7 +68,6 @@ export const InitCallManager = async (lVideo: HTMLVideoElement) => {
         }
     } catch (e) {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: { exact: "environment" } } });
-        localVideo.srcObject = stream;
         localStream = stream;
     }    
 
@@ -187,10 +184,7 @@ const setPeerEventListener = (pc: RTCPeerConnection) => {
         if(video){
             video = {pc: pc, stream: e.streams[0]};
             videos.push(video);
-
-            var newVideo = new HTMLVideoElement();
-            newVideo.srcObject = video.stream;
-            videoList.appendChild(newVideo);
+            videoList.push(video.stream);
 
             console.log('received remote stream');
         } else {
@@ -200,7 +194,3 @@ const setPeerEventListener = (pc: RTCPeerConnection) => {
         }
     };
 }
-
-export const SetVideoList = (videoListRef: HTMLDivElement) => {
-    videoList = videoListRef;
-};

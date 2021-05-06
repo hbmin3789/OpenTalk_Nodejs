@@ -5,7 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {addUserList, SetVideoList, InitCallManager, Call} from '../../libs/webrtc/callManager';
+import {addUserList, Call} from '../../libs/webrtc/callManager';
 
 type Props = {
     children: ReactNode;
@@ -47,14 +47,13 @@ const MyVideo = styled.video`{
 let isSetVideo = false;
 
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
-    var localVideoRef = React.useRef<HTMLVideoElement>(new HTMLVideoElement());
-    var videoListRef = React.useRef<HTMLDivElement>(new HTMLDivElement());
+    var localVideoRef = React.useRef<HTMLVideoElement>(null);
+    var videoListRef = React.useRef<HTMLDivElement>(null);
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
-    if(videoListRef.current)
-        SetVideoList(videoListRef.current);
-    if(localVideoRef.current)
-        InitCallManager(localVideoRef.current);
+    useEffect(()=>{
+
+    });
 
     setSocketEvent('userLeave', (resp)=>{
         var newList = userList?.filter(x=>x.userID !== resp.userID);
