@@ -181,17 +181,11 @@ export function Call(userID: string) {
     }
 }
 
-
-export const SetUserList = (userList: Array<User>) => {
-    peers = new Map<string, RTCPeerConnection>();
-    userList.forEach(x=>{
-        addUserList(x.userID);
-    });
-}
-
 export const addUserList = (userID: string) => {
     let newPC = new RTCPeerConnection(configuration);
     peers.set(userID, newPC);
+    console.log("peer add : " + userID);
+    
     setPeerEventListener(newPC);
 }
 
