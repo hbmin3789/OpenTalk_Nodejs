@@ -9,7 +9,7 @@ import User, { UserInfo } from '../../libs/user/userInfo';
 import { setSocketEvent } from '../../libs/network/websocketEvents';
 import {useHistory} from 'react-router-dom';
 import RoomDetail from './RoomDetail';
-import {addUserList, Hangup} from '../../libs/webrtc/callManager';
+import {Call, addUserList, Hangup} from '../../libs/webrtc/callManager';
 
 const Background = styled.div`{
     position: absolute;
@@ -111,6 +111,7 @@ export const RoomList = () => {
         var room = data.data as RoomInfo;
         room.userList.forEach(x=>{
             addUserList(x.userID);
+            Call(x.userID);
         })
 
         console.log(data.data);
