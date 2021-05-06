@@ -37,7 +37,7 @@ const InitWebSocket = (server) => {
                     findSocket(data.callee).socket.send(JSON.stringify({
                         message: "offer",
                         offer: data.offer,
-                        userID: data.caller
+                        caller: data.caller
                     }));
                     break;
                 case 'icecandidate':
