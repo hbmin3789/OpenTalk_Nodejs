@@ -167,7 +167,7 @@ export const SetUserList = (userList: Array<User>) => {
     });
 }
 
-const addUserList = (userID: string) => {
+export const addUserList = (userID: string) => {
     peers[userID] = new RTCPeerConnection(configuration);
     setPeerEventListener(peers[userID]);
 }

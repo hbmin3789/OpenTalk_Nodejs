@@ -5,7 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {SetVideoList, InitCallManager, Call} from '../../libs/webrtc/callManager';
+import {addUserList, SetVideoList, InitCallManager, Call} from '../../libs/webrtc/callManager';
 
 type Props = {
     children: ReactNode;
@@ -49,16 +49,22 @@ let isSetVideo = false;
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var videoListRef = React.useRef<HTMLDivElement>(null);
+    var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
     setSocketEvent('userLeave', (resp)=>{
-        var newList = room.userList.filter(x=>x.userID !== resp.userID);
-        room.userList = newList;
+        var newList = userList?.filter(x=>x.userID !== resp.userID);
+        setUserList(newList);
     });
 
     setSocketEvent('userEnter', (resp)=>{
         if(resp.data.userID !== Container.curUser.getUserID()){
+            setUserList(old=>[...old, resp.data]);
+            
             var user = resp.data as User;
+
             room.userList.push(user);
+
+            addUserList(resp.data.userID);
             Call(resp.data.userID);
         }
         console.log("enter");
@@ -66,23 +72,18 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     useEffect(()=>{
         console.log("effect");
-        if(!isSetVideo) {
-            if(videoListRef.current)
-                SetVideoList(videoListRef.current);
-            if(localVideoRef.current)
-                InitCallManager(localVideoRef.current);
-            isSetVideo = true;
-        }
+        if(videoListRef.current)
+            SetVideoList(videoListRef.current);
+        if(localVideoRef.current)
+            InitCallManager(localVideoRef.current);
     });
     console.log("render");
-    console.log(room.userList);
-    
 
     return (
         <RoomDetailBackground>
             <RoomTitle>{room.roomName}</RoomTitle>
             <div>
-                {room.userList.map(x=>x.userName)}
+                {userList.map(x=>x.userName)}
             </div>
             <MyVideo ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></MyVideo>
             <VideoList ref={videoListRef}></VideoList>
