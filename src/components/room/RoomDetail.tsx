@@ -79,7 +79,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             <div>
                 {userList.map(x=>x.userName)}
             </div>
-            <MyVideo ref={localVideoRef}></MyVideo>
+            <MyVideo ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></MyVideo>
             <VideoList ref={videoListRef}></VideoList>
             <ChatTextBlock>
             </ChatTextBlock>
