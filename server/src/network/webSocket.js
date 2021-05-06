@@ -38,11 +38,7 @@ const InitWebSocket = (server) => {
                         message: "offer",
                         offer: data.offer,
                         userID: data.caller
-                    }));                                           
-                    selectedRoom.userList.forEach(x=>{
-                        if(x.userID === data.userID)
-                            return;
-                    });
+                    }));
                     break;
                 case 'icecandidate':
                     console.log("IceCandidate user ID : " + data.userID);
