@@ -77,6 +77,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         }
     });
     console.log("render");
+    console.log(userList);
+    
 
     return (
         <RoomDetailBackground>
