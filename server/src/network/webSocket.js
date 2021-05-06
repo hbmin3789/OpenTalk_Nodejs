@@ -34,12 +34,6 @@ const InitWebSocket = (server) => {
                     break;
                 case "offer":
                     console.log("offer user ID : " + data.userID);
-                    //자신이 있는 방의 모든 유저들에게 연결 요청
-                    //자신은 뺌
-                    //자신의 ID를 넘겨줘서 Answer를 받음
-                    //서로 Offer, Answer가 되어야하는데 어차피 각각
-                    //Offer를 보내면 Answer가 한번씩 가서
-                    //상관없을듯
                     findSocket(data.reqUserID).socket.send(JSON.stringify({
                         message: "offer",
                         offer: data.offer,

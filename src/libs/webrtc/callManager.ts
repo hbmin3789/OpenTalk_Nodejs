@@ -52,8 +52,10 @@ export const InitCallManager = async (lVideo: HTMLVideoElement) => {
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+        
         localVideo.srcObject = stream;
         localStream = stream;
+
         const videoTracks = localStream.getVideoTracks();
         const audioTracks = localStream.getAudioTracks();
         if (videoTracks.length > 0) {

@@ -40,6 +40,10 @@ const VideoList = styled.div`{
 
 }`;
 
+const MyVideo = styled.video`{
+
+}`;
+
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var videoListRef = React.useRef<HTMLDivElement>(null);
@@ -62,10 +66,10 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     useEffect(()=>{
         console.log("effect");
-        if(localVideoRef.current)
-            InitCallManager(localVideoRef.current);
         if(videoListRef.current)
             SetVideoList(videoListRef.current);
+        if(localVideoRef.current)
+            InitCallManager(localVideoRef.current);
     });
     console.log("render");
 
@@ -75,6 +79,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             <div>
                 {userList.map(x=>x.userName)}
             </div>
+            <MyVideo ref={localVideoRef}></MyVideo>
             <VideoList ref={videoListRef}></VideoList>
             <ChatTextBlock>
             </ChatTextBlock>
