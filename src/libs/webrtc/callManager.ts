@@ -72,6 +72,11 @@ export const InitCallManager = async () => {
     }    
 
     setSocketEvent('offer', async (data: any) => {
+        console.log("peer : ");
+        console.log(peers);
+        console.log("data : ");
+        console.log(data);
+        
         let pc = peers[data.caller];
         await pc.setRemoteDescription(data.offer);
         console.log("setDescription : remote");
