@@ -44,6 +44,8 @@ const MyVideo = styled.video`{
 
 }`;
 
+let isSetVideo = false;
+
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var videoListRef = React.useRef<HTMLDivElement>(null);
@@ -66,10 +68,13 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     useEffect(()=>{
         console.log("effect");
-        if(videoListRef.current)
-            SetVideoList(videoListRef.current);
-        if(localVideoRef.current)
-            InitCallManager(localVideoRef.current);
+        if(!isSetVideo) {
+            if(videoListRef.current)
+                SetVideoList(videoListRef.current);
+            if(localVideoRef.current)
+                InitCallManager(localVideoRef.current);
+            isSetVideo = true;
+        }
     });
     console.log("render");
 
