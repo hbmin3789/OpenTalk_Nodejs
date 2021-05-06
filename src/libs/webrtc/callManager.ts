@@ -162,6 +162,8 @@ export const OnUserEnter = (userID: string) => {
 export function Call(userID: string) {
     let pc = peers.get(userID);
     if(pc) {
+        console.log("offer to :" + userID);
+        
         pc.createOffer().then((offer)=>{
             if(pc){
                 pc.setLocalDescription(offer);
