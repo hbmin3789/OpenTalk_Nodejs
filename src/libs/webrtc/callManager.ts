@@ -12,6 +12,7 @@ export const setVideoEvent = (func: () => void) => {
 
 let localStream: MediaStream;
 let peers = new Map<string, RTCPeerConnection>();
+let connectedPeers = new Map<string, RTCPeerConnection>();
 let localPC: RTCPeerConnection;
 let videoList = new Map<string, MediaStream>();
 
@@ -110,6 +111,11 @@ export const InitCallManager = async () => {
         if(pc){
             await pc.setRemoteDescription(data.answer);
             console.log("setDescription : remote");   
+            if(!connectedPeers.get(data.callee)){
+                console.log("*****start response*****");
+                connectedPeers.set(data.callee, pc);
+                Call(data.callee);
+            }
         } else {
             console.log("Answer Set Error : peer undefined");
         }
