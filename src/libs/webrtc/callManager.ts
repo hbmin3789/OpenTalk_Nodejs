@@ -8,9 +8,8 @@ let OnRemoteVideoRemoved: () => void;
 
 let localStream: MediaStream;
 let peers = new Map<string, RTCPeerConnection>();
-let videos: any[] = [];
 let localPC: RTCPeerConnection;
-let videoList = [];
+let videoList = new Map<string, MediaStream>();
 
 const configuration = {
 'iceServers': [
@@ -136,13 +135,25 @@ const addIceCandidatePC = (userID: string, pc: RTCPeerConnection) => {
 }
 
 export const Hangup = (userList: Array<User>) => {
+    console.log("hangup");
     userList.forEach(x=>{
         try{
             peers.get(x.userID)?.close();
         }catch{
-
+            console.log(x.userID + "user hang up error");
+            
         }
-    });
+    })
+
+    try{
+        peers = new Map<string, RTCPeerConnection>();
+        videoList = new Map<string, MediaStream>();
+    }catch{
+
+    }
+
+    console.log("hangup ended");
+    
 };
 
 export const OnUserEnter = (userID: string) => {
@@ -183,6 +194,17 @@ export const addUserList = (userID: string) => {
     }
 }
 
+export const GetRemoteVideos = () => {
+    let retval: any[] = [];
+    videoList.forEach((val,key)=>{
+        let newVideo = document.createElement("video");
+        newVideo.srcObject = val;
+        retval.push(newVideo);
+    });  
+
+    return retval;
+}
+
 export const getLocalStream = () => {
     return localStream;
 }
@@ -203,15 +225,8 @@ const setPeerEventListener = (userID: string, pc: RTCPeerConnection) => {
     });
 
     pc.ontrack = e => {
-        var video = videos.find(x=>x.pc === pc);
-
-        if(video){
-            videoList.push(e.streams[0]);
-            console.log('received remote stream');
-        } else {
-            if(video.stream !== e.streams[0]){
-                video.stream = e.streams[0];
-            }
-        }
+        console.log('received remote stream');
+        videoList.set(userID, e.streams[0]);
+        OnRemoteVideoAdded();
     };
 }
