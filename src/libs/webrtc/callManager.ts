@@ -85,12 +85,15 @@ export const InitCallManager = async () => {
             await pc.setLocalDescription(answer);
             console.log("setDescription : local");
 
-            Container.socket.send(JSON.stringify({
+            let ans = JSON.stringify({
                 message: "answer",
                 answer: answer,
                 callee: data.UserID,
                 caller: Container.curUser.getUserID()
-            }));
+            });
+            console.log("answer : " + ans);
+            
+            Container.socket.send(ans);
         }else{
             console.log("Offer Create Error : peer undefined");
         }
