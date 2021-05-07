@@ -3,8 +3,12 @@ import Container from '../common/container';
 import {setSocketEvent} from '../network/websocketEvents';
 import { User } from '../room/roomInfo';
 
-let OnRemoteVideoAdded: () =>  void;
+let OnRemoteVideoAdded: () => void;
 let OnRemoteVideoRemoved: () => void;
+
+export const setVideoEvent = (func: () => void) => {
+    OnRemoteVideoAdded = func;
+}
 
 let localStream: MediaStream;
 let peers = new Map<string, RTCPeerConnection>();
@@ -195,11 +199,14 @@ export const addUserList = (userID: string) => {
 }
 
 export const GetRemoteVideos = () => {
-    let retval: any[] = [];
+    let retval: HTMLVideoElement[] = [];
     videoList.forEach((val,key)=>{
         let newVideo = document.createElement("video");
+
         newVideo.srcObject = val;
-        
+        newVideo.autoplay = true;
+        newVideo.playsInline = true;
+
         console.log(newVideo);
         retval.push(newVideo);
     });  

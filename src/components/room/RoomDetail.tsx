@@ -5,7 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {GetRemoteVideos, addUserList, getLocalStream} from '../../libs/webrtc/callManager';
+import {setVideoEvent, GetRemoteVideos, addUserList, getLocalStream} from '../../libs/webrtc/callManager';
 
 type Props = {
     children: ReactNode;
@@ -49,6 +49,7 @@ let isSetVideo = false;
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var videoListRef = React.useRef<HTMLDivElement>(null);
+    var [videoList,setVideoList] = React.useState<Array<HTMLVideoElement>>();
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
     useEffect(()=>{
@@ -73,6 +74,16 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         console.log("enter");
     });
 
+    setVideoEvent(() => {
+        setVideoList(new Array<HTMLVideoElement>());
+        GetRemoteVideos().forEach(x=>setVideoList(old=>{
+            if(old)
+                return [...old, x];
+        }));
+        console.log("RoomDetail videoList : ");
+        console.log(videoList);
+    });
+
     console.log("render");
 
     return (
@@ -83,7 +94,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             </div>
             <MyVideo ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></MyVideo>
             <VideoList ref={videoListRef}>
-                {GetRemoteVideos().map(x=>x)}
+                {videoList ? videoList.map(x=>x) : <div></div>}
             </VideoList>
             <ChatTextBlock>
             </ChatTextBlock>
