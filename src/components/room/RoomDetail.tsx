@@ -6,6 +6,7 @@ import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
 import {setVideoEvent, GetRemoteVideos, addUserList, getLocalStream, Call} from '../../libs/webrtc/callManager';
+import Video from './Video';
 
 type Props = {
     children: ReactNode;
@@ -88,8 +89,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
                 {userList.map(x=>x.userName)}
             </div>
             <MyVideo ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></MyVideo>
-            {videoList ? videoList.map(x=><video src={URL.createObjectURL(x)}></video>) : <div></div>}
-            <video ></video>
+            {videoList ? videoList.map(x=><Video srcObject={x}></Video>) : <div></div>}
             <ChatTextBlock>
             </ChatTextBlock>
             <ChatInput></ChatInput>
