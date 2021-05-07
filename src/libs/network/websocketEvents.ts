@@ -4,7 +4,7 @@ export const setSocketEvent = (evName: string, invokeMethod: (data: any) => void
     SocketEvents[evName] = invokeMethod;
 }
 
-export const WebSocketEvents = async (resp: any) => {
+export const WebSocketEvents = (resp: any) => {
     if((typeof resp) === "string") {
         resp = JSON.parse(resp);
     }  

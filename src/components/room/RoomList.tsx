@@ -110,6 +110,9 @@ export const RoomList = () => {
         console.log("room enter");
         var room = data.data as RoomInfo;
         room.userList.forEach(x=>{
+            if(x.userID === Container.curUser.getUserID()){
+                return;
+            }
             addUserList(x.userID);
             Call(x.userID);
         })
