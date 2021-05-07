@@ -190,14 +190,23 @@ export const getLocalStream = () => {
 const setPeerEventListener = (userID: string, pc: RTCPeerConnection) => {
     addIceCandidatePC(userID, pc);
 
+    pc.addEventListener('message', async (message: any) => {
+        console.log(JSON.stringify(message));
+        var message = JSON.parse(message);
+        if (message.iceCandidate) {
+            try {
+                await pc.addIceCandidate(message.iceCandidate);
+            } catch (e) {
+                console.error('Error adding received ice candidate', e);
+            }
+        }
+    });
+
     pc.ontrack = e => {
         var video = videos.find(x=>x.pc === pc);
 
         if(video){
-            video = {pc: pc, stream: e.streams[0]};
-            videos.push(video);
-            videoList.push(video.stream);
-
+            videoList.push(e.streams[0]);
             console.log('received remote stream');
         } else {
             if(video.stream !== e.streams[0]){
