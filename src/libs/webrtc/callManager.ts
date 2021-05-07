@@ -199,9 +199,14 @@ export const GetRemoteVideos = () => {
     videoList.forEach((val,key)=>{
         let newVideo = document.createElement("video");
         newVideo.srcObject = val;
+        
+        console.log(newVideo);
         retval.push(newVideo);
     });  
 
+    console.log("videos : ");
+    console.log(retval);
+    
     return retval;
 }
 
