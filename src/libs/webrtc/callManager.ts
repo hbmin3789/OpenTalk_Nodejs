@@ -2,7 +2,6 @@ import { Media } from 'reactstrap';
 import Container from '../common/container';
 import {setSocketEvent} from '../network/websocketEvents';
 import { User } from '../room/roomInfo';
-import React from 'react';
 
 
 let OnRemoteVideoAdded: () => void;
@@ -208,15 +207,13 @@ export const addUserList = (userID: string) => {
 }
 
 export const GetRemoteVideos = () => {
-    let retval: React.RefObject<HTMLVideoElement>[] = [];
+    let retval: HTMLVideoElement[] = [];
     videoList.forEach((val,key)=>{
-        let newVideo = React.useRef<HTMLVideoElement>(document.createElement('video'));
-        
-        if(newVideo.current){
-            newVideo.current.srcObject = val;
-            newVideo.current.autoplay = true;
-            newVideo.current.playsInline = true;
-        }
+        let newVideo = document.createElement("video");
+
+        newVideo.srcObject = val;
+        newVideo.autoplay = true;
+        newVideo.playsInline = true;
 
         console.log(newVideo);
         retval.push(newVideo);
