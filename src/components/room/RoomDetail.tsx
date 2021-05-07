@@ -5,7 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {addUserList, getLocalStream, Call} from '../../libs/webrtc/callManager';
+import {addUserList, getLocalStream} from '../../libs/webrtc/callManager';
 
 type Props = {
     children: ReactNode;

@@ -39,7 +39,10 @@ const configuration = {
         username: 'hbmin3789@gmail.com'
     }]
 };
-
+const offerOptions = {
+    offerToReceiveAudio: true,
+    offerToReceiveVideo: true
+};
 
 export const requestConnection = () => {
     Container.socket.send(JSON.stringify({
@@ -119,27 +122,14 @@ export const InitCallManager = async () => {
     });
 };
 
-const addIceCandidatePC = (pc: RTCPeerConnection) => {
+const addIceCandidatePC = (userID: string, pc: RTCPeerConnection) => {
     pc.addEventListener('icecandidate', event => {
         if (event.candidate) {
             Container.socket.send(JSON.stringify({
                 message: 'icecandidate',
                 icecandidate: event.candidate,
-                userID: Container.curUser.getUserID()
+                userID: userID
             }));
-        }
-    });
-
-    // Listen for remote ICE candidates and add them to the local RTCPeerConnection
-    pc.addEventListener('message', async (message: any) => {
-        console.log(message);
-        var message = JSON.parse(message);
-        if (message.iceCandidate) {
-            try {
-                await pc.addIceCandidate(message.iceCandidate);
-            } catch (e) {
-                console.error('Error adding received ice candidate', e);
-            }
         }
     });
 }
@@ -154,10 +144,6 @@ export const Hangup = (userList: Array<User>) => {
     });
 };
 
-export function CallAllMember(userList: Array<User>) {
-    userList.forEach(x=>Call(x.userID));
-}
-
 export const OnUserEnter = (userID: string) => {
     peers.set(userID , new RTCPeerConnection(configuration));
 }
@@ -168,7 +154,7 @@ export async function Call(userID: string) {
     let pc = peers.get(userID);
     if(pc) {
         
-        let offer = await pc.createOffer();
+        let offer = await pc.createOffer(offerOptions);
         if(pc){
             await pc.setLocalDescription(offer);
             Container.socket.send(JSON.stringify({
@@ -192,7 +178,7 @@ export const addUserList = (userID: string) => {
         let newPC = new RTCPeerConnection(configuration);
         peers.set(userID, newPC);
         
-        setPeerEventListener(newPC);
+        setPeerEventListener(userID, newPC);
     }
 }
 
@@ -200,14 +186,8 @@ export const getLocalStream = () => {
     return localStream;
 }
 
-const setPeerEventListener = (pc: RTCPeerConnection) => {
-    addIceCandidatePC(pc);
-
-    pc.addEventListener('iceconnectionstatechange', event => {
-        if (pc.connectionState === 'connected') {
-            console.log('peer connected');
-        }
-    });
+const setPeerEventListener = (userID: string, pc: RTCPeerConnection) => {
+    addIceCandidatePC(userID, pc);
 
     pc.ontrack = e => {
         var video = videos.find(x=>x.pc === pc);
