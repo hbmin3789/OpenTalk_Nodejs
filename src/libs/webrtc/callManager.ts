@@ -138,7 +138,7 @@ const addIceCandidatePC = (userID: string, pc: RTCPeerConnection) => {
                 sender: Container.curUser.getUserID()
             }));
         }
-    });
+    };
 }
 
 export const Hangup = (userList: Array<User>) => {
