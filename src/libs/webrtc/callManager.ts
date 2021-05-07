@@ -240,7 +240,8 @@ const setPeerEventListener = (userID: string, pc: RTCPeerConnection) => {
 
     pc.ontrack = e => {
         console.log('received remote stream');
-        videoList.set(userID, e.streams[0]);
+        if(!videoList.get(userID))
+            videoList.set(userID, e.streams[0]);
         OnRemoteVideoAdded();
     };
 }
