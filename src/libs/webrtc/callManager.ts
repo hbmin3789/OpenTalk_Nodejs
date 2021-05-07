@@ -2,6 +2,8 @@ import { Media } from 'reactstrap';
 import Container from '../common/container';
 import {setSocketEvent} from '../network/websocketEvents';
 import { User } from '../room/roomInfo';
+import React from 'react';
+
 
 let OnRemoteVideoAdded: () => void;
 let OnRemoteVideoRemoved: () => void;
@@ -106,7 +108,7 @@ export const InitCallManager = async () => {
     setSocketEvent('answer', async (data: any) => {
         let pc = peers.get(data.callee);
         if(pc){
-            
+
             await pc.setRemoteDescription(data.answer);
             console.log("setDescription : remote");
 
@@ -206,13 +208,15 @@ export const addUserList = (userID: string) => {
 }
 
 export const GetRemoteVideos = () => {
-    let retval: HTMLVideoElement[] = [];
+    let retval: React.RefObject<HTMLVideoElement>[] = [];
     videoList.forEach((val,key)=>{
-        let newVideo = document.createElement("video");
-
-        newVideo.srcObject = val;
-        newVideo.autoplay = true;
-        newVideo.playsInline = true;
+        let newVideo = React.useRef<HTMLVideoElement>(document.createElement('video'));
+        
+        if(newVideo.current){
+            newVideo.current.srcObject = val;
+            newVideo.current.autoplay = true;
+            newVideo.current.playsInline = true;
+        }
 
         console.log(newVideo);
         retval.push(newVideo);
