@@ -113,7 +113,7 @@ export const InitCallManager = async () => {
     });
 
     setSocketEvent('icecandidate', (data: any) => {
-        let pc = peers.get(data.userID);
+        let pc = peers.get(data.sender);
         if(pc){
             pc.addIceCandidate(data.icecandidate);
         } else {

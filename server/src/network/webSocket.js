@@ -41,11 +41,11 @@ const InitWebSocket = (server) => {
                     }));
                     break;
                 case 'icecandidate':
-                    console.log("IceCandidate user ID : " + data.userID);
-                    findSocket(x.receiver).socket.send(JSON.stringify({
+                    console.log("IceCandidate user ID : " + data.receiver);
+                    findSocket(data.receiver).socket.send(JSON.stringify({
                         message: "icecandidate",
                         icecandidate: data.candidate,
-                        userID: x.sender
+                        sender: data.sender
                     }));
                     break;
                 case "answer":
