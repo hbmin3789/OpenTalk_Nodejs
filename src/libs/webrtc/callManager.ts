@@ -160,9 +160,10 @@ export const OnUserEnter = (userID: string) => {
 }
 
 export async function Call(userID: string) {
+    console.log("offer to :" + userID);
+
     let pc = peers.get(userID);
     if(pc) {
-        console.log("offer to :" + userID);
         
         let offer = await pc.createOffer();
         if(pc){
@@ -184,10 +185,12 @@ export async function Call(userID: string) {
 
 export const addUserList = (userID: string) => {
     console.log("peer add : " + userID);
-    let newPC = new RTCPeerConnection(configuration);
-    peers.set(userID, newPC);
-    
-    setPeerEventListener(newPC);
+    if(!peers.get(userID)){
+        let newPC = new RTCPeerConnection(configuration);
+        peers.set(userID, newPC);
+        
+        setPeerEventListener(newPC);
+    }
 }
 
 export const getLocalStream = () => {
