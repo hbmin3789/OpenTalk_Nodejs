@@ -59,10 +59,7 @@ export const InitCallManager = async () => {
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
-
         localStream = stream;
-
-        localStream.getTracks().forEach(s=>localPC.addTrack(s, localStream));
 
         const videoTracks = localStream.getVideoTracks();
         const audioTracks = localStream.getAudioTracks();
@@ -132,7 +129,7 @@ export const InitCallManager = async () => {
 };
 
 const addIceCandidatePC = (userID: string, pc: RTCPeerConnection) => {
-    pc.addEventListener('icecandidate', event => {
+    pc.onicecandidate = (event) => {
         if (event.candidate) {
             Container.socket.send(JSON.stringify({
                 message: 'icecandidate',
@@ -199,8 +196,11 @@ export const addUserList = (userID: string) => {
     if(!peers.get(userID)){
         let newPC = new RTCPeerConnection(configuration);
         peers.set(userID, newPC);
+        localStream.getTracks().forEach(s=>newPC.addTrack(s, localStream));
         
         setPeerEventListener(userID, newPC);
+    } else {
+
     }
 }
 
