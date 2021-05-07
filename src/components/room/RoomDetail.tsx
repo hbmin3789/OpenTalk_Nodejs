@@ -49,7 +49,7 @@ let isSetVideo = false;
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var videoListRef = React.useRef<HTMLDivElement>(null);
-    var [videoList, setVideoList] = React.useState<Array<HTMLVideoElement>>();
+    var [videoList, setVideoList] = React.useState<MediaStream[]>();
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
     useEffect(()=>{
@@ -88,11 +88,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
                 {userList.map(x=>x.userName)}
             </div>
             <MyVideo ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></MyVideo>
-            <VideoList ref={videoListRef}>
-                {videoList ? videoList.map(x=>{
-                    return <video></video>;
-                }) : <div></div>}
-            </VideoList>
+            {videoList ? videoList.map(x=><video src={URL.createObjectURL(x)}></video>) : <div></div>}
             <video ></video>
             <ChatTextBlock>
             </ChatTextBlock>

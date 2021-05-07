@@ -114,7 +114,7 @@ export const InitCallManager = async () => {
             if(!connectedPeers.get(data.callee)){
                 console.log("*****start response*****");
                 connectedPeers.set(data.callee, pc);
-                Call(data.callee);
+                //Call(data.callee);
             }
         } else {
             console.log("Answer Set Error : peer undefined");
@@ -207,16 +207,10 @@ export const addUserList = (userID: string) => {
 }
 
 export const GetRemoteVideos = () => {
-    let retval: HTMLVideoElement[] = [];
+    let retval: MediaStream[] = [];
     videoList.forEach((val,key)=>{
-        let newVideo = document.createElement("video");
 
-        newVideo.srcObject = val;
-        newVideo.autoplay = true;
-        newVideo.playsInline = true;
-
-        console.log(newVideo);
-        retval.push(newVideo);
+        retval.push(val);
     });  
 
     console.log("videos : ");
