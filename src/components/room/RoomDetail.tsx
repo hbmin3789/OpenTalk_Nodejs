@@ -74,11 +74,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     });
 
     setVideoEvent(() => {
-        setVideoList(new Array<HTMLVideoElement>());
-        GetRemoteVideos().forEach(x=>setVideoList(old=>{
-            if(old)
-                return [...old, x];
-        }));
+        setVideoList(GetRemoteVideos());
         console.log("RoomDetail videoList : ");
         console.log(videoList);
     });

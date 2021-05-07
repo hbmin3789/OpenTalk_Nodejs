@@ -106,8 +106,10 @@ export const InitCallManager = async () => {
     setSocketEvent('answer', async (data: any) => {
         let pc = peers.get(data.callee);
         if(pc){
+            
             await pc.setRemoteDescription(data.answer);
-            console.log("setDescription : remote");   
+            console.log("setDescription : remote");
+
             if(!connectedPeers.get(data.callee)){
                 console.log("*****start response*****");
                 connectedPeers.set(data.callee, pc);
@@ -148,7 +150,6 @@ export const Hangup = (userList: Array<User>) => {
             peers.get(x.userID)?.close();
         }catch{
             console.log(x.userID + "user hang up error");
-            
         }
     })
 
@@ -219,7 +220,7 @@ export const GetRemoteVideos = () => {
 
     console.log("videos : ");
     console.log(retval);
-    
+     
     return retval;
 }
 
