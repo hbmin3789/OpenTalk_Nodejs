@@ -88,8 +88,8 @@ export const InitCallManager = async () => {
             Container.socket.send(JSON.stringify({
                 message: "answer",
                 answer: answer,
-                callee: Container.curUser.getUserID(),
-                caller: data.UserID
+                callee: data.UserID,
+                caller: Container.curUser.getUserID()
             }));
         }else{
             console.log("Offer Create Error : peer undefined");
@@ -102,7 +102,7 @@ export const InitCallManager = async () => {
             await pc.setRemoteDescription(data.answer);
             console.log("setDescription : remote");   
         } else {
-            console.log("Answer Create Error : peer undefined");
+            console.log("Answer Set Error : peer undefined");
         }
     });
 

@@ -61,7 +61,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         setUserList(newList);
     });
 
-    setSocketEvent('userEnter', async (resp)=>{
+    setSocketEvent('userEnter', (resp)=>{
         if(resp.data.userID !== Container.curUser.getUserID()){
             setUserList(old=>[...old, resp.data]);
             var user = resp.data as User;
