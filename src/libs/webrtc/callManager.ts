@@ -114,7 +114,7 @@ export const InitCallManager = async () => {
             if(!connectedPeers.get(data.callee)){
                 console.log("*****start response*****");
                 connectedPeers.set(data.callee, pc);
-                Call(data.callee);
+                //Call(data.callee);
             }
         } else {
             console.log("Answer Set Error : peer undefined");
