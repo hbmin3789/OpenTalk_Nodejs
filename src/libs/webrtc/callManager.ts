@@ -88,8 +88,8 @@ export const InitCallManager = async () => {
             let ans = JSON.stringify({
                 message: "answer",
                 answer: answer,
-                callee: data.UserID,
-                caller: Container.curUser.getUserID()
+                callee: Container.curUser.getUserID(),
+                caller: data.caller
             });
             console.log("answer : " + ans);
             
