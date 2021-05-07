@@ -42,16 +42,11 @@ const InitWebSocket = (server) => {
                     break;
                 case 'icecandidate':
                     console.log("IceCandidate user ID : " + data.userID);
-                    var selectedRoom = room.getRoomList()
-                                           .find(x=>x.userList.find(x=>x.userID === data.userID));
-                    selectedRoom.userList.forEach(x=>{
-                        if(x.userID === data.userID)
-                            return;
-                        findSocket(x.userID).socket.send(JSON.stringify({
-                            message: "icecandidate",
-                            icecandidate: data.candidate
-                        }));
-                    });
+                    findSocket(x.receiver).socket.send(JSON.stringify({
+                        message: "icecandidate",
+                        icecandidate: data.candidate,
+                        userID: x.sender
+                    }));
                     break;
                 case "answer":
                     console.log("answer user ID : " + data.callee);
