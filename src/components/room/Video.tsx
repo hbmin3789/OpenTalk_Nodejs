@@ -8,8 +8,11 @@ export const Video = ({srcObject}: Props) => {
     let videoRef = React.useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
-        if(videoRef.current)
+        if(videoRef.current){
             videoRef.current.srcObject = srcObject;
+            videoRef.current.playsInline = true;
+            videoRef.current.autoplay = true;
+        }
     });
 
     return (
