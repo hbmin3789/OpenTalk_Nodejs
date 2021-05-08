@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled,{keyframes} from 'styled-components';
 import Cookies from 'universal-cookie';
 import stringResources from '../../assets/stringResources';
 import RoomInfo from '../../libs/room/roomInfo';
@@ -176,7 +176,7 @@ export const RoomList = () => {
         <Background>
             <UserInfoNav></UserInfoNav>
             <SearchBox placeholder={"검색"}></SearchBox>
-            <RoomCreateButton>방 생성</RoomCreateButton>
+            <RoomCreateButton onClick={()=>{onRoomCreateClicked();}}>방 생성</RoomCreateButton>
             <RoomListView>
                 {roomList.map(x=><RoomListItem onclick={()=>{
                     setSelectedRoom(x);
