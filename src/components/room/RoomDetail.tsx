@@ -5,7 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {setVideoEvent, GetRemoteVideos, addUserList, getLocalStream, Call} from '../../libs/webrtc/callManager';
+import {setVideoEvent, addUserList, getLocalStream, Call} from '../../libs/webrtc/callManager';
 import Video from './Video';
 
 type Props = {
@@ -14,43 +14,65 @@ type Props = {
     OnQuitBtnPressed: () => void;
 };
 
-const RoomDetailBackground = styled.div`{
+//#region styles
 
-}`;
-
-const RoomTitle = styled.a`{
-    font-family: opentalk-light;
-    font-size: 4rem;
-}`;
-
-const ChatTextBlock = styled.a`{
-
-}`;
-
-const ChatInput = styled.input`{
-
-}`;
-
-const QuitButton = styled.button`{
+const Background = styled.div`
     position: absolute;
-    right: 3%;
-    top: 2%;
-}`;
+    width: 100%;
+    height: 100%;
+    background-color: #8888ee;
+`;
 
-const VideoList = styled.div`{
+const RoomNameArea = styled.div`
+    display: inline;
+    margin: 2rem;
+`;
 
-}`;
+const RoomNameTextBox = styled.input`
+    font-size: 2rem;
+    border: none;
+    &:focus{
+        outline: none;
+    }
+`;
 
-const MyVideo = styled.video`{
+const EditRoomNameButton = styled.button`
+    font-size: 2rem;
+    padding: 0;
+    border: none;
+    margin: 0;
+    margin-left: 1rem;
+    cursor: pointer;
+    &:focus{
+        outline: none;
+    }
+`;
 
-}`;
+const Header = styled.div`
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+`;
+
+const VideoList = styled.div`
+    display: block;
+`;
+
+const QuitButton = styled.button`
+    font-size: 2rem;
+    display: inline;
+    margin: 2rem;
+    &:focus{
+        outline: none;
+    }
+`;
+
+//#endregion
 
 let isSetVideo = false;
 
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
-    var videoListRef = React.useRef<HTMLDivElement>(null);
-    var [videoList, setVideoList] = React.useState<MediaStream[]>();
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
 
     useEffect(()=>{
@@ -75,26 +97,28 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     });
 
     setVideoEvent(() => {
-        setVideoList(GetRemoteVideos());
-        console.log("RoomDetail videoList : ");
-        console.log(videoList);
+        console.log("RoomDetail : getStream");
+        
+        setUserList(userList);
     });
 
     console.log("render");
 
     return (
-        <RoomDetailBackground>
-            <RoomTitle>{room.roomName}</RoomTitle>
-            <div>
+        <Background>
+            <Header>
+                <RoomNameArea>
+                    <RoomNameTextBox>{room.roomName}</RoomNameTextBox>
+                    <EditRoomNameButton>확인</EditRoomNameButton>
+                </RoomNameArea>
+                <QuitButton onClick={()=>OnQuitBtnPressed()}>나가기</QuitButton>
+            </Header>
+            <VideoList>
+                <video ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></video>
                 {userList.map(x=>x.userName)}
-            </div>
-            <MyVideo ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></MyVideo>
-            {videoList ? videoList.map(x=><Video srcObject={x}></Video>) : <div></div>}
-            <ChatTextBlock>
-            </ChatTextBlock>
-            <ChatInput></ChatInput>
-            <QuitButton onClick={()=>OnQuitBtnPressed()}>나가기</QuitButton>
-        </RoomDetailBackground>
+                {userList ? userList.map(x=><Video userID={x.userID}></Video>) : <div></div>}
+            </VideoList>
+        </Background>
     );
 }
 

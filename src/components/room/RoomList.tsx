@@ -10,85 +10,74 @@ import { setSocketEvent } from '../../libs/network/websocketEvents';
 import {useHistory} from 'react-router-dom';
 import RoomDetail from './RoomDetail';
 import {Call, addUserList, Hangup} from '../../libs/webrtc/callManager';
+import RoomListItem from './RoomListItem';
+import UserInfoNav from './UserInfoNav';
 
-const Background = styled.div`{
-    position: absolute;
+//#region styles
+
+const Background = styled.div`
+    margin-top: 0;
+    background-color: #8a8aff;
     width: 100%;
     height: 100%;
-    display: inline-flex;
-}`;
-
-const RoomListNavigation = styled.div`{
-    flex-shrink: 0;
-    height: 100%;
-    background-color: #dddddd;
-    width: 25%;
-}`;
-
-const Title = styled.a`{
-    display: block;
+    top: 0%;
+    padding-top: 3rem;
     text-align: center;
-    font-size: 2rem;
-    font-family: opentalk-bold;
-}`;
+`;
 
-const SearchArea = styled.div`{
-    margin-top: 5%;
-}`;
+const ListLayout = styled.div`
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 50%;
+    height: 50%;
+`;
 
-const SearchBox = styled.input`{
-    border-radius: 5px;
-    border-color: #aaaaaa;
-    font-size: 2rem;
-    width: 85%;
-    display: inline;    
+const RoomListView = styled.ul`
+    margin-top: 3rem;
+    margin-left: 7rem;
+    margin-right: 3rem;
+    margin-bottom: 0px;    
+    list-style-type: none;
+    padding: 0px;
+    padding-bottom: 1rem;
+`;
+
+const SearchBox = styled.input`
+    display: inline-block;
+    margin: 0 auto;
+    font-size: 2.5rem;
+    border-radius: 10px;
+    border-color: white;
+    border-width: 1rem;
+
     &:focus{
         outline: none;
     }
-}`;
+`;
 
-const SearchButton = styled.button`{
-    font-size: 1rem;
-    width: 10%;
-    height: 100%;
-    display: inline;
-}`;
+const RoomCreateButtonAnimation = keyframes`
+    0%{box-shadow: 0px 0px 0px 0px rgb(0, 0, 0);}
+    100%{box-shadow: 2px 2px 1px 1px rgb(0, 0, 0);}
+`;
 
-const ListView = styled.ul`{
-    border-width: 5px;
-    list-style-type: none;
-    padding: 0;
-}`;
-
-const ListViewItem = styled.li`{    
-    border-radius: 5px;
-    background-color: white;
-    padding: 10px;
-    margin: 0;
-    overflow: hidden;
-    margin: 2%;
-    user-select: none;
-
-    font-size: 1rem;
+const RoomCreateButton = styled.button`
+    position: absolute;
+    font-size: 2rem;
+    right: 3rem;
     cursor: pointer;
-    box-shadow: 2px 2px 1px 1px #aaaaaa;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
     &:hover{
-        box-shadow: 2px 2px 1px 1px #666666;
+        animation-name: ${RoomCreateButtonAnimation};
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
     }
-    &:active{
-        box-shadow: 1px 1px 1px 1px black;
-    }
-}`;
+`;
 
-const CreateRoomButton = styled.button`{
-}`;
-
-const EmptyRoom = styled.div`{
-    text-align: center;
-    align-self: center;
-    flex-grow: 1;
-    font-family: opentalk-bold;
-}`;
+//#endregion
 
 let loaded;
 
@@ -96,6 +85,12 @@ export const RoomList = () => {
     var cookie = new Cookies();
     var [selectedRoom, setSelectedRoom] = React.useState<RoomInfo>();
     var [roomList, setRoomList] = React.useState<Array<RoomInfo>>(new Array<RoomInfo>());
+
+    window.addEventListener('resize', () => {
+        if(window.innerWidth <= 830){
+            //반응형(모바일)
+        }
+    });
 
     setSocketEvent('roomList',(data: any) => {
         setRoomList(data.roomList);
@@ -179,47 +174,14 @@ export const RoomList = () => {
 
     return (
         <Background>
-            {(selectedRoom) ? 
-            <div></div> : 
-            <RoomListNavigation>
-                <div>
-                    <Title>
-                        {cookie.get(stringResources.userNameCookie)}님, 반가워요!
-                    </Title>
-                    <CreateRoomButton onClick={()=>onRoomCreateClicked()}>
-                        방 만들기
-                    </CreateRoomButton>
-                </div>
-                <SearchArea>
-                    <SearchBox></SearchBox>
-                    <SearchButton>검색</SearchButton>
-                </SearchArea>
-                <ListView>
-                    {(roomList) ? roomList.map(x => 
-                    <ListViewItem onClick={()=>onRoomClicked(x)}>
-                        {x.roomName}
-                    </ListViewItem>) : <div></div>}
-                </ListView>
-            </RoomListNavigation>}
-            {(selectedRoom) ? 
-            <RoomDetail room={selectedRoom} 
-                        OnQuitBtnPressed={()=>{
-                            if(selectedRoom)
-                                Hangup(selectedRoom.userList);
-
-                            Container.socket.send(JSON.stringify({
-                                message: 'quitRoom',
-                                data: {
-                                    userID: Container.curUser.getUserID(),
-                                    roomID: selectedRoom?.roomID
-                                }
-                            }));
-
-                            Container.curRoomID = "";
-                            setSelectedRoom(undefined);
-                        }}>
-
-            </RoomDetail> : <EmptyRoom>방을 만들거나 참여해보세요!</EmptyRoom>}
+            <UserInfoNav></UserInfoNav>
+            <SearchBox placeholder={"검색"}></SearchBox>
+            <RoomCreateButton>방 생성</RoomCreateButton>
+            <RoomListView>
+                {roomList.map(x=><RoomListItem onclick={()=>{
+                    setSelectedRoom(x);
+                }} roomInfo={x}></RoomListItem>)}
+            </RoomListView>
         </Background>
     )
 };
