@@ -82,7 +82,6 @@ const RoomCreateButton = styled.button`
 let loaded;
 
 export const RoomList = () => {
-    var cookie = new Cookies();
     var [selectedRoom, setSelectedRoom] = React.useState<RoomInfo>();
     var [roomList, setRoomList] = React.useState<Array<RoomInfo>>(new Array<RoomInfo>());
 
@@ -172,17 +171,42 @@ export const RoomList = () => {
         
     }
 
+    const onQuitBtnPressed = ()=>{
+        if(selectedRoom)
+            Hangup(selectedRoom.userList);
+
+        Container.socket.send(JSON.stringify({
+            message: 'quitRoom',
+            data: {
+                userID: Container.curUser.getUserID(),
+                roomID: selectedRoom?.roomID
+            }
+        }));
+
+        Container.curRoomID = "";
+        setSelectedRoom(undefined);
+    };
+
     return (
-        <Background>
-            <UserInfoNav></UserInfoNav>
-            <SearchBox placeholder={"검색"}></SearchBox>
-            <RoomCreateButton onClick={()=>{onRoomCreateClicked();}}>방 생성</RoomCreateButton>
-            <RoomListView>
-                {roomList.map(x=><RoomListItem onclick={()=>{
-                    setSelectedRoom(x);
-                }} roomInfo={x}></RoomListItem>)}
-            </RoomListView>
-        </Background>
+        <div>
+            {selectedRoom ? 
+            <RoomDetail room={selectedRoom} OnQuitBtnPressed={onQuitBtnPressed}>
+
+            </RoomDetail> : 
+            <Background>
+                <UserInfoNav></UserInfoNav>
+                <SearchBox placeholder={"검색"}></SearchBox>
+                <RoomCreateButton onClick={()=>{onRoomCreateClicked();}}>방 생성</RoomCreateButton>
+                <RoomListView>
+                    {roomList.map(x=><RoomListItem onclick={()=>{
+                        onRoomClicked(x);
+                    }} roomInfo={x}></RoomListItem>)}
+                </RoomListView>
+            </Background>
+            
+            }
+        </div>
+        
     )
 };
 
