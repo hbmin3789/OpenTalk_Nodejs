@@ -190,7 +190,7 @@ export const RoomList = () => {
     return (
         <div>
             {selectedRoom ? 
-            <RoomDetail room={selectedRoom} OnQuitBtnPressed={onQuitBtnPressed}>
+            <RoomDetail room={selectedRoom} OnQuitBtnPressed={()=>{onQuitBtnPressed()}}>
 
             </RoomDetail> : 
             <Background>
