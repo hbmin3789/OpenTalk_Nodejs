@@ -1,15 +1,18 @@
 import React,{ReactNode, useEffect} from 'react';
+import {GetRemoteVideos} from '../../libs/webrtc/callManager';
 
 type Props = {
-    srcObject: any;
+    userID: string;
 };
 
-export const Video = ({srcObject}: Props) => {
+export const Video = ({userID}: Props) => {
     let videoRef = React.useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
-        if(videoRef.current){
-            videoRef.current.srcObject = srcObject;
+        var streams = GetRemoteVideos();
+        var stream = streams.get(userID);
+        if(videoRef.current && stream){
+            videoRef.current.srcObject = stream;
             videoRef.current.playsInline = true;
             videoRef.current.autoplay = true;
         }
