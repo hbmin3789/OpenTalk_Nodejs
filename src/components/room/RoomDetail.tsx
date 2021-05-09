@@ -102,20 +102,17 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         setUserList(userList);
     });
 
-    console.log("render");
-
     return (
         <Background>
             <Header>
                 <RoomNameArea>
-                    <RoomNameTextBox>{room.roomName}</RoomNameTextBox>
+                    <RoomNameTextBox></RoomNameTextBox>
                     <EditRoomNameButton>확인</EditRoomNameButton>
                 </RoomNameArea>
                 <QuitButton onClick={()=>OnQuitBtnPressed()}>나가기</QuitButton>
             </Header>
             <VideoList>
                 <video ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></video>
-                {userList.map(x=>x.userName)}
                 {userList ? userList.map(x=><Video userID={x.userID}></Video>) : <div></div>}
             </VideoList>
         </Background>
