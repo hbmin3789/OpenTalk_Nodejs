@@ -82,14 +82,9 @@ const RoomCreateButton = styled.button`
 let loaded;
 
 export const RoomList = () => {
+
     var [selectedRoom, setSelectedRoom] = React.useState<RoomInfo>();
     var [roomList, setRoomList] = React.useState<Array<RoomInfo>>(new Array<RoomInfo>());
-
-    window.addEventListener('resize', () => {
-        if(window.innerWidth <= 830){
-            //반응형(모바일)
-        }
-    });
 
     setSocketEvent('roomList',(data: any) => {
         setRoomList(data.roomList);
@@ -198,7 +193,7 @@ export const RoomList = () => {
                 <SearchBox placeholder={"검색"}></SearchBox>
                 <RoomCreateButton onClick={()=>{onRoomCreateClicked();}}>방 생성</RoomCreateButton>
                 <RoomListView>
-                    {roomList.map(x=><RoomListItem onclick={()=>{
+                    {roomList.map(x=><RoomListItem key={x.roomID} onclick={()=>{
                         onRoomClicked(x);
                     }} roomInfo={x}></RoomListItem>)}
                 </RoomListView>

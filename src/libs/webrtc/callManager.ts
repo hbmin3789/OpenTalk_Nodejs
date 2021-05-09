@@ -4,17 +4,16 @@ import {setSocketEvent} from '../network/websocketEvents';
 import { User } from '../room/roomInfo';
 
 
-let OnRemoteVideoAdded: () => void;
+let OnRemoteVideoAdded: (userId: string, mediaStream: MediaStream) => void;
 let OnRemoteVideoRemoved: () => void;
 
-export const setVideoEvent = (func: () => void) => {
+export const setVideoEvent = (func: (userId: string, mediaStream: MediaStream) => void) => {
     OnRemoteVideoAdded = func;
 }
 
 let localStream: MediaStream;
 let peers = new Map<string, RTCPeerConnection>();
 let connectedPeers = new Map<string, RTCPeerConnection>();
-let localPC: RTCPeerConnection;
 let videoList = new Map<string, MediaStream>();
 
 const configuration = {
@@ -56,7 +55,6 @@ export const requestConnection = () => {
 };
 
 export const InitCallManager = async () => {
-    localPC = new RTCPeerConnection();
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
@@ -146,20 +144,10 @@ const addIceCandidatePC = (userID: string, pc: RTCPeerConnection) => {
 
 export const Hangup = (userList: Array<User>) => {
     console.log("hangup");
+
     userList.forEach(x=>{
-        try{
-            peers.get(x.userID)?.close();
-        }catch{
-            console.log(x.userID + "user hang up error");
-        }
+        userLeave(x.userID);
     })
-
-    try{
-        peers = new Map<string, RTCPeerConnection>();
-        videoList = new Map<string, MediaStream>();
-    }catch{
-
-    }
 
     console.log("hangup ended");
     
@@ -199,15 +187,40 @@ export const addUserList = (userID: string) => {
         let newPC = new RTCPeerConnection(configuration);
         peers.set(userID, newPC);
         localStream.getTracks().forEach(s=>newPC.addTrack(s, localStream));
-        
+        //videoRefMap.set(userID, new HTMLVideoElement());
         setPeerEventListener(userID, newPC);
     } else {
 
     }
 }
 
+export const GetRemoteVideo = (userID: string) => {
+    return videoList.get(userID);
+}
+
+export const userLeave = (userID: string) => {
+    console.log("user leave : " + userID);
+    
+    let peer = peers.get(userID);
+    if(peer){
+        peer.onicecandidate = null;
+        peer.ontrack = null;
+    }
+    peers.delete(userID);
+    connectedPeers.delete(userID);
+    videoList.delete(userID);
+}
+
 export const GetRemoteVideos = () => {
-    return videoList;
+    let retval: MediaStream[] = [];
+    videoList.forEach((val,key)=>{
+        retval.push(val);
+    });  
+
+    console.log("videos : ");
+    console.log(retval);
+     
+    return retval;
 }
 
 export const getLocalStream = () => {
@@ -233,6 +246,6 @@ const setPeerEventListener = (userID: string, pc: RTCPeerConnection) => {
         console.log('received remote stream');
         if(!videoList.get(userID))
             videoList.set(userID, e.streams[0]);
-        OnRemoteVideoAdded();
+        OnRemoteVideoAdded(userID, e.streams[0]);
     };
 }

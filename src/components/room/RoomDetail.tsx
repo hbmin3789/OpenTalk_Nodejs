@@ -5,7 +5,11 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {setVideoEvent, addUserList, getLocalStream, GetRemoteVideos} from '../../libs/webrtc/callManager';
+import {setVideoEvent, 
+        userLeave,
+        addUserList,
+        getLocalStream, 
+        GetRemoteVideos} from '../../libs/webrtc/callManager';
 import Video from './Video';
 
 type Props = {
@@ -69,11 +73,10 @@ const QuitButton = styled.button`
 
 //#endregion
 
-let isSetVideo = false;
-
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
+    var [videoList, setVideoList] = React.useState<MediaStream[]>();
 
     useEffect(()=>{
         if(localVideoRef.current)
@@ -83,6 +86,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     setSocketEvent('userLeave', (resp)=>{
         var newList = userList?.filter(x=>x.userID !== resp.userID);
         setUserList(newList);
+        userLeave(resp.userID);
+        setVideoList(GetRemoteVideos());
     });
 
     setSocketEvent('userEnter', (resp)=>{
@@ -90,16 +95,15 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             setUserList(old=>[...old, resp.data]);
             var user = resp.data as User;
             room.userList.push(user);
-
             addUserList(resp.data.userID);
         }
         console.log("enter");
     });
 
     setVideoEvent(() => {
-        console.log("RoomDetail : getStream");        
-        console.log(GetRemoteVideos());
-        setUserList(userList);
+        setVideoList(GetRemoteVideos());
+        console.log("RoomDetail videoList : ");
+        console.log(videoList);
     });
 
     return (
@@ -109,11 +113,15 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
                     <RoomNameTextBox></RoomNameTextBox>
                     <EditRoomNameButton>확인</EditRoomNameButton>
                 </RoomNameArea>
-                <QuitButton onClick={()=>OnQuitBtnPressed()}>나가기</QuitButton>
+                <QuitButton onClick={()=>{
+                    setVideoList(new Array<MediaStream>());
+                    OnQuitBtnPressed();
+                    }}>나가기</QuitButton>
             </Header>
             <VideoList>
                 <video ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></video>
-                {userList ? userList.map(x=><Video userID={x.userID}></Video>) : <div></div>}
+                {videoList ? videoList.map(x=><Video srcObject={x}></Video>)
+                : <div></div>}
             </VideoList>
         </Background>
     );
