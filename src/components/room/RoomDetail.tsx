@@ -5,7 +5,7 @@ import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import UserListView from './UserListView';
-import {setVideoEvent, addUserList, getLocalStream, Call} from '../../libs/webrtc/callManager';
+import {setVideoEvent, addUserList, getLocalStream, GetRemoteVideos} from '../../libs/webrtc/callManager';
 import Video from './Video';
 
 type Props = {
@@ -97,8 +97,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     });
 
     setVideoEvent(() => {
-        console.log("RoomDetail : getStream");
-        
+        console.log("RoomDetail : getStream");        
+        console.log(GetRemoteVideos());
         setUserList(userList);
     });
 
