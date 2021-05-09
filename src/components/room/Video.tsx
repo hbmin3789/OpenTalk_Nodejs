@@ -13,13 +13,11 @@ export const Video = ({userID}: Props) => {
         var stream = streams.get(userID);
         if(videoRef.current && stream){
             videoRef.current.srcObject = stream;
-            videoRef.current.playsInline = true;
-            videoRef.current.autoplay = true;
         }
     });
 
     return (
-        <video ref={videoRef}></video>
+        <video ref={videoRef} playsInline={true} autoPlay={true}></video>
     )
 }
 
