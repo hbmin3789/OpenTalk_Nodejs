@@ -1,4 +1,5 @@
 import UserInfo from '../user/userInfo';
+import RoomTag from './roomTag';
 
 export class User {
     userName = "";
@@ -12,6 +13,7 @@ export class RoomInfo {
     roomID: string = "";
     password: string = "";
     adminID: string = "";
+    tags: RoomTag[] = [];
 };
 
 export default RoomInfo;

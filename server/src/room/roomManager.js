@@ -7,13 +7,14 @@ const getRoomList = () => roomList;
 
 //방을 생성함. 기본 이름 : 새 방
 //TODO : 방을 생성할 때 이름을 지정하면 좋을듯
-const createRoom = (userID, roomName, password) => {
+const createRoom = (userID, roomName, password, tags) => {
     var room = {
         adminID: userID,
         roomName: roomName,
         password: password,
         roomID: guid(),
-        userList: []
+        userList: [],
+        tags: tags
     };
 
     roomList.push(room);
@@ -45,7 +46,7 @@ const deleteRoom = (roomID) => {
         quitRoom(user.userID, roomID);
     });
 
-    roomList.splice(idx);
+    roomList.splice(idx, 1);
 }
 
 //채팅방 입장
@@ -67,10 +68,10 @@ const quitRoom = (userID, roomID) => {
     var room = roomList.find(x => x.roomID === roomID);
     if(room){
         var idx = room.userList.findIndex(x=>x.userID === userID);
-        room.userList.splice(idx);
+        room.userList.splice(idx,1);
         if(room.userList.length === 0) {
             var idx = roomList.findIndex(x=>x===room);
-            roomList.splice(idx);
+            roomList.splice(idx,1);
             return undefined;
         } else {
             if(room.adminID === userID){
