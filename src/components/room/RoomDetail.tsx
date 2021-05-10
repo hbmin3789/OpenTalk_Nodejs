@@ -77,6 +77,8 @@ const QuitButton = styled.button`
 const VideoPlayer = styled.video`
     grid-column: 1;
     grid-row: 1;
+    width: 90%;
+    height: 90%;
 `;
 
 //#endregion
