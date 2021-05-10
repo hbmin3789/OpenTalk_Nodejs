@@ -7,13 +7,14 @@ const getRoomList = () => roomList;
 
 //방을 생성함. 기본 이름 : 새 방
 //TODO : 방을 생성할 때 이름을 지정하면 좋을듯
-const createRoom = (userID, roomName, password) => {
+const createRoom = (userID, roomName, password, tags) => {
     var room = {
         adminID: userID,
         roomName: roomName,
         password: password,
         roomID: guid(),
-        userList: []
+        userList: [],
+        tags: tags
     };
 
     roomList.push(room);

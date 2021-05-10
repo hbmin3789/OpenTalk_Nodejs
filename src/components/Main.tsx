@@ -4,7 +4,7 @@ import SignIn from './account/SignIn';
 import RoomList from './room/RoomList';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Container from '../libs/common/container';
-
+import RoomCreate from './room/RoomCreate';
 
 export const Main = () => {
 
@@ -23,6 +23,7 @@ export const Main = () => {
             <Switch>
                 <Route exact path="/" component={RoomList} />
                 <Route path="/SignIn" render={() => <SignIn isMobile={isMobile}></SignIn>} />
+                <Route path="/CreateRoom" component={RoomCreate}></Route>
             </Switch>
         </BrowserRouter>
     );

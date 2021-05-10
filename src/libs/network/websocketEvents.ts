@@ -7,8 +7,9 @@ export const setSocketEvent = (evName: string, invokeMethod: (data: any) => void
 export const WebSocketEvents = (resp: any) => {
     if((typeof resp) === "string") {
         resp = JSON.parse(resp);
-    }  
-    SocketEvents[resp.message](resp);
+    }
+    if(SocketEvents[resp.message])
+        SocketEvents[resp.message](resp);
 };
 
 export default WebSocketEvents;
