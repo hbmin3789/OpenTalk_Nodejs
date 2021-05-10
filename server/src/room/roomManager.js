@@ -46,7 +46,7 @@ const deleteRoom = (roomID) => {
         quitRoom(user.userID, roomID);
     });
 
-    roomList.splice(idx);
+    roomList.splice(idx, 1);
 }
 
 //채팅방 입장
@@ -68,10 +68,10 @@ const quitRoom = (userID, roomID) => {
     var room = roomList.find(x => x.roomID === roomID);
     if(room){
         var idx = room.userList.findIndex(x=>x.userID === userID);
-        room.userList.splice(idx);
+        room.userList.splice(idx,1);
         if(room.userList.length === 0) {
             var idx = roomList.findIndex(x=>x===room);
-            roomList.splice(idx);
+            roomList.splice(idx,1);
             return undefined;
         } else {
             if(room.adminID === userID){

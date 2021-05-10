@@ -13,10 +13,10 @@ const quitRoomApi = (ws, data) => {
                 message: 'userLeave',
                 userID: data.userID
             }));
+            console.log("userLeave : " + user.userID);
         });
-    }else{
-        socket.onRoomCreated();
     }
+    socket.onRoomCreated();
 }
 
 module.exports = quitRoomApi;
