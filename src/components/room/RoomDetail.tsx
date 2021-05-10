@@ -59,7 +59,10 @@ const Header = styled.div`
 `;
 
 const VideoList = styled.div`
-    display: block;
+    display: grid;
+    margin: 5rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
 `;
 
 const QuitButton = styled.button`
@@ -71,12 +74,17 @@ const QuitButton = styled.button`
     }
 `;
 
+const VideoPlayer = styled.video`
+    grid-column: 1;
+    grid-row: 1;
+`;
+
 //#endregion
 
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
-    var [videoList, setVideoList] = React.useState<MediaStream[]>();
+    var [videoList, setVideoList] = React.useState<Array<MediaStream | undefined>>(new Array<MediaStream | undefined>());
 
     useEffect(()=>{
         if(localVideoRef.current)
@@ -101,7 +109,16 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     });
 
     setVideoEvent(() => {
-        setVideoList(GetRemoteVideos());
+        let videos = GetRemoteVideos();
+        let newList = new Array<MediaStream|undefined>();
+        videos.forEach(x=>newList.push(x));
+        if(videos.length < 9){
+            for(let i=videoList.length;i<9;i++){
+                newList.push(undefined);
+            }
+        }
+        setVideoList(newList);
+        
         console.log("RoomDetail videoList : ");
         console.log(videoList);
     });
@@ -119,9 +136,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
                     }}>나가기</QuitButton>
             </Header>
             <VideoList>
-                <video ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></video>
-                {videoList ? videoList.map(x=><Video srcObject={x}></Video>)
-                : <div></div>}
+                <VideoPlayer ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></VideoPlayer>
+                {videoList?.map((x,idx)=><Video idx={idx} srcObject={x}></Video>)}
             </VideoList>
         </Background>
     );
