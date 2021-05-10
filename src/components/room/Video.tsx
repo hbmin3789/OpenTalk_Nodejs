@@ -8,6 +8,8 @@ type Props = {
 };
 
 const VideoPlayer = styled.video`
+    width: 90%;
+    height: 90%;
 `;
 
 export const Video = ({srcObject, idx}: Props) => {
