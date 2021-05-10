@@ -1,17 +1,14 @@
 import React from 'react';
 import styled,{keyframes} from 'styled-components';
-import Cookies from 'universal-cookie';
-import stringResources from '../../assets/stringResources';
 import RoomInfo from '../../libs/room/roomInfo';
-import axios from 'axios';
 import Container from '../../libs/common/container';
-import User, { UserInfo } from '../../libs/user/userInfo';
 import { setSocketEvent } from '../../libs/network/websocketEvents';
 import {useHistory} from 'react-router-dom';
 import RoomDetail from './RoomDetail';
 import {Call, addUserList, Hangup} from '../../libs/webrtc/callManager';
 import RoomListItem from './RoomListItem';
 import UserInfoNav from './UserInfoNav';
+import MessageBox from './MessageBox';
 
 //#region styles
 
@@ -58,9 +55,11 @@ const RoomCreateButtonAnimation = keyframes`
 let loaded;
 
 export const RoomList = () => {
-
-    var [selectedRoom, setSelectedRoom] = React.useState<RoomInfo>();
-    var [roomList, setRoomList] = React.useState<Array<RoomInfo>>(new Array<RoomInfo>());
+    let [password, setPassword] = React.useState<string>();
+    let [selectedRoom, setSelectedRoom] = React.useState<RoomInfo>();
+    let [roomList, setRoomList] = React.useState<Array<RoomInfo>>(new Array<RoomInfo>());
+    let [displayMessage, setDisplayMessage] = React.useState<boolean>(false);
+    let [messageBoxContent, setMessageBoxContent] = React.useState<string>("");
 
     setSocketEvent('roomList',(data: any) => {
         setRoomList(data.roomList);
@@ -74,6 +73,7 @@ export const RoomList = () => {
     setSocketEvent('enterRoom', (data: any) => {
         console.log("room enter");
         var room = data.data as RoomInfo;
+        setSelectedRoom(room);
         room.userList.forEach(x=>{
             if(x.userID === Container.curUser.getUserID()){
                 return;
@@ -83,6 +83,12 @@ export const RoomList = () => {
         })
 
         console.log(data.data);
+    });
+
+    setSocketEvent('passwordDenied', (data: any)=>{
+        console.log("password denied");
+        setDisplayMessage(true);
+        setMessageBoxContent("비밀번호가 틀렸습니다.");
     });
 
     setSocketEvent('roomCreated', (data: any) => {
@@ -103,7 +109,6 @@ export const RoomList = () => {
     
 
     const onRoomClicked = (room: RoomInfo) => {
-        setSelectedRoom(room);
         if(selectedRoom?.roomID === room.roomID){
             return;
         }
@@ -113,7 +118,7 @@ export const RoomList = () => {
                 message: "enterRoom",
                 data: {
                     roomID: room.roomID,
-                    password: "",
+                    password: password,
                     userID: Container.curUser.getUserID(),
                 }
             }));
@@ -159,6 +164,7 @@ export const RoomList = () => {
             <RoomDetail room={selectedRoom} OnQuitBtnPressed={()=>{onQuitBtnPressed()}}>
 
             </RoomDetail> : 
+            <div>
             <Background>
                 <UserInfoNav createButtonClicked={onCreateButtonClicked}></UserInfoNav>
                 <SearchBox placeholder={"검색"}></SearchBox>
@@ -168,6 +174,9 @@ export const RoomList = () => {
                     }} roomInfo={x}></RoomListItem>)}
                 </RoomListView>
             </Background>
+            <MessageBox setDisplay={setDisplayMessage} display={displayMessage} message={messageBoxContent}></MessageBox>
+            </div>
+
             
             }
         </div>

@@ -50,9 +50,11 @@ const deleteRoom = (roomID) => {
 }
 
 //채팅방 입장
-const enterRoom = (userID, roomID) => {
+const enterRoom = (userID, roomID, password) => {
     console.log(userID + " entered to " + roomID);
     var room = roomList.find(x => x.roomID === roomID);
+    if(room.password !== password)
+        return undefined;
     if(room){
         var user = room.userList.find(x=>x.userID === userID);
         if(!user){
