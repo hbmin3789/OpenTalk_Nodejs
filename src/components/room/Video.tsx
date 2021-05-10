@@ -4,16 +4,19 @@ import {GetRemoteVideos} from '../../libs/webrtc/callManager';
 
 type Props = {
     srcObject: any | undefined;
+    idx: number;
 };
 
 const VideoPlayer = styled.video`
-    display: inline-block;
-    width: 33%;
-    height: 33%;
 `;
 
-export const Video = ({srcObject}: Props) => {
+export const Video = ({srcObject, idx}: Props) => {
     let videoRef = React.useRef<HTMLVideoElement>(null);
+    idx += 1;
+    const VideoFrame = styled.div`
+        grid-column: ${(idx % 3)+1};
+        grid-row: ${Math.floor(idx / 3)+1};
+    `;
 
     useEffect(() => {
         if(!srcObject)
@@ -26,7 +29,7 @@ export const Video = ({srcObject}: Props) => {
         }
     });
 
-    return srcObject ? <VideoPlayer ref={videoRef} playsInline={true} autoPlay={true}></VideoPlayer> : <a>사람을 기다려요</a>;
+    return srcObject ? <VideoFrame><VideoPlayer ref={videoRef} playsInline={true} autoPlay={true}></VideoPlayer></VideoFrame> : <a>사람을 기다려요</a>;
 }
 
 export default Video;

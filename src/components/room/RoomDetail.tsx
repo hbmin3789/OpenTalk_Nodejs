@@ -59,8 +59,10 @@ const Header = styled.div`
 `;
 
 const VideoList = styled.div`
-    display: block;
+    display: grid;
+    margin: 5rem;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
 `;
 
 const QuitButton = styled.button`
@@ -73,9 +75,8 @@ const QuitButton = styled.button`
 `;
 
 const VideoPlayer = styled.video`
-    display: inline-block;
-    width: 33%;
-    height: 33%;
+    grid-column: 1;
+    grid-row: 1;
 `;
 
 //#endregion
@@ -136,7 +137,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             </Header>
             <VideoList>
                 <VideoPlayer ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></VideoPlayer>
-                {videoList?.map(x=><Video srcObject={x}></Video>)}
+                {videoList?.map((x,idx)=><Video idx={idx} srcObject={x}></Video>)}
             </VideoList>
         </Background>
     );
