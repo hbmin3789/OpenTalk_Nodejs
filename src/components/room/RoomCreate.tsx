@@ -51,8 +51,8 @@ const ApplyButton = styled.button`
 `;
 
 export const RoomCreate = () => {
-    let [roomName, setRoomName] = React.useState<string>();
-    let [password, setPassword] = React.useState<string>();
+    let [roomName, setRoomName] = React.useState<string>("");
+    let [password, setPassword] = React.useState<string>("");
     let history = useHistory();
 
     const onRoomCreateClicked = () => {
