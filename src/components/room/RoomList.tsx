@@ -9,6 +9,7 @@ import {Call, addUserList, Hangup} from '../../libs/webrtc/callManager';
 import RoomListItem from './RoomListItem';
 import UserInfoNav from './UserInfoNav';
 import MessageBox from './MessageBox';
+import PasswordMessage from './PasswordMessage';
 
 //#region styles
 
@@ -55,11 +56,14 @@ const RoomCreateButtonAnimation = keyframes`
 let loaded;
 
 export const RoomList = () => {
-    let [password, setPassword] = React.useState<string>();
     let [selectedRoom, setSelectedRoom] = React.useState<RoomInfo>();
     let [roomList, setRoomList] = React.useState<Array<RoomInfo>>(new Array<RoomInfo>());
+
     let [displayMessage, setDisplayMessage] = React.useState<boolean>(false);
     let [messageBoxContent, setMessageBoxContent] = React.useState<string>("");
+
+    let [displayPassword, setDisplayPassword] = React.useState<boolean>(false);
+    let [passwordRoom, setPasswordRoom] = React.useState<RoomInfo>(new RoomInfo());
 
     setSocketEvent('roomList',(data: any) => {
         setRoomList(data.roomList);
@@ -106,9 +110,17 @@ export const RoomList = () => {
         history.push('/SignIn');
     }
 
-    
-
     const onRoomClicked = (room: RoomInfo) => {
+        if(room.password.length === 0){
+            enterRoom(room, "");
+            return;
+        }
+        setPasswordRoom(room);
+        setDisplayPassword(true);
+    }    
+
+    const enterRoom = (room: RoomInfo, password: string) => {
+        setDisplayPassword(false);
         if(selectedRoom?.roomID === room.roomID){
             return;
         }
@@ -175,6 +187,10 @@ export const RoomList = () => {
                 </RoomListView>
             </Background>
             <MessageBox setDisplay={setDisplayMessage} display={displayMessage} message={messageBoxContent}></MessageBox>
+            <PasswordMessage confirm={(room, password)=>enterRoom(room, password)} 
+                             cancel={()=>setDisplayPassword(false)}
+                             room={passwordRoom}
+                             display={displayPassword}></PasswordMessage>
             </div>
 
             
