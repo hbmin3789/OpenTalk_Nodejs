@@ -1,7 +1,7 @@
 var createRoom = require('./roomApis/roomCreate');
 var quitRoom = require('./roomApis/quitRoom');
 var enterRoom = require('./roomApis/enterRoom');
-var getUserName = require('../services/userList');
+var {getUser} = require('../services/userList');
 var {getRoomList} = require('./roomManager.js');
 var changeRoom = require('./roomApis/changeRoom');
 
@@ -31,7 +31,7 @@ messageList["userName"] = (ws, data) => {
     sendWebSocketMsg(ws,{
         message: "userName",
         userID: data.userID,
-        userName: getUserName(data.userID)
+        userName: getUser(data.userID).userName
     });
 }
 messageList["disconnect"] = (ws, data) => {

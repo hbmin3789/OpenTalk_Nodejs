@@ -38,10 +38,12 @@ const CreateRoomButton = styled.button`
     background-color: transparent;
     border-left-width: 0;
     border-right-width: 0;
-    border-bottom-width: thick;
     border-color: #666666;
-    color: #aaaaaa;
+    border-style: solid;
+    color: #dddddd;
     cursor: pointer;
+    margin-top: 2rem;
+
     &:focus{
         outline: none;
     }
@@ -49,6 +51,7 @@ const CreateRoomButton = styled.button`
 
 const UserNameText = styled.a`
     font-size: 2rem;
+    color: white;
 `;
 
 export const UserInfoNav = ({createButtonClicked}:Props) => {

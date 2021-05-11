@@ -29,14 +29,12 @@ const PasswordMessageBackground = styled.div`
     left: 50%;
     transform: translate(-50%,-50%);
     text-align: center;
+    border-radius: 10px;
 `;
 
 const Area = styled.div`
-    position: absolute;
+    margin-top: 2.5rem;
     width: 100%;
-    left: 50%;
-    top:50%;
-    transform: translate(-50%,-50%);
 `;
 
 const CloseButton = styled.button`
@@ -55,12 +53,13 @@ const ApplyButton = styled.button`
 
 const PasswordBox = styled.input`
     display: inline-block;
-    font-size: 1rem;
+    font-size: 1.5rem;
+    margin-left: 1rem;
 `;
 
 const Message = styled.a`
     display: inline-block;
-    font-size: 1rem;
+    font-size: 1.5rem;
 `;
 
 //#endregion

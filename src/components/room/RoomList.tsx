@@ -40,6 +40,7 @@ const SearchBox = styled.input`
     border-radius: 10px;
     border-color: white;
     border-width: 1rem;
+    border-style: solid;
 
     &:focus{
         outline: none;

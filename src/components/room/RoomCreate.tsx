@@ -2,52 +2,74 @@ import React from 'react';
 import styled,{keyframes} from 'styled-components';
 import Container from '../../libs/common/container';
 import {useHistory} from 'react-router-dom';
+import TagInput from '../controls/TagInput';
+
+const Background = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #dddddd;
+    overflow: scroll;
+`;
+
+const Title = styled.div`
+    font-size: 4rem;
+    color: black;
+    text-align: center;
+    margin-top: 3rem;
+`;
 
 
 const CreateArea = styled.div`
-    position: absolute;
-    box-shadow: 1px 1px 10px black;
-    width: 50%;
-    height: 70%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 30rem;
+    height: auto;
+    padding: 2rem;
+    margin-top: 5rem;
+    background-color: white;
+    border-radius: 10px;
+    &:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
 `;
 
 const InputArea = styled.div`
-    position: absolute;
-    left: 50%;
-    top: 2rem;
-    transform: translate(-50%,0);
     font-size: 2rem;
 `;
 
 const Area = styled.div`
-    display: block;
-    text-align: left;
+    display: inline-block;
+    text-align: center;
     margin-top: 2rem;
+    width: 100%;
+`;
+
+const Text = styled.div`
+    width: 30%;
+    display: inline-block;
+
 `;
 
 const Input = styled.input`
     font-size: 2rem;
+    width: 50%;
 `;
 
 const ButtonArea = styled.div`
-    position: absolute;
-    width: 100%;
-    margin-top: 2rem;
+    position: relative;
+    margin: 2rem;
 `;
 
-const CancelButton = styled.button`
+const CancelButton = styled.button` 
     position: absolute;
-    top: 1rem;
-    right: 1rem;
 `;
 
 const ApplyButton = styled.button`
     position: absolute;
-    top: 1rem;
-    left: 1rem;
+    right: 0;
 `;
 
 export const RoomCreate = () => {
@@ -70,22 +92,28 @@ export const RoomCreate = () => {
     }
 
     return (
-        <CreateArea>
-            <InputArea>
-                <Area>
-                    <a>방 이름</a>
-                    <Input onChange={e=>setRoomName(e.target.value)}></Input>
-                </Area>
-                <Area>
-                    <a>비밀번호</a>
-                    <Input onChange={e=>setPassword(e.target.value)}></Input>
-                </Area>
-                <ButtonArea>
-                    <CancelButton>취소</CancelButton>
-                    <ApplyButton onClick={onRoomCreateClicked}>생성</ApplyButton>
-                </ButtonArea>
-            </InputArea>
-        </CreateArea>
+        <Background>
+            <Title>방을 만들어보세요!</Title>
+            <CreateArea>
+                <InputArea>
+                    <Area>
+                        <Text>방 이름</Text>
+                        <Input onChange={e=>setRoomName(e.target.value)}></Input>
+                    </Area>
+                    <Area>
+                        <Text>비밀번호</Text>
+                        <Input onChange={e=>setPassword(e.target.value)}></Input>
+                    </Area>
+                    <Area>
+                        <TagInput></TagInput>
+                    </Area>
+                    <ButtonArea>
+                        <CancelButton onClick={()=>history.push('/')}>취소</CancelButton>
+                        <ApplyButton onClick={onRoomCreateClicked}>생성</ApplyButton>
+                    </ButtonArea>
+                </InputArea>
+            </CreateArea>
+        </Background>
     );
 };
 
