@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import TagItem from './TagItem';
 
@@ -28,11 +28,19 @@ const CreateTagButton = styled.button`
     font-size: 1rem;
 `;
 
-export const TagInput = () => {
+type Props = {
+    getTagList: (arr: string[]) => void;
+};
+
+export const TagInput = ({getTagList}: Props) => {
     let [tagList, setTagList] = React.useState<Array<string>>(new Array<string>());
     let [tagInputString, setTagInputString] = React.useState<string>("");
-
+    let tagTextBoxRef = React.useRef<HTMLInputElement>(null);
     const onAddTag = () => {
+        getTagList(tagList);
+        if(tagTextBoxRef.current){
+            tagTextBoxRef.current.value = "";
+        }
         if(tagList.find(x=>x === tagInputString)){
             alert("이미 추가된 태그입니다.");
             return;
@@ -44,7 +52,7 @@ export const TagInput = () => {
         <Container>
             <TagInputArea>
                 <Hint>태그</Hint>
-                <TagInputBox onChange={e=>{
+                <TagInputBox ref={tagTextBoxRef} onChange={e=>{
                     if(e.target.value.length >= 13){
                         e.target.value = e.target.value.slice(0,12);
                     }
