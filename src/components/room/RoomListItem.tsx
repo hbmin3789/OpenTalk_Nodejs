@@ -68,6 +68,7 @@ export const RoomListItem  = ({roomInfo, onclick}: Props) => {
                 <Title>{roomInfo.roomName}</Title>
                 <Title>{adminName}님의 방</Title>
                 <UserCount>유저{roomInfo.userList.length}/9명</UserCount>
+                {roomInfo.tags.map(x=><div>{x}</div>)}
             </CardBackground>
         </Background>
     );

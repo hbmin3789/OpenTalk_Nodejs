@@ -18,7 +18,8 @@ const createRoom = (userID, roomName, password, tags) => {
     };
 
     roomList.push(room);
-    console.log(room.roomName + "room created");
+    console.log(room);
+    console.log("room created");
 
     return room;
 }

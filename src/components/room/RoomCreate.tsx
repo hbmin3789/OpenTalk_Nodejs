@@ -75,16 +75,18 @@ const ApplyButton = styled.button`
 export const RoomCreate = () => {
     let [roomName, setRoomName] = React.useState<string>("");
     let [password, setPassword] = React.useState<string>("");
-    let history = useHistory();
+    let tagList: string[] = new Array<string>();
+    let history = useHistory()
 
     const onRoomCreateClicked = () => {
+        
         var msg = JSON.stringify({
             message: 'createRoom',
             data:{
                 userID: Container.curUser.getUserID(),
                 roomName: roomName,
                 password: password,
-                tags: new Array<number>()
+                tags: tagList
             }});                     
         Container.socket.send(msg);
         console.log('message To Server' + msg);
@@ -105,7 +107,10 @@ export const RoomCreate = () => {
                         <Input onChange={e=>setPassword(e.target.value)}></Input>
                     </Area>
                     <Area>
-                        <TagInput></TagInput>
+                        <TagInput getTagList={(arr)=>{                            
+                            console.log(arr);
+                            tagList = arr;
+                        }}></TagInput>
                     </Area>
                     <ButtonArea>
                         <CancelButton onClick={()=>history.push('/')}>취소</CancelButton>
