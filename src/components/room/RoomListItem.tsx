@@ -1,7 +1,8 @@
 import React,{ReactNode} from 'react';
 import styled, { keyframes } from 'styled-components';
 import RoomInfo from '../../libs/room/roomInfo';
-
+import { setSocketEvent } from '../../libs/network/websocketEvents';
+import Container from '../../libs/common/container';
 type Props = {
     children?: ReactNode;
     roomInfo: RoomInfo;
@@ -25,7 +26,7 @@ const Background = styled.div`
     cursor: pointer;
     text-align: justify;
     &:hover{
-
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
 `;
 
@@ -48,11 +49,25 @@ const CardBackground = styled.div`
 `;
 
 export const RoomListItem  = ({roomInfo, onclick}: Props) => {
+    let [adminName,setAdminName] = React.useState<string>("");
+
+    setSocketEvent('userName',(data)=>{
+        setAdminName(data.userName);
+    });
+
+    Container.socket.send(JSON.stringify({
+        message: "userName",
+        userID: roomInfo.adminID,
+    }));
+
+
+
     return (
         <Background onClick={() => {onclick();}}>
             <CardBackground>
                 <Title>{roomInfo.roomName}</Title>
-                <UserCount>유저{roomInfo.userList.length}/2명</UserCount>
+                <Title>{adminName}님의 방</Title>
+                <UserCount>유저{roomInfo.userList.length}/9명</UserCount>
             </CardBackground>
         </Background>
     );
