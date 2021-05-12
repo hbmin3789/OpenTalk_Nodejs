@@ -13,7 +13,7 @@ const Hint = styled.div`
 `;
 
 const TagInputArea = styled.div`
-
+    display: flex;
 `;
 
 const Container = styled.div`
@@ -26,6 +26,13 @@ const TagList = styled.div`
 
 const CreateTagButton = styled.button`
     font-size: 1rem;
+    background-color: #88ff88;
+    border-width: thin;
+    cursor: pointer;
+    &:hover{
+        background-color: #66ff66;
+    }
+    
 `;
 
 type Props = {
@@ -37,7 +44,14 @@ export const TagInput = ({getTagList}: Props) => {
     let [tagInputString, setTagInputString] = React.useState<string>("");
     let tagTextBoxRef = React.useRef<HTMLInputElement>(null);
     const onAddTag = () => {
-        getTagList(tagList);
+
+        if(tagList.length >= 4){
+            alert("태그를 더 추가할 수 없습니다.");
+            return;
+        }
+        if(tagInputString === ""){
+            return;
+        }
         if(tagTextBoxRef.current){
             tagTextBoxRef.current.value = "";
         }
@@ -46,7 +60,18 @@ export const TagInput = ({getTagList}: Props) => {
             return;
         }
         setTagList([...tagList, tagInputString]);
+        setTagInputString("");
     }
+
+    useEffect(()=>{
+        getTagList(tagList);
+    });
+
+    window.onkeyup = (e: any) => {
+        if(e.key === "Enter"){
+            onAddTag();
+        }
+    };
 
     return (
         <Container>

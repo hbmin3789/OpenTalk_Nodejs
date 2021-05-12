@@ -11,6 +11,7 @@ import {setVideoEvent,
         getLocalStream, 
         GetRemoteVideos} from '../../libs/webrtc/callManager';
 import Video from './Video';
+import ChatControl from '../controls/ChatControl';
 
 type Props = {
     children: ReactNode;
@@ -25,6 +26,8 @@ const Background = styled.div`
     width: 100%;
     height: 100%;
     background-color: #8888ee;
+    display: flex;
+    flex-direction: row;
 `;
 
 const RoomNameArea = styled.div`
@@ -81,6 +84,10 @@ const VideoPlayer = styled.video`
     height: 90%;
 `;
 
+const VideoArea = styled.div`
+    width: 100%;
+`;
+
 //#endregion
 
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
@@ -127,20 +134,23 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     return (
         <Background>
-            <Header>
-                <RoomNameArea>
-                    <RoomNameTextBox></RoomNameTextBox>
-                    <EditRoomNameButton>확인</EditRoomNameButton>
-                </RoomNameArea>
-                <QuitButton onClick={()=>{
-                    setVideoList(new Array<MediaStream>());
-                    OnQuitBtnPressed();
-                    }}>나가기</QuitButton>
-            </Header>
-            <VideoList>
-                <VideoPlayer ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></VideoPlayer>
-                {videoList?.map((x,idx)=><Video idx={idx} srcObject={x}></Video>)}
-            </VideoList>
+            <VideoArea>
+                <Header>
+                    <RoomNameArea>
+                        <RoomNameTextBox></RoomNameTextBox>
+                        <EditRoomNameButton>확인</EditRoomNameButton>
+                    </RoomNameArea>
+                    <QuitButton onClick={()=>{
+                        setVideoList(new Array<MediaStream>());
+                        OnQuitBtnPressed();
+                        }}>나가기</QuitButton>
+                </Header>
+                <VideoList>
+                    <VideoPlayer ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></VideoPlayer>
+                    {videoList?.map((x,idx)=><Video idx={idx} srcObject={x}></Video>)}
+                </VideoList>
+            </VideoArea>
+            <ChatControl room={room}></ChatControl>
         </Background>
     );
 }

@@ -41,7 +41,7 @@ const InputArea = styled.div`
 `;
 
 const Area = styled.div`
-    display: inline-block;
+    display: flex;
     text-align: center;
     margin-top: 2rem;
     width: 100%;
@@ -60,16 +60,38 @@ const Input = styled.input`
 
 const ButtonArea = styled.div`
     position: relative;
-    margin: 2rem;
+    text-align: right;
+    margin: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
 `;
 
 const CancelButton = styled.button` 
     position: absolute;
+    background-color: #dd7788;
+    cursor: pointer;
+    border: none;
+    left: 0;
+    font-size: 1.5rem;
+    box-shadow: 1px 1px 2px black;
+    &:hover{
+        box-shadow: 1px 1px 4px black;
+        outline: none;
+    }
 `;
 
 const ApplyButton = styled.button`
     position: absolute;
+    background-color: #7788ff;
     right: 0;
+    cursor: pointer;
+    box-shadow: 1px 1px 2px black;
+    font-size: 1.5rem;
+    border: none;
+    &:hover{
+        box-shadow: 1px 1px 4px black;
+        outline: none;
+    }
 `;
 
 export const RoomCreate = () => {
@@ -79,7 +101,10 @@ export const RoomCreate = () => {
     let history = useHistory()
 
     const onRoomCreateClicked = () => {
-        
+        if(roomName.length === 0){
+
+            return;
+        }
         var msg = JSON.stringify({
             message: 'createRoom',
             data:{
@@ -100,11 +125,21 @@ export const RoomCreate = () => {
                 <InputArea>
                     <Area>
                         <Text>방 이름</Text>
-                        <Input onChange={e=>setRoomName(e.target.value)}></Input>
+                        <Input onChange={e=>{
+                            if(e.target.value.length >= 11){
+                                e.target.value = e.target.value.slice(0,10);
+                            }
+                            setRoomName(e.target.value)
+                        }}></Input>
                     </Area>
                     <Area>
                         <Text>비밀번호</Text>
-                        <Input onChange={e=>setPassword(e.target.value)}></Input>
+                        <Input onChange={e=>{
+                            if(e.target.value.length >= 13){
+                                e.target.value = e.target.value.slice(0,12);
+                            }
+                            setPassword(e.target.value)
+                            }}></Input>
                     </Area>
                     <Area>
                         <TagInput getTagList={(arr)=>{                            
