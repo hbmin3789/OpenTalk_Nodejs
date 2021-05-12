@@ -15,12 +15,16 @@ import PasswordMessage from './PasswordMessage';
 
 const Background = styled.div`
     position: absolute;  
+    display: flex;
     background-color: #8a8aff;
     width: 100%;
     height: 100%;
     top: 0%;
-    padding-top: 3rem;
-    text-align: center;
+    text-align: left;
+    align-items: flex-start;
+`;
+
+const RoomArea = styled.div`
 `;
 
 const RoomListView = styled.ul`
@@ -35,13 +39,12 @@ const RoomListView = styled.ul`
 
 const SearchBox = styled.input`
     display: inline-block;
-    margin: 0 auto;
-    font-size: 2.5rem;
-    border-radius: 10px;
+    font-size: 1.5rem;
+    margin: 2rem;
     border-color: white;
-    border-width: 1rem;
+    border-width: 0.4rem 1rem;
     border-style: solid;
-
+    width: 30rem;
     &:focus{
         outline: none;
     }
@@ -181,14 +184,16 @@ export const RoomList = () => {
             <div>
             <Background>
                 <UserInfoNav createButtonClicked={onCreateButtonClicked}></UserInfoNav>
-                <SearchBox placeholder={"검색"} onChange={(e)=>{
-                    setKeyWord(e.target.value);
-                }}></SearchBox>
-                <RoomListView>
-                    {roomList.filter(x=>x.roomName.includes(keyWord)).map(x=><RoomListItem key={x.roomID} onclick={()=>{
-                        onRoomClicked(x);
-                    }} roomInfo={x}></RoomListItem>)}
-                </RoomListView>
+                <RoomArea>
+                    <SearchBox placeholder={"검색"} onChange={(e)=>{
+                        setKeyWord(e.target.value);
+                    }}></SearchBox>
+                    <RoomListView>
+                        {roomList.filter(x=>x.roomName.includes(keyWord)).map(x=><RoomListItem key={x.roomID} onclick={()=>{
+                            onRoomClicked(x);
+                        }} roomInfo={x}></RoomListItem>)}
+                    </RoomListView>
+                </RoomArea>
             </Background>
             <MessageBox setDisplay={setDisplayMessage} display={displayMessage} message={messageBoxContent}></MessageBox>
             <PasswordMessage confirm={(room, password)=>enterRoom(room, password)} 

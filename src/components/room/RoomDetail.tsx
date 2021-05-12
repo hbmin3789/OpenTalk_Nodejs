@@ -1,10 +1,8 @@
 import React, {ReactNode, useEffect} from 'react';
 import styled from 'styled-components';
 import RoomInfo,{User} from '../../libs/room/roomInfo';
-import UserInfo from '../../libs/user/userInfo';
 import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
-import UserListView from './UserListView';
 import {setVideoEvent, 
         userLeave,
         addUserList,
@@ -12,6 +10,7 @@ import {setVideoEvent,
         GetRemoteVideos} from '../../libs/webrtc/callManager';
 import Video from './Video';
 import ChatControl from '../controls/ChatControl';
+import getUserList from '../../libs/user/userList';
 
 type Props = {
     children: ReactNode;
@@ -60,14 +59,23 @@ const QuitButton = styled.button`
 `;
 
 const VideoPlayer = styled.video`
-    grid-column: 1;
-    grid-row: 1;
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
 `;
 
 const VideoArea = styled.div`
     width: 100%;
+`;
+
+type VideoItem = {
+    stream: MediaStream;
+    userName: string;
+};
+
+const MyVideoArea = styled.div`
+    grid-column: 1;
+    grid-row: 1;
+    padding: 1rem;
 `;
 
 //#endregion
@@ -75,7 +83,7 @@ const VideoArea = styled.div`
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var [userList, setUserList] = React.useState<Array<User>>(room.userList);
-    var [videoList, setVideoList] = React.useState<Array<MediaStream | undefined>>(new Array<MediaStream | undefined>());
+    var [videoList, setVideoList] = React.useState<Array<VideoItem>>(new Array<VideoItem>());
 
     useEffect(()=>{
         if(localVideoRef.current)
@@ -86,7 +94,6 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         var newList = userList?.filter(x=>x.userID !== resp.userID);
         setUserList(newList);
         userLeave(resp.userID);
-        setVideoList(GetRemoteVideos());
     });
 
     setSocketEvent('userEnter', (resp)=>{
@@ -100,18 +107,20 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     });
 
     setVideoEvent(() => {
+        let newList = new Array<VideoItem>();
         let videos = GetRemoteVideos();
-        let newList = new Array<MediaStream|undefined>();
-        videos.forEach(x=>newList.push(x));
-        if(videos.length < 9){
-            for(let i=videoList.length;i<9;i++){
-                newList.push(undefined);
-            }
-        }
-        setVideoList(newList);
+        let userList = getUserList();
+        userList.forEach(u=>{
+            let stream = videos.get(u.userID);
+            if(stream)
+                newList.push({ stream: stream, userName: u.userName });
+        });
+        console.log("******");
         
-        console.log("RoomDetail videoList : ");
-        console.log(videoList);
+        console.log(userList);
+        console.log("******");
+        
+        setVideoList(newList);
     });
 
     return (
@@ -122,13 +131,15 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
                         {room.roomName}
                     </RoomNameArea>
                     <QuitButton onClick={()=>{
-                        setVideoList(new Array<MediaStream>());
+                        setVideoList(new Array<VideoItem>());
                         OnQuitBtnPressed();
                         }}>나가기</QuitButton>
                 </Header>
                 <VideoList>
-                    <VideoPlayer ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></VideoPlayer>
-                    {videoList?.map((x,idx)=><Video idx={idx} srcObject={x}></Video>)}
+                    <MyVideoArea>
+                        <VideoPlayer ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></VideoPlayer>
+                    </MyVideoArea>
+                    {videoList?.map((x,idx)=><Video idx={idx} item={x}></Video>)}
                 </VideoList>
             </VideoArea>
             <ChatControl room={room}></ChatControl>

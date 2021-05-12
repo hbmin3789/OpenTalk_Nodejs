@@ -211,15 +211,7 @@ export const userLeave = (userID: string) => {
 }
 
 export const GetRemoteVideos = () => {
-    let retval: MediaStream[] = [];
-    videoList.forEach((val,key)=>{
-        retval.push(val);
-    });  
-
-    console.log("videos : ");
-    console.log(retval);
-     
-    return retval;
+    return videoList;
 }
 
 export const getLocalStream = () => {
