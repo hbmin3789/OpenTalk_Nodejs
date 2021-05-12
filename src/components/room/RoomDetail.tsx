@@ -33,26 +33,8 @@ const Background = styled.div`
 const RoomNameArea = styled.div`
     display: inline;
     margin: 2rem;
-`;
-
-const RoomNameTextBox = styled.input`
-    font-size: 2rem;
-    border: none;
-    &:focus{
-        outline: none;
-    }
-`;
-
-const EditRoomNameButton = styled.button`
-    font-size: 2rem;
-    padding: 0;
-    border: none;
-    margin: 0;
-    margin-left: 1rem;
-    cursor: pointer;
-    &:focus{
-        outline: none;
-    }
+    font-size: 3rem;
+    color: white;
 `;
 
 const Header = styled.div`
@@ -137,8 +119,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             <VideoArea>
                 <Header>
                     <RoomNameArea>
-                        <RoomNameTextBox></RoomNameTextBox>
-                        <EditRoomNameButton>확인</EditRoomNameButton>
+                        {room.roomName}
                     </RoomNameArea>
                     <QuitButton onClick={()=>{
                         setVideoList(new Array<MediaStream>());

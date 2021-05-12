@@ -96,8 +96,10 @@ export const ChatControl = ({room}: Props) => {
             </InputArea>
             <ChatList>
                 {chatList ? chatList.map(x=>
-                (x.userID === Container.curUser.getUserID()) ? <MyChat>{x.content}</MyChat> : 
-                <Chat>{x.userName} : {x.content}</Chat>) : <div></div>}
+                (x.userID === Container.curUser.getUserID()) ?
+                    <MyChat>{x.content}</MyChat> : 
+                    <Chat>{x.userName} : {x.content}</Chat>)
+                 : <div></div>}
             </ChatList>
         </Background>
     );
