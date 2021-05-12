@@ -44,33 +44,8 @@ export const TagInput = ({getTagList}: Props) => {
     let [tagInputString, setTagInputString] = React.useState<string>("");
     let tagTextBoxRef = React.useRef<HTMLInputElement>(null);
     const onAddTag = () => {
-        let line = 0;
-        let curLine = 0;
-        tagList.forEach(x=>{
-            let length = x.length;
 
-            curLine += length + 1;
-            if(curLine === 16){
-                curLine = 0;
-                line++;
-                return;
-            }
-            if(curLine + length > 16){
-                curLine = length + 1;
-                line++;
-            }
-        });
-
-        if(curLine + tagInputString.length > 16){
-            curLine = 0;
-            line++;
-            curLine += tagInputString.length + 1;
-        }
-
-        console.log(line);
-        
-
-        if(line > 4){
+        if(tagList.length >= 4){
             alert("태그를 더 추가할 수 없습니다.");
             return;
         }
@@ -91,6 +66,12 @@ export const TagInput = ({getTagList}: Props) => {
     useEffect(()=>{
         getTagList(tagList);
     });
+
+    window.onkeyup = (e: any) => {
+        if(e.key === "Enter"){
+            onAddTag();
+        }
+    };
 
     return (
         <Container>

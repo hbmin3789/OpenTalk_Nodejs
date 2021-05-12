@@ -56,6 +56,13 @@ const InitWebSocket = (server) => {
                         callee: data.callee
                     }));
                     break;
+                case "chat":
+                    var curRoom = room.getRoomList().find(x=>x.roomID === data.data.roomID);
+                    console.log(curRoom);
+                    curRoom.userList.forEach(u=>{
+                        findSocket(u.userID).socket.send(JSON.stringify(data));
+                    });
+                    break;
                 default:
                     ProcessMessage(ws, data);
                     break;

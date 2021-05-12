@@ -2,7 +2,6 @@ var createRoom = require('./roomApis/roomCreate');
 var quitRoom = require('./roomApis/quitRoom');
 var enterRoom = require('./roomApis/enterRoom');
 var {getUser} = require('../services/userList');
-var {getRoomList} = require('./roomManager.js');
 var changeRoom = require('./roomApis/changeRoom');
 
 var messageList = {};
@@ -27,6 +26,7 @@ messageList["getRoomList"] = (ws, data) => {
 messageList["enterRoom"] = (ws, data) => {
     enterRoom(ws, data.data);
 }
+
 messageList["userName"] = (ws, data) => {
     sendWebSocketMsg(ws,{
         message: "userName",
@@ -36,7 +36,7 @@ messageList["userName"] = (ws, data) => {
 }
 messageList["disconnect"] = (ws, data) => {
     try{
-        var room = getRoomList().find(x=>{
+        var room = room.getRoomList().find(x=>{
             var user = x.userList.find(x=>x.userID === data);
             if(user)
                 return x;
