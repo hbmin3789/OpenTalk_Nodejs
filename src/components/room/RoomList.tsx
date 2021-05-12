@@ -59,6 +59,7 @@ let loaded;
 export const RoomList = () => {
     let [selectedRoom, setSelectedRoom] = React.useState<RoomInfo>();
     let [roomList, setRoomList] = React.useState<Array<RoomInfo>>(new Array<RoomInfo>());
+    let [keyWord, setKeyWord] = React.useState<string>("");
 
     let [displayMessage, setDisplayMessage] = React.useState<boolean>(false);
     let [messageBoxContent, setMessageBoxContent] = React.useState<string>("");
@@ -180,9 +181,11 @@ export const RoomList = () => {
             <div>
             <Background>
                 <UserInfoNav createButtonClicked={onCreateButtonClicked}></UserInfoNav>
-                <SearchBox placeholder={"검색"}></SearchBox>
+                <SearchBox placeholder={"검색"} onChange={(e)=>{
+                    setKeyWord(e.target.value);
+                }}></SearchBox>
                 <RoomListView>
-                    {roomList.map(x=><RoomListItem key={x.roomID} onclick={()=>{
+                    {roomList.filter(x=>x.roomName.includes(keyWord)).map(x=><RoomListItem key={x.roomID} onclick={()=>{
                         onRoomClicked(x);
                     }} roomInfo={x}></RoomListItem>)}
                 </RoomListView>
