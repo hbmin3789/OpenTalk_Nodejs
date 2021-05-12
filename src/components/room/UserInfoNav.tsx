@@ -17,9 +17,8 @@ const NavigationCollapseAnimation = keyframes`
 `;
 
 const NavigationBar = styled.div`
-    position: fixed;
     height: 100%;
-    width: 25rem;
+    width: 20rem;
     top: 0%;
     background-color: #333333;
     animation-duration: 0.2s;
@@ -49,9 +48,11 @@ const CreateRoomButton = styled.button`
     }
 `;
 
-const UserNameText = styled.a`
+const UserNameText = styled.div`
     font-size: 2rem;
+    margin-top: 1rem;
     color: white;
+    text-align: center;
 `;
 
 export const UserInfoNav = ({createButtonClicked}:Props) => {

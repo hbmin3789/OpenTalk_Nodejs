@@ -1,7 +1,7 @@
 var WebSocketServer = require('ws').Server;
 const guid = require('../services/guid');
 const ProcessMessage = require('../room/processMessage');
-const { setUserName } = require('../services/userList');
+const { setUserName, getUser } = require('../services/userList');
 const socketList = [];
 
 const InitWebSocket = (server) => {
@@ -16,6 +16,7 @@ const InitWebSocket = (server) => {
             switch(data.message){
                 //유저 아이디 최초 발급(브라우저당 GUID 발급)
                 case "userID":
+                    sendUserList(ws);
                     var resp = {
                         status: 200,
                         message: 'userID',
@@ -25,6 +26,7 @@ const InitWebSocket = (server) => {
                     break;
                 //다시 접속했을 때, 수정할 때
                 case "connect":
+                    sendUserList(ws);
                     setUserName(data.userID, data.userName);
                     socketList.push({userID: data.userID, socket: ws});
                     ws.send(JSON.stringify({
@@ -58,10 +60,12 @@ const InitWebSocket = (server) => {
                     break;
                 case "chat":
                     var curRoom = room.getRoomList().find(x=>x.roomID === data.data.roomID);
-                    console.log(curRoom);
                     curRoom.userList.forEach(u=>{
                         findSocket(u.userID).socket.send(JSON.stringify(data));
                     });
+                    break;
+                case "userList":
+                    sendUserList(ws);
                     break;
                 default:
                     ProcessMessage(ws, data);
@@ -78,6 +82,22 @@ const InitWebSocket = (server) => {
         };
     });
 };
+
+const sendUserList = (ws) => {
+    let list = [];
+    socketList.forEach(s=>{
+        var userName = getUser(s.userID);
+        list.push({
+            userName: userName.userName,
+            userID: s.userID
+        });
+    });
+    let userList = JSON.stringify({
+        message: "userList",
+        userList: list
+    });
+    ws.send(userList);
+}
 
 const sendMessage = (msg, userID, data) => {
     var socket = socketList.find(x=>x.userID === userID).socket;
