@@ -8,28 +8,28 @@ import {Link, useHistory} from 'react-router-dom';
 import Container from '../../libs/common/container';
 
 
-const UserNameArea = styled.div`{
+const UserNameArea = styled.div`
     display: flex;
     margin-top: 4%;
     justify-content: center;
-}`;
+`;
 
-const BackgroundImage = styled.img`{
+const BackgroundImage = styled.img`
     position: absolute;
     width: 100%;
     height: 100%;
     filter: blur(10px);
-}`;
+`;
 
-const BlurEffect = styled.div`{
+const BlurEffect = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
     opacity: 70%;
     background: #aaaaaa;
-}`;
+`;
 
-const TitleAnimation = keyframes`{
+const TitleAnimation = keyframes`
     0%{
         opacity: 0%;
         margin-top: 5%;
@@ -38,9 +38,9 @@ const TitleAnimation = keyframes`{
         opacity: 100%;
         margin-top: 0%;
     }
-}`;
+`;
 
-const TitleArea = styled.div`{
+const TitleArea = styled.div`
     left: 50%;
     top: 40%;
     transform: translate(-50%,-50%);
@@ -51,18 +51,18 @@ const TitleArea = styled.div`{
     text-align: center;
     animation: ${TitleAnimation};
     animation-duration: 2s;
-}`;
+`;
 
-const Title = styled.a`{
+const Title = styled.a`
     font-size: ${FontSizes.titleFontSize}rem;
-}`;
+`;
 
-const SubTitle = styled.a`{
+const SubTitle = styled.a`
     font-size: ${FontSizes.subTitleFontSize}rem;
     display:  block;
-}`;
+`;
 
-const UserNameInput = styled.input`{
+const UserNameInput = styled.input`
     border: 1rem solid white;
     border-radius: 10px;
     font-size: ${FontSizes.subTitleFontSize}rem;
@@ -72,9 +72,9 @@ const UserNameInput = styled.input`{
     &:focus{
         outline: none;
     }
-}`;
+`;
 
-const ConfirmButton = styled.button`{
+const ConfirmButton = styled.button`
     margin-left: 20px;        
     border-radius: 10px;
     border: 0px;
@@ -90,7 +90,7 @@ const ConfirmButton = styled.button`{
     &:hover{
         background: #323232;
     }
-}`;
+`;
 
 type Props = {
     

@@ -3,6 +3,7 @@ import React from 'react';
 
 import bold from './NOTOSANSKR-BOLD.OTF';
 import light from './NOTOSANSKR-LIGHT.OTF';
+import mid from './NOTOSANSKR-MEDIUM.OTF';
 
 const GlobalCSS = css`
   @font-face {
@@ -17,10 +18,16 @@ const GlobalCSS = css`
     font-weight: 700;
     font-style: normal;
   }
+  @font-face {
+    font-family: 'opentalk-mid';
+    src: url(${mid}) format('truetype');
+    font-weight: 700;
+    font-style: normal;
+  }
 
   body {
     margin: 0;
-    font-family: 'opentalk-light', -apple-system, 'opentalk-bold', BlinkMacSystemFont, 'Segoe UI',
+    font-family: 'opentalk-mid', 'opentalk-light', -apple-system, 'opentalk-bold', BlinkMacSystemFont, 'Segoe UI',
       'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
     -webkit-font-smoothing: antialiased;

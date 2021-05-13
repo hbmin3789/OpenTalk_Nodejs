@@ -3,7 +3,8 @@ import styled,{keyframes} from 'styled-components';
 import Container from '../../libs/common/container';
 import {useHistory} from 'react-router-dom';
 import TagInput from '../controls/TagInput';
-
+import InputBox from '../controls/InputBox';
+//#region styles
 const Background = styled.div`
     position: absolute;
     width: 100%;
@@ -22,12 +23,12 @@ const Title = styled.div`
 
 const CreateArea = styled.div`
     margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-right: auto;    
     transition: 0.3s;
-    width: 30rem;
+    width: 20rem;
     height: auto;
     padding: 2rem;
+    padding-top: 1rem;
     margin-top: 5rem;
     background-color: white;
     border-radius: 10px;
@@ -47,17 +48,6 @@ const Area = styled.div`
     width: 100%;
 `;
 
-const Text = styled.div`
-    width: 30%;
-    display: inline-block;
-
-`;
-
-const Input = styled.input`
-    font-size: 2rem;
-    width: 50%;
-`;
-
 const ButtonArea = styled.div`
     position: relative;
     text-align: right;
@@ -68,31 +58,46 @@ const ButtonArea = styled.div`
 
 const CancelButton = styled.button` 
     position: absolute;
-    background-color: #dd7788;
+    background-color: #666666;
+    color: #dddddd;
     cursor: pointer;
     border: none;
     left: 0;
+    width: 40%;
+    border-radius: 3px;
     font-size: 1.5rem;
-    box-shadow: 1px 1px 2px black;
     &:hover{
-        box-shadow: 1px 1px 4px black;
+        box-shadow: 1px 1px 1px black;
         outline: none;
     }
 `;
 
 const ApplyButton = styled.button`
     position: absolute;
-    background-color: #7788ff;
+    background-color: #666666;
+    color: #dddddd;
     right: 0;
     cursor: pointer;
-    box-shadow: 1px 1px 2px black;
+    width: 40%;
+    border-radius: 3px;
     font-size: 1.5rem;
     border: none;
     &:hover{
-        box-shadow: 1px 1px 4px black;
+        box-shadow: 1px 1px 1px black;
         outline: none;
     }
 `;
+
+const Description = styled.div`
+    font-size: 0.6rem;
+    color: gray;
+    margin-top: 0.7rem;
+    margin-left: auto;
+    margin-right: 0;
+    margin-bottom: 2rem;
+`;
+
+//#endregion
 
 export const RoomCreate = () => {
     let [roomName, setRoomName] = React.useState<string>("");
@@ -101,8 +106,8 @@ export const RoomCreate = () => {
     let history = useHistory()
 
     const onRoomCreateClicked = () => {
-        if(roomName.length === 0){
-
+        if(roomName.length <= 1){
+            alert("방 이름 규칙을 지켜주세요.");
             return;
         }
         var msg = JSON.stringify({
@@ -120,27 +125,30 @@ export const RoomCreate = () => {
 
     return (
         <Background>
-            <Title>방을 만들어보세요!</Title>
             <CreateArea>
                 <InputArea>
                     <Area>
-                        <Text>방 이름</Text>
-                        <Input onChange={e=>{
-                            if(e.target.value.length >= 11){
-                                e.target.value = e.target.value.slice(0,10);
-                            }
-                            setRoomName(e.target.value)
-                        }}></Input>
+                        <InputBox onChange={e=>{
+                        if(e.target.value.length >= 11){
+                            e.target.value = e.target.value.slice(0,10);
+                        }
+                        setRoomName(e.target.value);
+                        }}>방이름</InputBox>
                     </Area>
+                    <Description>
+                        2자~12자
+                    </Description>
                     <Area>
-                        <Text>비밀번호</Text>
-                        <Input onChange={e=>{
+                        <InputBox onChange={e=>{
                             if(e.target.value.length >= 13){
                                 e.target.value = e.target.value.slice(0,12);
                             }
                             setPassword(e.target.value)
-                            }}></Input>
+                            }}>비밀번호</InputBox>
                     </Area>
+                    <Description>
+                        0자~12자 (비워놓으면 공개방)
+                    </Description>
                     <Area>
                         <TagInput getTagList={(arr)=>{                            
                             console.log(arr);

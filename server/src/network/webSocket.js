@@ -11,7 +11,6 @@ const InitWebSocket = (server) => {
         console.log('connected');
 
         ws.on('message', (msg) => {
-            console.log('message from client : ' + msg);
             var data = JSON.parse(msg);
             switch(data.message){
                 //유저 아이디 최초 발급(브라우저당 GUID 발급)
