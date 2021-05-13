@@ -36,8 +36,10 @@ const ToggleButton = styled.div`
     border-color: ${TagBorderColor};
     background-color: white;
     padding: 0.3rem 1.2rem;
-    margin-left: 1rem;
-    margin-top: 1rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.6rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
     animation-duration: 100ms;
     animation-name: ${ToggleButtonHleaveAnimation};
     &:hover{

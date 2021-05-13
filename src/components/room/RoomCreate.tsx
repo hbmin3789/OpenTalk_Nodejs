@@ -23,8 +23,7 @@ const Title = styled.div`
 
 const CreateArea = styled.div`
     margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-right: auto;    
     transition: 0.3s;
     width: 20rem;
     height: auto;
@@ -67,9 +66,8 @@ const CancelButton = styled.button`
     width: 40%;
     border-radius: 3px;
     font-size: 1.5rem;
-    box-shadow: 1px 1px 2px black;
     &:hover{
-        box-shadow: 1px 1px 4px black;
+        box-shadow: 1px 1px 1px black;
         outline: none;
     }
 `;
@@ -82,17 +80,16 @@ const ApplyButton = styled.button`
     cursor: pointer;
     width: 40%;
     border-radius: 3px;
-    box-shadow: 1px 1px 2px black;
     font-size: 1.5rem;
     border: none;
     &:hover{
-        box-shadow: 1px 1px 4px black;
+        box-shadow: 1px 1px 1px black;
         outline: none;
     }
 `;
 
 const Description = styled.div`
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     color: gray;
     margin-top: 0.7rem;
     margin-left: auto;

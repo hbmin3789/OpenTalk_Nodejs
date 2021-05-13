@@ -70,6 +70,7 @@ const VideoArea = styled.div`
 type VideoItem = {
     stream: MediaStream;
     userName: string;
+    userID: string;
 };
 
 const MyVideoArea = styled.div`
@@ -91,8 +92,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     });
 
     setSocketEvent('userLeave', (resp)=>{
-        var newList = userList?.filter(x=>x.userID !== resp.userID);
-        setUserList(newList);
+        var newList = videoList?.filter(x=>x.userID !== resp.userID);
+        setVideoList(newList);
         userLeave(resp.userID);
     });
 
@@ -113,12 +114,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         userList.forEach(u=>{
             let stream = videos.get(u.userID);
             if(stream)
-                newList.push({ stream: stream, userName: u.userName });
+                newList.push({ stream: stream, userName: u.userName, userID: u.userID });
         });
-        console.log("******");
-        
-        console.log(userList);
-        console.log("******");
         
         setVideoList(newList);
     });

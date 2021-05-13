@@ -34,7 +34,7 @@ const CreateTagButton = styled.button`
 `;
 
 const Description = styled.div`
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     color: gray;
     margin-top: 0.7rem;
     margin-left: auto;
