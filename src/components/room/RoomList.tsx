@@ -16,7 +16,7 @@ import PasswordMessage from './PasswordMessage';
 const Background = styled.div`
     position: absolute;  
     display: flex;
-    background-color: #8a8aff;
+    background-color: white;
     width: 100%;
     height: 100%;
     top: 0%;
@@ -28,10 +28,7 @@ const RoomArea = styled.div`
 `;
 
 const RoomListView = styled.ul`
-    margin-top: 3rem;
-    margin-left: 7rem;
-    margin-right: 3rem;
-    margin-bottom: 0px;    
+    margin: 2rem;
     list-style-type: none;
     padding: 0px;
     padding-bottom: 1rem;    
@@ -39,20 +36,16 @@ const RoomListView = styled.ul`
 
 const SearchBox = styled.input`
     display: inline-block;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin: 2rem;
-    border-color: white;
-    border-width: 0.4rem 1rem;
+    padding: 0.5rem;
+    border-color: #dddddd;
+    border-width: 0.2rem;
     border-style: solid;
     width: 30rem;
     &:focus{
         outline: none;
     }
-`;
-
-const RoomCreateButtonAnimation = keyframes`
-    0%{box-shadow: 0px 0px 0px 0px rgb(0, 0, 0);}
-    100%{box-shadow: 2px 2px 1px 1px rgb(0, 0, 0);}
 `;
 
 //#endregion

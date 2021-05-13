@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 const TagList = styled.div`
-
+    font-size: 1rem;
 `;
 
 const CreateTagButton = styled.button`
@@ -44,11 +44,6 @@ export const TagInput = ({getTagList}: Props) => {
     let [tagInputString, setTagInputString] = React.useState<string>("");
     let tagTextBoxRef = React.useRef<HTMLInputElement>(null);
     const onAddTag = () => {
-
-        if(tagList.length >= 4){
-            alert("태그를 더 추가할 수 없습니다.");
-            return;
-        }
         if(tagInputString === ""){
             return;
         }
@@ -87,8 +82,8 @@ export const TagInput = ({getTagList}: Props) => {
             </TagInputArea>
             
             <TagList>
-                {tagList ? tagList.map(x=><TagItem key={x}
-                 onRemove={()=>setTagList(tagList.filter((s)=>s !== x))}>#{x}</TagItem>) : <div></div>}
+                {tagList ? tagList.map(x=><TagItem key={x} deleteBtnVisible={true}
+                 onRemove={()=>setTagList(tagList.filter((s)=>s !== x))}>{x}</TagItem>) : <div></div>}
             </TagList>
         </Container>
     

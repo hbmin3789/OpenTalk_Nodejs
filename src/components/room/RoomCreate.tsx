@@ -94,6 +94,15 @@ const ApplyButton = styled.button`
     }
 `;
 
+const Description = styled.div`
+    font-size: 1rem;
+    color: gray;
+    width: 70%;
+    margin-top: 0.5rem;
+    margin-left: auto;
+    margin-right: 0;
+`;
+
 export const RoomCreate = () => {
     let [roomName, setRoomName] = React.useState<string>("");
     let [password, setPassword] = React.useState<string>("");
@@ -101,8 +110,8 @@ export const RoomCreate = () => {
     let history = useHistory()
 
     const onRoomCreateClicked = () => {
-        if(roomName.length === 0){
-
+        if(roomName.length <= 1){
+            alert("방 이름 규칙을 지켜주세요.");
             return;
         }
         var msg = JSON.stringify({
@@ -132,6 +141,9 @@ export const RoomCreate = () => {
                             setRoomName(e.target.value)
                         }}></Input>
                     </Area>
+                    <Description>
+                        2자~12자
+                    </Description>
                     <Area>
                         <Text>비밀번호</Text>
                         <Input onChange={e=>{
@@ -141,12 +153,18 @@ export const RoomCreate = () => {
                             setPassword(e.target.value)
                             }}></Input>
                     </Area>
+                    <Description>
+                        0자~12자 (비워놓으면 공개방)
+                    </Description>
                     <Area>
                         <TagInput getTagList={(arr)=>{                            
                             console.log(arr);
                             tagList = arr;
                         }}></TagInput>
                     </Area>
+                    <Description>
+                        엔터키로도 추가할 수 있습니다.
+                    </Description>
                     <ButtonArea>
                         <CancelButton onClick={()=>history.push('/')}>취소</CancelButton>
                         <ApplyButton onClick={onRoomCreateClicked}>생성</ApplyButton>

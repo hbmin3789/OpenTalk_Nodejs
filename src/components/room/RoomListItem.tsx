@@ -3,6 +3,8 @@ import styled, { keyframes } from 'styled-components';
 import RoomInfo from '../../libs/room/roomInfo';
 import { setSocketEvent } from '../../libs/network/websocketEvents';
 import Container from '../../libs/common/container';
+import TagItem from '../controls/TagItem';
+
 type Props = {
     children?: ReactNode;
     roomInfo: RoomInfo;
@@ -12,23 +14,6 @@ type Props = {
 const ListViewItemMouseOverColorAnimation = keyframes`
     0%{}
     100%{}
-`;
-
-const Background = styled.div`
-    margin: 1rem;
-    display: inline-block;
-    background-color: white;
-    border-radius: 3px;
-    margin-top: 5px;
-    padding: 10px;
-    height: 20rem;
-    width: 15rem;
-    cursor: pointer;
-    text-align: justify;
-    overflow: hidden;
-    &:hover{
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
 `;
 
 const Title = styled.a`
@@ -51,51 +36,12 @@ const CardBackground = styled.div`
     flex-direction: column;
 `;
 
-const TagHoverBorderColor = "#99dfdf";
-const TagBorderColor = "#999999";
-
-const ToggleButtonHoverAnimation = keyframes`
-    0%{
-        border-color: ${TagBorderColor};
-    }
-    100%{
-        border-color: ${TagHoverBorderColor};
-    }
-`;
-const ToggleButtonHleaveAnimation = keyframes`
-    0%{
-        border-color: ${TagHoverBorderColor};
-    }
-    100%{
-        border-color: ${TagBorderColor};
-    }
-`;
-
-const TagItem = styled.div`
-    position: relative;
-    display: inline-block;
-    border-radius: 100px;
-    border-style: solid;
-    cursor: pointer;
-    border-color: ${TagBorderColor};
-    background-color: white;
-    font-size: 1rem;
-    animation-duration: 100ms;
-    padding: 2px 0.5rem;
-    margin-top: 0.5rem;
-    animation-name: ${ToggleButtonHleaveAnimation};
-    &:hover{
-        animation-duration: 100ms;
-        animation-name: ${ToggleButtonHoverAnimation};
-        animation-fill-mode: forwards;
-    }
-`;
-
 const TagList = styled.div`
     display: inline-block;
     text-align: center;
     margin-top: 2rem;
     overflow: hidden;
+    font-size: 1rem;
 `;
 
 export const RoomListItem  = ({roomInfo, onclick}: Props) => {
@@ -110,6 +56,30 @@ export const RoomListItem  = ({roomInfo, onclick}: Props) => {
         userID: roomInfo.adminID,
     }));
 
+    //209 ~ 255 사이의 색을 배경으로 지정
+    let R = 209 + (Math.random() * 100 % 46);
+    let G = 209 + (Math.random() * 100 % 46);
+    let B = 209 + (Math.random() * 100 % 46);
+
+    
+    const Background = styled.div`
+    margin: 0.4rem;
+    display: inline-block;
+    background-color: rgb(${R},${G},${B});
+    margin-top: 5px;
+    padding: 10px;
+    height: 18rem;
+    width: 14rem;
+    cursor: pointer;
+    text-align: justify;
+    overflow: hidden;
+    &:hover{
+        transition-property: transform, box-shadow;
+        transition-duration: 0.1s;
+        transform: translate(0.5rem,-0.5rem);
+        box-shadow: -0.5rem 0.5rem 1px #aaaaaa;
+    }
+`;
 
 
     return (
@@ -117,9 +87,10 @@ export const RoomListItem  = ({roomInfo, onclick}: Props) => {
             <CardBackground>
                 <Title>{roomInfo.roomName}</Title>
                 <Title>{adminName}님의 방</Title>
-                <UserCount>유저{roomInfo.userList.length}/9명</UserCount>
+                <UserCount>유저{roomInfo.userList.length}명</UserCount>
                 <TagList>
-                    {roomInfo.tags.map(x=><TagItem>#{x}</TagItem>)}
+                    {roomInfo.tags.map(x=><TagItem deleteBtnVisible={false} 
+                                                   children={x}></TagItem>)}
                 </TagList>
             </CardBackground>
         </Background>
