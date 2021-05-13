@@ -83,7 +83,6 @@ const MyVideoArea = styled.div`
 
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
-    var [userList, setUserList] = React.useState<Array<User>>(room.userList);
     var [videoList, setVideoList] = React.useState<Array<VideoItem>>(new Array<VideoItem>());
 
     useEffect(()=>{
@@ -99,7 +98,19 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     setSocketEvent('userEnter', (resp)=>{
         if(resp.data.userID !== Container.curUser.getUserID()){
-            setUserList(old=>[...old, resp.data]);
+            let videos = GetRemoteVideos();
+            let stream = videos.get(resp.data.userID);
+            let userName = getUserList().find(x=>x.userID === resp.data.userID);
+
+            if(stream && userName){
+                let videoItem = {
+                    stream: stream,
+                    userID: resp.data.userID,
+                    userName: userName.userName
+                };
+
+                setVideoList(old=>[...old, videoItem]);
+            }
             var user = resp.data as User;
             room.userList.push(user);
             addUserList(resp.data.userID);
