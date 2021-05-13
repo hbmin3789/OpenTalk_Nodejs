@@ -1,38 +1,46 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import TagItem from './TagItem';
-
-const TagInputBox = styled.input`
-    font-size: 2rem;
-    width: 50%;
-`;
-
-const Hint = styled.div`
-    width: 30%;
-    display: inline-block;
-`;
+import InputBox from '../controls/InputBox';
 
 const TagInputArea = styled.div`
     display: flex;
 `;
 
 const Container = styled.div`
-
+    flex-grow: 1;
 `;
 
 const TagList = styled.div`
     font-size: 1rem;
+    text-align: left;
 `;
 
 const CreateTagButton = styled.button`
     font-size: 1rem;
-    background-color: #88ff88;
+    flex-grow: 1;
+    width: 5rem;
+    margin: 0.5rem;
+    border: none;
+    border-radius: 3px;
+    background-color: #666666;
+    color: white;
     border-width: thin;
     cursor: pointer;
     &:hover{
-        background-color: #66ff66;
+        box-shadow: 1px 1px 2px black;
     }
     
+`;
+
+const Description = styled.div`
+    font-size: 0.8rem;
+    color: gray;
+    margin-top: 0.7rem;
+    margin-left: auto;
+    margin-right: 0;
+    margin-bottom: 2rem;
+    text-align: left;
 `;
 
 type Props = {
@@ -42,20 +50,21 @@ type Props = {
 export const TagInput = ({getTagList}: Props) => {
     let [tagList, setTagList] = React.useState<Array<string>>(new Array<string>());
     let [tagInputString, setTagInputString] = React.useState<string>("");
-    let tagTextBoxRef = React.useRef<HTMLInputElement>(null);
+    let setTagInput: {func: any} = {func: ""};
+
     const onAddTag = () => {
         if(tagInputString === ""){
             return;
-        }
-        if(tagTextBoxRef.current){
-            tagTextBoxRef.current.value = "";
         }
         if(tagList.find(x=>x === tagInputString)){
             alert("이미 추가된 태그입니다.");
             return;
         }
+
         setTagList([...tagList, tagInputString]);
         setTagInputString("");
+        console.log(setTagInput);
+        setTagInput.func("");
     }
 
     useEffect(()=>{
@@ -71,16 +80,17 @@ export const TagInput = ({getTagList}: Props) => {
     return (
         <Container>
             <TagInputArea>
-                <Hint>태그</Hint>
-                <TagInputBox ref={tagTextBoxRef} onChange={e=>{
+                <InputBox setValue={setTagInput} onChange={e=>{
                     if(e.target.value.length >= 13){
                         e.target.value = e.target.value.slice(0,12);
                     }
                     setTagInputString(e.target.value);
-                }}></TagInputBox>
+                }}>태그</InputBox>
                 <CreateTagButton onClick={onAddTag}>추가</CreateTagButton>
             </TagInputArea>
-            
+            <Description>
+                엔터키로도 추가할 수 있습니다.
+            </Description>
             <TagList>
                 {tagList ? tagList.map(x=><TagItem key={x} deleteBtnVisible={true}
                  onRemove={()=>setTagList(tagList.filter((s)=>s !== x))}>{x}</TagItem>) : <div></div>}
