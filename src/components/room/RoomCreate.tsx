@@ -10,7 +10,6 @@ const Background = styled.div`
     width: 100%;
     height: 100%;
     background-color: #dddddd;
-    overflow: scroll;
 `;
 
 const Title = styled.div`

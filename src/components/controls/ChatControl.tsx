@@ -13,18 +13,21 @@ type Props = {
 const ChatArea = styled.div`
   display: flex;
   flex-direction: column-reverse;
-  width: 30%;
+  width: 30rem;
   background-color: #ededed;
 `;
 
-const ChatList = styled.div`
+const ChatList = styled.ul`
   margin: 1rem;
+  list-style: none;
   margin-bottom: 0;
   background-color: #ffffff;
   border-radius: 1rem;
   border-width: 1rem;
   border-color: #aaaaaa;
   height: 100%;
+  padding: 0;
+  overflow: auto;
 `;
 
 const ChatInputArea = styled.div`
@@ -93,7 +96,10 @@ export const ChatControl = ({room}: Props) => {
     let [content, setContent] = React.useState<string>("");
     let [chatList, setChatList] = React.useState<Array<ChatItem>>(new Array<ChatItem>());
     let ChatInputRef = React.useRef<HTMLInputElement>(null);
+    let ChatListRef = React.useRef<HTMLUListElement>(null);
+
     const OnSendChat = () => {
+        
         if(content === ""){
             return;
         }
@@ -103,10 +109,12 @@ export const ChatControl = ({room}: Props) => {
         chat.userName = Container.curUser.getUserName();
         chat.roomID = room.roomID;
 
-        Container.socket.send(JSON.stringify({
+        let data = JSON.stringify({
             message: "chat",
             data: chat
-        }));
+        });
+
+        Container.socket.send(data);
 
         if(ChatInputRef.current)
             ChatInputRef.current.value = "";
@@ -119,13 +127,15 @@ export const ChatControl = ({room}: Props) => {
         }
     };
 
-    setSocketEvent('chatItems', (data) => {
-
-    });
-
     setSocketEvent('chat', (data) => {
         console.log(data);
         setChatList([...chatList, data.data as ChatItem]);
+        if(ChatListRef.current){
+            console.log(ChatListRef.current.scrollHeight);
+            console.log(ChatListRef.current.scrollTop);
+            
+            ChatListRef.current.scrollTo(0, ChatListRef.current.scrollHeight);
+        }
     });
 
     return (
@@ -138,7 +148,7 @@ export const ChatControl = ({room}: Props) => {
                     <SendButtonImage src={sendIcon}></SendButtonImage>
                 </SendButton>
             </ChatInputArea>
-            <ChatList>
+            <ChatList ref={ChatListRef}>
                 {chatList ? chatList.map(x=>
                 (x.userID === Container.curUser.getUserID()) ?
                     <MyChatContainer><MyChat>{x.content}</MyChat></MyChatContainer> : 

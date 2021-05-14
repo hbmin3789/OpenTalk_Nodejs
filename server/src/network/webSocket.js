@@ -81,6 +81,8 @@ const InitWebSocket = (server) => {
         ws.onclose = () => {
             console.log(ws + "disconnected");
             var socket = socketList.find(x=>x.socket === ws);
+            let idx = socketList.indexOf(socket);
+            socketList.splice(idx,1);
             if(socket)
                 var userID = socket.userID;
             ProcessMessage(ws,{message: "disconnect", userID: userID});
