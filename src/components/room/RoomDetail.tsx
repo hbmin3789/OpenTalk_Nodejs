@@ -21,50 +21,56 @@ type Props = {
 //#region styles
 
 const Background = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #8888ee;
-    display: flex;
-    flex-direction: row;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #fafafa;
+  display: flex;
 `;
 
-const RoomNameArea = styled.div`
-    display: inline;
-    margin: 2rem;
-    font-size: 3rem;
-    color: white;
+const ContentArea = styled.div`
+  width: 100%;
+  height: 100%;
 `;
 
 const Header = styled.div`
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+  display: flex;
 `;
 
-const VideoList = styled.div`
-    display: grid;
-    margin: 5rem;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+const Title = styled.div`  
+  margin: 2rem;
+  font-size: 3rem;
+  flex-grow: 1;
 `;
 
 const QuitButton = styled.button`
-    font-size: 2rem;
-    display: inline;
-    margin: 2rem;
-    &:focus{
-        outline: none;
-    }
-`;
-
-const VideoPlayer = styled.video`
-    width: 100%;
-    height: 100%;
+  margin: 2rem;
+  font-size: 1.5rem;
+  height: 3rem;
+  background-color: gray;
+  color: white;
+  border: none;
+  cursor: pointer;
+  &:focus{
+    outline: none;
+  }
+  &:hover{
+    background-color: #555555;
+  }
 `;
 
 const VideoArea = styled.div`
-    width: 100%;
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+`;
+
+const VideoPlayer = styled.video`
+  margin: 1rem 2rem;
+  margin-left: 3rem;
+  width: 27%;
+  height: 27%;
 `;
 
 type VideoItem = {
@@ -133,23 +139,21 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     return (
         <Background>
-            <VideoArea>
+            <ContentArea>
                 <Header>
-                    <RoomNameArea>
+                    <Title>
                         {room.roomName}
-                    </RoomNameArea>
+                    </Title>
                     <QuitButton onClick={()=>{
                         setVideoList(new Array<VideoItem>());
                         OnQuitBtnPressed();
                         }}>나가기</QuitButton>
                 </Header>
-                <VideoList>
-                    <MyVideoArea>
-                        <VideoPlayer ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></VideoPlayer>
-                    </MyVideoArea>
+                <VideoArea>
+                <VideoPlayer ref={localVideoRef} playsInline={true} autoPlay={true} muted={true}></VideoPlayer>
                     {videoList?.map((x,idx)=><Video idx={idx} item={x}></Video>)}
-                </VideoList>
-            </VideoArea>
+                </VideoArea>
+            </ContentArea>
             <ChatControl room={room}></ChatControl>
         </Background>
     );

@@ -28,11 +28,12 @@ messageList["enterRoom"] = (ws, data) => {
 }
 
 messageList["userName"] = (ws, data) => {
-    sendWebSocketMsg(ws,{
-        message: "userName",
-        userID: data.userID,
-        userName: getUser(data.userID).userName
-    });
+    if(getUser(data.userID))
+        sendWebSocketMsg(ws,{
+            message: "userName",
+            userID: data.userID,
+            userName: getUser(data.userID).userName
+        });
 }
 messageList["disconnect"] = (ws, data) => {
     try{

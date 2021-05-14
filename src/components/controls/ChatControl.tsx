@@ -4,47 +4,91 @@ import Container from '../../libs/common/container';
 import {setSocketEvent} from '../../libs/network/websocketEvents';
 import ChatItem from '../../libs/room/chatItem';
 import RoomInfo from '../../libs/room/roomInfo';
+import sendIcon from '../../assets/send.png';
 
 type Props = {
     room: RoomInfo;
 }
 
-const Background = styled.div`
-    right: 0;
-    left: auto;
-    width: auto;
-    background-color: white;
-    display: flex;
-    align-items: flex-end;
-    flex-direction: column-reverse;
+const ChatArea = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  width: 30%;
+  background-color: #ededed;
 `;
 
 const ChatList = styled.div`
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  margin-bottom: 0;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  border-width: 1rem;
+  border-color: #aaaaaa;
+  height: 100%;
+  justify-content: flex-end;
 `;
 
-const Chat = styled.a`
-    display: block;
+const ChatInputArea = styled.div`
+  display: flex;
 `;
 
-const MyChat = styled.a`
-    display: block;
-    right: 0;
-    background-color: #ee99ee;
+const SendButton = styled.button`
+  align-self: center;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  cursor: pointer;
+  margin: 1rem;
+  margin-left: 0;
+  padding: 0;
+  background-color: #dddddd;
+  &:focus{
+    outline: none;
+  }
+  &:hover{
+    background-color: #999999;
+  }
 `;
 
-const InputArea = styled.div`
-    display: flex;
-    width: 100%;
+const SendButtonImage = styled.img`
+  width: 100%;
+  height: 100%;
 `;
 
 const ChatInput = styled.input`
-    
+  padding: 1rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 1rem;
+  margin: 1rem;
+  flex-grow: 1;
+  &:focus{
+    outline: none;
+  }
 `;
 
-const SendChat = styled.button`
-    font-size: 1.2rem;
-    width: 5rem;
+const Chat = styled.div`
+  padding: 0.5rem;
+  background-color: #e3eeff;
+  display: block;
+  margin: 1rem;
+  font-size: 1.5rem;
+  right: 0;
+  left: auto;
+  border-radius: 1rem 1rem 1rem 0rem;
+`;
+
+const MyChat = styled.div`
+  padding: 0.5rem;
+  background: #518ded;
+  right: 0;
+  left: auto;
+  margin: 1rem;
+  font-size: 1.5rem;
+  border-radius: 1rem 1rem 0px 1em;
+  text-align: right;
 `;
 
 export const ChatControl = ({room}: Props) => {
@@ -87,13 +131,15 @@ export const ChatControl = ({room}: Props) => {
     });
 
     return (
-        <Background>
-            <InputArea>
+        <ChatArea>
+            <ChatInputArea>
                 <ChatInput ref={ChatInputRef} onChange={(e)=>{
                     setContent(e.target.value);
                 }}></ChatInput>
-                <SendChat onClick={OnSendChat}>보내기</SendChat>
-            </InputArea>
+                <SendButton onClick={OnSendChat}>
+                    <SendButtonImage src={sendIcon}></SendButtonImage>
+                </SendButton>
+            </ChatInputArea>
             <ChatList>
                 {chatList ? chatList.map(x=>
                 (x.userID === Container.curUser.getUserID()) ?
@@ -101,7 +147,7 @@ export const ChatControl = ({room}: Props) => {
                     <Chat>{x.userName} : {x.content}</Chat>)
                  : <div></div>}
             </ChatList>
-        </Background>
+        </ChatArea>
     );
 }
 

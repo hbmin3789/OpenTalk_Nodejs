@@ -13,7 +13,7 @@ export class RoomInfo {
     roomID: string = "";
     password: string = "";
     adminID: string = "";
-    tags: RoomTag[] = [];
+    tags: string[] = [];
 };
 
 export default RoomInfo;

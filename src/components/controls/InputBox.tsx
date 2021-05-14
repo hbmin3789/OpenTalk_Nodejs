@@ -2,6 +2,7 @@ import React, { ReactNode, useRef } from 'react';
 import styled,{keyframes} from 'styled-components';
 
 const TextInput = styled.input`
+    position: absolute;
     border: none;
 	outline: none;
 	background: none;
@@ -15,6 +16,7 @@ const WaterMark = styled.div`
     position: absolute;
 	top: 50%;
     font-size: 2rem;
+    background: none;
 	transform: translateY(-50%);
 	color: #999;
 	font-size: 18px;
@@ -23,17 +25,18 @@ const WaterMark = styled.div`
 
 const InputFrame = styled.div`
     position: relative;
-    display: block;
+    display: grid;
     content: '';
     width: 100%;
+    height: 2rem;
     border-bottom: 2px solid #d9d9d9;
     &.focus > ${WaterMark}{
-        font-size: 1rem;
-        top: 0;
+        font-size: 0.5rem;
+        top: -0.5rem;
         left: 0;
-        margin: 0.3rem;
     }
     &.focus::after, &.focus::before{
+        position: absolute;
         width: 50%;
     }
     ::after{
@@ -87,7 +90,7 @@ export const InputBox = ({children, onChange, setValue}:Props) => {
     return (
         <InputFrame ref={InputFrameRef}>
             <WaterMark>{children}</WaterMark>
-            <TextInput ref={InputRef} onChange={onChange}></TextInput>
+            <TextInput type={"text"} ref={InputRef} onChange={onChange}></TextInput>
         </InputFrame>
     );
 };
