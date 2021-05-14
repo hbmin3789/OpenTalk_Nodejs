@@ -10,13 +10,14 @@ import RoomListItem from './RoomListItem';
 import UserInfoNav from './UserInfoNav';
 import MessageBox from './MessageBox';
 import PasswordMessage from './PasswordMessage';
+import RoomTag from '../../libs/room/roomTag';
 
 //#region styles
 
 const Background = styled.div`
     position: absolute;  
-    display: flex;
-    background-color: white;
+    display: block;
+    background-color: #fafafa;
     width: 100%;
     height: 100%;
     top: 0%;
@@ -34,17 +35,49 @@ const RoomListView = styled.ul`
     padding-bottom: 1rem;    
 `;
 
-const SearchBox = styled.input`
-    display: inline-block;
+const Header = styled.div`
+    content: '';
+    text-align: center;
+    background: white;
+    align-items: center;
+    height: 5rem;
+`;
+
+const SearchBox = styled.input`    
+    margin-top: 1rem;
     font-size: 1.3rem;
-    margin: 2rem;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     border-color: #dddddd;
-    border-width: 0.2rem;
     border-style: solid;
-    width: 30rem;
+    border-radius: 2rem;
     &:focus{
         outline: none;
+    }
+`;
+
+const UserName = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+    font-size: 2rem;
+`;
+
+const RoomCreateButton = styled.button`
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    border-radius: 5px;
+    border-width: 1px;
+    background-color: #f6f6f6;
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    &:focus{
+        outline: none;
+    }
+    &:hover{
+        background-color: #efefef;
     }
 `;
 
@@ -174,27 +207,25 @@ export const RoomList = () => {
             <RoomDetail room={selectedRoom} OnQuitBtnPressed={()=>{onQuitBtnPressed()}}>
 
             </RoomDetail> : 
-            <div>
             <Background>
-                <UserInfoNav createButtonClicked={onCreateButtonClicked}></UserInfoNav>
-                <RoomArea>
+                <Header>
+                    <RoomCreateButton onClick={onCreateButtonClicked}>방 만들기</RoomCreateButton>
                     <SearchBox placeholder={"검색"} onChange={(e)=>{
                         setKeyWord(e.target.value);
                     }}></SearchBox>
-                    <RoomListView>
-                        {roomList.filter(x=>x.roomName.includes(keyWord)).map(x=><RoomListItem key={x.roomID} onclick={()=>{
-                            onRoomClicked(x);
-                        }} roomInfo={x}></RoomListItem>)}
-                    </RoomListView>
-                </RoomArea>
-            </Background>
+                </Header>
+                <RoomListView>
+                    {roomList.filter(x=>x.roomName.includes(keyWord)).map(x=><RoomListItem key={x.roomID} onclick={()=>{
+                        onRoomClicked(x);
+                    }} roomInfo={x}></RoomListItem>)}
+                </RoomListView>
             <MessageBox setDisplay={setDisplayMessage} display={displayMessage} message={messageBoxContent}></MessageBox>
             <PasswordMessage confirm={(room, password)=>enterRoom(room, password)} 
-                             cancel={()=>setDisplayPassword(false)}
-                             room={passwordRoom}
-                             display={displayPassword}></PasswordMessage>
-            </div>
-
+                            cancel={()=>setDisplayPassword(false)}
+                            room={passwordRoom}
+                            display={displayPassword}></PasswordMessage>
+            <UserName>{Container.curUser.getUserName()}</UserName>
+            </Background>
             
             }
         </div>

@@ -23,8 +23,8 @@ export const Video = ({item, idx}: Props) => {
     let videoRef = React.useRef<HTMLVideoElement>(null);
     idx += 1;
     const VideoFrame = styled.div`
-        grid-column: ${(idx % 3)+1};
-        grid-row: ${Math.floor(idx / 3)+1};
+    width: 27%;
+    height: 27%;
         padding: 1rem;
     `;
 

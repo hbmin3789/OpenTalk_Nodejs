@@ -27,28 +27,6 @@ const ToggleButtonHleaveAnimation = keyframes`
     }
 `;
 
-const ToggleButton = styled.div`
-    position: relative;
-    display: inline-block;
-    border-radius: 100px;
-    border-style: solid;
-    cursor: pointer;
-    border-color: ${TagBorderColor};
-    background-color: white;
-    padding: 0.3rem 1.2rem;
-    padding-bottom: 0.5rem;
-    padding-left: 0.6rem;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    animation-duration: 100ms;
-    animation-name: ${ToggleButtonHleaveAnimation};
-    &:hover{
-        animation-duration: 100ms;
-        animation-name: ${ToggleButtonHoverAnimation};
-        animation-fill-mode: forwards;
-    }
-`;
-
 const DeleteButton = styled.button`
     background-color: transparent;
     border: none;
@@ -64,6 +42,28 @@ const DeleteButton = styled.button`
 
 export const TagItem = ({deleteBtnVisible, children, onRemove}: Props) => {
     let [toggled,setToggled] = React.useState<boolean>(false);
+
+    const ToggleButton = styled.div`
+    position: relative;
+    display: inline-block;
+    border-radius: 100px;
+    border-style: solid;
+    cursor: pointer;
+    border-color: ${TagBorderColor};
+    background-color: white;
+    padding: 0.3rem 1.2rem;
+    padding-bottom: 0.5rem;
+    padding-left: ${(deleteBtnVisible) ? "0.6rem" : "1rem"};
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    animation-duration: 100ms;
+    animation-name: ${ToggleButtonHleaveAnimation};
+    &:hover{
+        animation-duration: 100ms;
+        animation-name: ${ToggleButtonHoverAnimation};
+        animation-fill-mode: forwards;
+    }
+`;
 
     return(
         <ToggleButton>

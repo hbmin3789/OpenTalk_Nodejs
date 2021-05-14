@@ -28,21 +28,25 @@ messageList["enterRoom"] = (ws, data) => {
 }
 
 messageList["userName"] = (ws, data) => {
-    sendWebSocketMsg(ws,{
-        message: "userName",
-        userID: data.userID,
-        userName: getUser(data.userID).userName
-    });
+    if(getUser(data.userID))
+        sendWebSocketMsg(ws,{
+            message: "userName",
+            userID: data.userID,
+            userName: getUser(data.userID).userName
+        });
 }
 messageList["disconnect"] = (ws, data) => {
     try{
-        var room = room.getRoomList().find(x=>{
-            var user = x.userList.find(x=>x.userID === data);
+        console.log(data);
+        var curRoom = room.getRoomList().find(x=>{
+            var user = x.userList.find(x=>x.userID === data.userID);
             if(user)
-                return x;
+                return true;
+            return false;
         });
-        if(room)
-            quitRoom(ws, {userID: data.userID, roomID: room.roomID});
+        console.log(curRoom);
+        if(curRoom)
+            quitRoom(ws, {userID: data.userID, roomID: curRoom.roomID});
     }catch{
         
     }
