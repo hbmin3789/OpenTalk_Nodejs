@@ -18,8 +18,6 @@ const ChatArea = styled.div`
 `;
 
 const ChatList = styled.div`
-  display: flex;
-  flex-direction: column;
   margin: 1rem;
   margin-bottom: 0;
   background-color: #ffffff;
@@ -27,7 +25,6 @@ const ChatList = styled.div`
   border-width: 1rem;
   border-color: #aaaaaa;
   height: 100%;
-  justify-content: flex-end;
 `;
 
 const ChatInputArea = styled.div`
@@ -70,25 +67,26 @@ const ChatInput = styled.input`
 `;
 
 const Chat = styled.div`
-  padding: 0.5rem;
-  background-color: #e3eeff;
-  display: block;
-  margin: 1rem;
-  font-size: 1.5rem;
-  right: 0;
-  left: auto;
-  border-radius: 1rem 1rem 1rem 0rem;
+    left: 0;
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background-color: #e3eeff;
+    margin: 1rem;
+    font-size: 1.5rem;
+    border-radius: 1rem 1rem 1rem 0rem;
 `;
 
 const MyChat = styled.div`
-  padding: 0.5rem;
-  background: #518ded;
-  right: 0;
-  left: auto;
-  margin: 1rem;
-  font-size: 1.5rem;
-  border-radius: 1rem 1rem 0px 1em;
-  text-align: right;
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: #518ded;
+    margin: 1rem;
+    font-size: 1.5rem;
+    border-radius: 1rem 1rem 0px 1rem;
+`;
+
+const MyChatContainer = styled.div`
+    text-align: right;
 `;
 
 export const ChatControl = ({room}: Props) => {
@@ -143,8 +141,8 @@ export const ChatControl = ({room}: Props) => {
             <ChatList>
                 {chatList ? chatList.map(x=>
                 (x.userID === Container.curUser.getUserID()) ?
-                    <MyChat>{x.content}</MyChat> : 
-                    <Chat>{x.userName} : {x.content}</Chat>)
+                    <MyChatContainer><MyChat>{x.content}</MyChat></MyChatContainer> : 
+                    <div><Chat>{x.userName} : {x.content}</Chat></div>)
                  : <div></div>}
             </ChatList>
         </ChatArea>
