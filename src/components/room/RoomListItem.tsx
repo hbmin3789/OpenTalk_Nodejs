@@ -23,6 +23,7 @@ const CardBackground = styled.div`
     border-color: #aaaaaa;
     border-radius: 5px;
     border-style: solid;
+    overflow: hidden;
 `;
 
 const TagList = styled.div`
