@@ -13,7 +13,7 @@ type Props = {
 const ChatArea = styled.div`
   display: flex;
   flex-direction: column-reverse;
-  width: 30%;
+  width: 30rem;
   background-color: #ededed;
 `;
 
@@ -99,6 +99,7 @@ export const ChatControl = ({room}: Props) => {
     let ChatListRef = React.useRef<HTMLUListElement>(null);
 
     const OnSendChat = () => {
+        
         if(content === ""){
             return;
         }
@@ -108,10 +109,12 @@ export const ChatControl = ({room}: Props) => {
         chat.userName = Container.curUser.getUserName();
         chat.roomID = room.roomID;
 
-        Container.socket.send(JSON.stringify({
+        let data = JSON.stringify({
             message: "chat",
             data: chat
-        }));
+        });
+
+        Container.socket.send(data);
 
         if(ChatInputRef.current)
             ChatInputRef.current.value = "";
@@ -123,10 +126,6 @@ export const ChatControl = ({room}: Props) => {
             OnSendChat();
         }
     };
-
-    setSocketEvent('chatItems', (data) => {
-
-    });
 
     setSocketEvent('chat', (data) => {
         console.log(data);

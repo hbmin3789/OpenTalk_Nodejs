@@ -12,6 +12,7 @@ type Props = {
 };
 
 const ListItemBackground = styled.div`
+    margin: 1rem;
     display: inline-block;
 `;
 
