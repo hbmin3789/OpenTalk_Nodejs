@@ -13,7 +13,7 @@ type Props = {
 //#region 
 
 const Background = styled.div`
-    position: fixed;
+    position: absolute;
     background-color: rgba(0,0,0,0.5);
     width: 100%;
     height: 100%;

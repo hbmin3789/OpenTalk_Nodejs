@@ -114,7 +114,6 @@ export const RoomList = () => {
                 return;
             }
             addUserList(x.userID);
-            Call(x.userID);
         })
 
         console.log(data.data);

@@ -8,21 +8,11 @@ import RoomCreate from './room/RoomCreate';
 
 export const Main = () => {
 
-    var [isMobile, setIsMobile] = React.useState<boolean>(false);
-
-    useEffect(() => {
-        if(window.innerWidth < 1000){
-            setIsMobile(true);
-            return;
-        }
-        setIsMobile(false);
-    });
-
     return(
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={RoomList} />
-                <Route path="/SignIn" render={() => <SignIn isMobile={isMobile}></SignIn>} />
+                <Route path="/SignIn" render={() => <SignIn isMobile={false}></SignIn>} />
                 <Route path="/CreateRoom" component={RoomCreate}></Route>
             </Switch>
         </BrowserRouter>

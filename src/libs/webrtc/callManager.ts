@@ -109,7 +109,6 @@ export const InitCallManager = async () => {
             console.log("setDescription : remote");
 
             if(!connectedPeers.get(data.callee)){
-                console.log("*****start response*****");
                 connectedPeers.set(data.callee, pc);
                 Call(data.callee);
             }
@@ -160,8 +159,9 @@ export async function Call(userID: string) {
     console.log("offer to :" + userID);
 
     let pc = peers.get(userID);
+    
     if(pc) {
-        
+        console.log(pc);
         let offer = await pc.createOffer(offerOptions);
         if(pc){
             await pc.setLocalDescription(offer);
@@ -201,10 +201,8 @@ export const userLeave = (userID: string) => {
     console.log("user leave : " + userID);
     
     let peer = peers.get(userID);
-    if(peer){
-        peer.onicecandidate = null;
-        peer.ontrack = null;
-    }
+    if(peer)
+        peer.close();
     peers.delete(userID);
     connectedPeers.delete(userID);
     videoList.delete(userID);
@@ -222,7 +220,6 @@ const setPeerEventListener = (userID: string, pc: RTCPeerConnection) => {
     addIceCandidatePC(userID, pc);
 
     pc.addEventListener('message', async (message: any) => {
-        console.log(JSON.stringify(message));
         var message = JSON.parse(message);
         if (message.iceCandidate) {
             try {
