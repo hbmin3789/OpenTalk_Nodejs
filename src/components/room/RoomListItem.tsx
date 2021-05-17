@@ -15,6 +15,9 @@ type Props = {
 };
 
 const ListItemBackground = styled.div`
+    @media screen and (max-width: ${ResponseWidth}px){
+        width: 10rem;
+    }
     margin: 1rem;
     width: 20%;
     height: 10rem;

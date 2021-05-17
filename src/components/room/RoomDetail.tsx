@@ -134,6 +134,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             var user = resp.data as User;
             room.userList.push(user);
             addUserList(resp.data.userID);
+            Call(resp.data.userID);
         }
     });
 
