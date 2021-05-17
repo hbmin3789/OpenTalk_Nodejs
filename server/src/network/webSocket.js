@@ -62,7 +62,9 @@ const InitWebSocket = (server) => {
         SocketEvents["chat"] = (ws, data) => {
             var curRoom = room.getRoomList().find(x=>x.roomID === data.data.roomID);
             curRoom.userList.forEach(u=>{
-                findSocket(u.userID).socket.send(JSON.stringify(data));
+                let socketItem = findSocket(u.userID);
+                if(socketItem)
+                    socketItem.socket.send(JSON.stringify(data));
             });
         }
         
