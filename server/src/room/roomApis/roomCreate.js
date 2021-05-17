@@ -5,12 +5,6 @@ const createRoomApi = (ws, data) => {
 
     console.log(data.userID + 'createRoom request');
     console.log(data);
-    
-    //요청자가 이미 방을 만들었다면
-    if(isAdmin(data.userID)){
-        console.log(data.userID + "createRoomEnded : createdRoomAlready");
-        return;
-    }
 
     //방 생성
     var newRoom = createRoom(data.userID,data.roomName,data.password,data.tags);

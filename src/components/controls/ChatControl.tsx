@@ -128,12 +128,8 @@ export const ChatControl = ({room}: Props) => {
     };
 
     setSocketEvent('chat', (data) => {
-        console.log(data);
         setChatList([...chatList, data.data as ChatItem]);
-        if(ChatListRef.current){
-            console.log(ChatListRef.current.scrollHeight);
-            console.log(ChatListRef.current.scrollTop);
-            
+        if(ChatListRef.current){            
             ChatListRef.current.scrollTo(0, ChatListRef.current.scrollHeight);
         }
     });
