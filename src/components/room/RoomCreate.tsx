@@ -12,15 +12,15 @@ const Background = styled.div`
     background-color: #dddddd;
 `;
 
-const Title = styled.div`
-    font-size: 4rem;
-    color: black;
-    text-align: center;
-    margin-top: 3rem;
-`;
-
+const ResponseWidth = 1000;
 
 const CreateArea = styled.div`
+    @media screen and (max-width: ${ResponseWidth}px){
+        height: 100%;
+        width: 90%;
+        border-radius: 0;
+        margin: 0;
+    }
     margin-left: auto;
     margin-right: auto;    
     transition: 0.3s;
@@ -56,6 +56,10 @@ const ButtonArea = styled.div`
 `;
 
 const CancelButton = styled.button` 
+    @media screen and (max-width: ${ResponseWidth}px){
+        width: auto;
+        padding: 0.3rem 1rem;
+    }
     position: absolute;
     background-color: #666666;
     color: #dddddd;
@@ -72,6 +76,10 @@ const CancelButton = styled.button`
 `;
 
 const ApplyButton = styled.button`
+    @media screen and (max-width: ${ResponseWidth}px){
+        width: auto;
+        padding: 0.3rem 1rem;
+    }
     position: absolute;
     background-color: #666666;
     color: #dddddd;
