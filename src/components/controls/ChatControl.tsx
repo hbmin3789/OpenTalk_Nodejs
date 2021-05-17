@@ -10,7 +10,14 @@ type Props = {
     room: RoomInfo;
 }
 
+const ResponseWidth = 1000;
+const MobileWidth = 500;
+
 const ChatArea = styled.div`
+  @media screen and (max-width: ${ResponseWidth}px){
+    height: 20rem;
+    width: 100%;
+  }
   display: flex;
   flex-direction: column-reverse;
   width: 30rem;
@@ -18,6 +25,9 @@ const ChatArea = styled.div`
 `;
 
 const ChatList = styled.ul`
+  @media screen and (max-width: ${ResponseWidth}px){
+    height: 10rem;
+  }
   margin: 1rem;
   list-style: none;
   margin-bottom: 0;
@@ -35,6 +45,9 @@ const ChatInputArea = styled.div`
 `;
 
 const SendButton = styled.button`
+  @media screen and (max-width: ${ResponseWidth}px){
+    min-width: 2rem;
+  }
   align-self: center;
   width: 3rem;
   height: 3rem;
@@ -58,6 +71,10 @@ const SendButtonImage = styled.img`
 `;
 
 const ChatInput = styled.input`
+  @media screen and (max-width: ${ResponseWidth}px){
+    font-size: 1rem;
+    min-width: 0;
+  }
   padding: 1rem;
   font-size: 1.5rem;
   border: none;
@@ -145,7 +162,7 @@ export const ChatControl = ({room}: Props) => {
                     setContent(e.target.value);
                 }}></ChatInput>
                 <SendButton onClick={OnSendChat}>
-                    <SendButtonImage src={sendIcon}></SendButtonImage>
+                    전송
                 </SendButton>
             </ChatInputArea>
             <ChatList ref={ChatListRef}>

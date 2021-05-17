@@ -5,6 +5,9 @@ import { setSocketEvent } from '../../libs/network/websocketEvents';
 import Container from '../../libs/common/container';
 import TagItem from '../controls/TagItem';
 
+const ResponseWidth = 1000;
+const MobileWidth = 500;
+
 type Props = {
     children?: ReactNode;
     roomInfo: RoomInfo;
@@ -14,7 +17,7 @@ type Props = {
 const ListItemBackground = styled.div`
     margin: 1rem;
     width: 20%;
-    height: 10%;
+    height: 10rem;
     display: inline-block;
 `;
 
