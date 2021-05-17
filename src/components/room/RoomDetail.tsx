@@ -118,11 +118,22 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
 
     setSocketEvent('userEnter', (resp)=>{
         if(resp.data.userID !== Container.curUser.getUserID()){
+            let videos = GetRemoteVideos();
+            let stream = videos.get(resp.data.userID);
+            let userName = resp.data.userName
+
+            if(stream && userName){
+                let videoItem = {
+                    stream: stream,
+                    userID: resp.data.userID,
+                    userName: userName.userName
+                };
+
+                setVideoList(old=>[...old, videoItem]);
+            }
             var user = resp.data as User;
             room.userList.push(user);
-
             addUserList(resp.data.userID);
-            Call(resp.data.userID);
         }
     });
 
