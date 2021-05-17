@@ -4,6 +4,8 @@ import Font from './fonts/font';
 import {InitCallManager} from './libs/webrtc/callManager';
 import {InitGetUser} from './libs/user/userList';
 import GlobalFont from './fonts/font';
+
+
 export const App = () => {
   InitCallManager();
   InitGetUser();

@@ -40,10 +40,7 @@ const DeleteButton = styled.button`
     }
 `;
 
-export const TagItem = ({deleteBtnVisible, children, onRemove}: Props) => {
-    let [toggled,setToggled] = React.useState<boolean>(false);
-
-    const ToggleButton = styled.div`
+const ToggleButton = styled.div`
     position: relative;
     display: inline-block;
     border-radius: 100px;
@@ -53,7 +50,7 @@ export const TagItem = ({deleteBtnVisible, children, onRemove}: Props) => {
     background-color: white;
     padding: 0.3rem 1.2rem;
     padding-bottom: 0.5rem;
-    padding-left: ${(deleteBtnVisible) ? "0.6rem" : "1rem"};
+    padding-left: 1rem;
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
     animation-duration: 100ms;
@@ -64,6 +61,11 @@ export const TagItem = ({deleteBtnVisible, children, onRemove}: Props) => {
         animation-fill-mode: forwards;
     }
 `;
+
+export const TagItem = ({deleteBtnVisible, children, onRemove}: Props) => {
+    let [toggled,setToggled] = React.useState<boolean>(false);
+
+    
 
     return(
         <ToggleButton>

@@ -228,6 +228,22 @@ export const RoomList = () => {
         history.push('CreateRoom');
     }
 
+    window.onpopstate = (event: PopStateEvent) => {
+        onQuitBtnPressed();
+        window.history.go(1);
+    }
+
+    React.useEffect(()=>{
+        try{
+            Container.socket.send(JSON.stringify({
+                message: "getRoomList"
+            }));
+        }
+        catch{
+
+        }
+    },[]);
+
     return (
         <div>
             {selectedRoom ? 

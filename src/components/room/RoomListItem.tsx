@@ -75,7 +75,7 @@ export const RoomListItem  = ({roomInfo, onclick}: Props) => {
             <CardBackground>
                 <TagList>
                 {(roomInfo.tags.length < 1) ? <TagEmpty>태그가 없습니다.</TagEmpty> : 
-                roomInfo.tags.map(x=><TagItem deleteBtnVisible={false} 
+                roomInfo.tags.map(x=><TagItem key={x} deleteBtnVisible={false} 
                     children={x}></TagItem>)}
                 </TagList>
             </CardBackground>
