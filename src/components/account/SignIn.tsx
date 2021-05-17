@@ -91,6 +91,7 @@ const UserNameInput = styled.input`
 
 const ConfirmButton = styled.button`
     @media screen and (max-width: ${ResponseWidth}px){
+        width: 10rem;
         font-size: 1rem;
         margin-left: 10px;   
     }
