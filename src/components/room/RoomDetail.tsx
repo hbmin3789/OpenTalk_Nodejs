@@ -7,7 +7,8 @@ import {setVideoEvent,
         userLeave,
         addUserList,
         getLocalStream, 
-        GetRemoteVideos} from '../../libs/webrtc/callManager';
+        GetRemoteVideos,
+        Call} from '../../libs/webrtc/callManager';
 import Video from './Video';
 import ChatControl from '../controls/ChatControl';
 import getUserList from '../../libs/user/userList';
@@ -133,6 +134,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             var user = resp.data as User;
             room.userList.push(user);
             addUserList(resp.data.userID);
+            Call(resp.data.userID);
         }
     });
 
