@@ -8,7 +8,12 @@ import {Link, useHistory} from 'react-router-dom';
 import Container from '../../libs/common/container';
 
 
+const ResponseWidth = 1000;
+
 const UserNameArea = styled.div`
+    @media screen and (max-width: ${ResponseWidth}px){
+        font-size: 0.5rem;
+    }
     display: flex;
     margin-top: 4%;
     justify-content: center;
@@ -54,15 +59,25 @@ const TitleArea = styled.div`
 `;
 
 const Title = styled.a`
+    @media screen and (max-width: ${ResponseWidth}px){
+        font-size: 2rem;
+    }
     font-size: ${FontSizes.titleFontSize}rem;
 `;
 
 const SubTitle = styled.a`
+    @media screen and (max-width: ${ResponseWidth}px){
+        font-size: 1.5rem;
+    }
     font-size: ${FontSizes.subTitleFontSize}rem;
     display:  block;
 `;
 
 const UserNameInput = styled.input`
+    @media screen and (max-width: ${ResponseWidth}px){
+        font-size: 1rem;
+        border: 0.5rem solid white;
+    }
     border: 1rem solid white;
     border-radius: 10px;
     font-size: ${FontSizes.subTitleFontSize}rem;
@@ -75,6 +90,10 @@ const UserNameInput = styled.input`
 `;
 
 const ConfirmButton = styled.button`
+    @media screen and (max-width: ${ResponseWidth}px){
+        font-size: 1rem;
+        margin-left: 10px;   
+    }
     margin-left: 20px;        
     border-radius: 10px;
     border: 0px;
