@@ -21,7 +21,13 @@ type Props = {
 
 //#region styles
 
+const ResponseWidth = 1000;
+const MobileWidth = 500;
+
 const Background = styled.div`
+  @media screen and (max-width: ${ResponseWidth}px){
+    flex-direction: column;
+  }
   position: absolute;
   width: 100%;
   height: 100%;
@@ -39,12 +45,19 @@ const Header = styled.div`
 `;
 
 const Title = styled.div`  
+  @media screen and (max-width: ${ResponseWidth}px){
+    font-size: 1rem;
+  }
   margin: 2rem;
   font-size: 3rem;
   flex-grow: 1;
 `;
 
 const QuitButton = styled.button`
+  @media screen and (max-width: ${ResponseWidth}px){
+    font-size: 0.8rem;
+    margin: 1rem;
+  }
   margin: 2rem;
   font-size: 1.5rem;
   height: 3rem;
@@ -111,7 +124,6 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             addUserList(resp.data.userID);
             Call(resp.data.userID);
         }
-        console.log("enter");
     });
 
     setVideoEvent(() => {
@@ -135,7 +147,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             <ContentArea>
                 <Header>
                     <Title>
-                        {room.roomName}
+                        {room.roomName}님의방
                     </Title>
                     <QuitButton onClick={()=>{
                         setVideoList(new Array<VideoItem>());
