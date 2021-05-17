@@ -159,7 +159,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             <ContentArea>
                 <Header>
                     <Title>
-                        {room.roomName}님의방
+                        {room.userList.find(x=>x.userID === room.adminID)?.userName}님의방
                     </Title>
                     <QuitButton onClick={()=>{
                         setVideoList(new Array<VideoItem>());
