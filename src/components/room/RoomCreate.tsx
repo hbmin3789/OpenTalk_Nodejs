@@ -15,25 +15,24 @@ const Background = styled.div`
 const ResponseWidth = 1000;
 
 const CreateArea = styled.div`
-    @media screen and (max-width: ${ResponseWidth}px){
-        height: 100%;
-        width: 90%;
-        border-radius: 0;
-        margin: 0;
+    @media screen and (min-width: ${ResponseWidth}px){
+        margin-left: auto;
+        margin-right: auto;    
+        transition: 0.3s;
+        width: 20rem;
+        height: auto;
+        padding: 2rem;
+        padding-top: 1rem;
+        margin-top: 5rem;
+        background-color: white;
+        border-radius: 10px;
+        &:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
     }
-    margin-left: auto;
-    margin-right: auto;    
-    transition: 0.3s;
-    width: 20rem;
-    height: auto;
-    padding: 2rem;
-    padding-top: 1rem;
-    margin-top: 5rem;
+    padding: 1rem;
     background-color: white;
-    border-radius: 10px;
-    &:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
+    height: 100%;
 `;
 
 const InputArea = styled.div`
@@ -158,7 +157,6 @@ export const RoomCreate = () => {
                     </Description>
                     <Area>
                         <TagInput getTagList={(arr)=>{                            
-                            console.log(arr);
                             tagList = arr;
                         }}></TagInput>
                     </Area>

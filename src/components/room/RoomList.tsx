@@ -14,6 +14,9 @@ import RoomTag from '../../libs/room/roomTag';
 
 //#region styles
 
+const ResponseWidth = 1000;
+const MobileWidth = 500;
+
 const Background = styled.div`
     position: absolute;  
     display: block;
@@ -23,9 +26,6 @@ const Background = styled.div`
     top: 0%;
     text-align: left;
     align-items: flex-start;
-`;
-
-const RoomArea = styled.div`
 `;
 
 const RoomListView = styled.ul`
@@ -44,18 +44,38 @@ const Header = styled.div`
 `;
 
 const SearchBox = styled.input`    
+    @media screen and (max-width: ${ResponseWidth}px){
+        margin-top: 1.3rem;
+        font-size: 1rem;
+    }
+    @media screen and (max-width: ${MobileWidth}px){
+        margin-top: 1.5rem;
+        font-size: 0.8rem;
+        width: 30%; 
+    }
+    position: absolute;
+    left: 50%;
     margin-top: 1rem;
     font-size: 1.3rem;
     padding: 0.5rem 1rem;
     border-color: #dddddd;
     border-style: solid;
     border-radius: 2rem;
+    transform: translate(-50%,0);
     &:focus{
         outline: none;
     }
 `;
 
 const UserName = styled.div`
+    @media screen and (max-width: ${ResponseWidth}px){
+        margin-top: 1.3rem;
+        font-size: 1.5rem;
+    }
+    @media screen and (max-width: ${MobileWidth}px){
+        margin-top: 1.5rem;
+        font-size: 1.3rem;
+    }
     position: absolute;
     top: 0;
     right: 0;
@@ -64,6 +84,14 @@ const UserName = styled.div`
 `;
 
 const RoomCreateButton = styled.button`
+    @media screen and (max-width: ${ResponseWidth}px){
+        margin-top: 0.3rem;
+        font-size: 1rem;
+    }
+    @media screen and (max-width: ${MobileWidth}px){
+        margin-top: 0.4rem;
+        font-size: 0.9rem;
+    }
     position: absolute;
     top: 1rem;
     left: 1rem;

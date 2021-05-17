@@ -50,7 +50,6 @@ type Props = {
 export const TagInput = ({getTagList}: Props) => {
     let [tagList, setTagList] = React.useState<Array<string>>(new Array<string>());
     let [tagInputString, setTagInputString] = React.useState<string>("");
-    let setTagInput: {func: any} = {func: ""};
 
     const onAddTag = () => {
         if(tagInputString === ""){
@@ -63,8 +62,6 @@ export const TagInput = ({getTagList}: Props) => {
 
         setTagList([...tagList, tagInputString]);
         setTagInputString("");
-        console.log(setTagInput);
-        setTagInput.func("");
     }
 
     useEffect(()=>{
@@ -80,7 +77,7 @@ export const TagInput = ({getTagList}: Props) => {
     return (
         <Container>
             <TagInputArea>
-                <InputBox setValue={setTagInput} onChange={e=>{
+                <InputBox onChange={e=>{
                     if(e.target.value.length >= 13){
                         e.target.value = e.target.value.slice(0,12);
                     }
