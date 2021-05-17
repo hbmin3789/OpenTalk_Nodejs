@@ -14,7 +14,6 @@ export class container{
         this.curUser = new UserInfo();
 
         this.socket.onmessage = (ev) => {
-            console.log('message from server : ' + ev.data);
             WebSocketEvents(ev.data);
         }
 

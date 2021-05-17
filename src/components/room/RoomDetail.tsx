@@ -139,6 +139,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     });
 
     setVideoEvent(() => {
+        console.log('received remote stream');
         let newList = new Array<VideoItem>();
         let videos = GetRemoteVideos();
         let userList = room.userList;
@@ -147,6 +148,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             if(stream)
                 newList.push({ stream: stream, userName: u.userName, userID: u.userID });
         });
+        console.log(videos);
+        console.log(userList);
         
         setVideoList(newList);
     });
