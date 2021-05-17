@@ -119,7 +119,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         if(resp.data.userID !== Container.curUser.getUserID()){
             let videos = GetRemoteVideos();
             let stream = videos.get(resp.data.userID);
-            let userName = getUserList().find(x=>x.userID === resp.data.userID);
+            let userName = resp.data.userName
 
             if(stream && userName){
                 let videoItem = {
@@ -139,7 +139,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     setVideoEvent(() => {
         let newList = new Array<VideoItem>();
         let videos = GetRemoteVideos();
-        let userList = getUserList();
+        let userList = room.userList;
         userList.forEach(u=>{
             let stream = videos.get(u.userID);
             if(stream)
