@@ -13,12 +13,14 @@ type Props = {
 
 const ListItemBackground = styled.div`
     margin: 1rem;
+    width: 20%;
+    height: 10%;
     display: inline-block;
 `;
 
 const CardBackground = styled.div`
-    width: 20rem;
-    height: 15rem;  
+    width: 100%;
+    height: 100%;  
     background-color: #ffffff;
     border-width: 1px;
     border-color: #aaaaaa;
@@ -28,6 +30,7 @@ const CardBackground = styled.div`
 `;
 
 const TagList = styled.div`
+    position: relative;
     padding: 1rem;
     height: 100%;
 `;
@@ -44,7 +47,8 @@ const AdminName = styled.div`
 const TagEmpty = styled.div`
     font-size: 1rem;
     text-align: center;
-    margin-top: 6rem;
+    margin-top: 30%;
+    transform: translate(0,-50%);
 `;
 
 

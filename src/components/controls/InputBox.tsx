@@ -66,11 +66,18 @@ export const InputBox = ({children, onChange, setValue}:Props) => {
     let InputFrameRef = React.useRef<HTMLDivElement>(null);
     let InputRef = React.useRef<HTMLInputElement>(null);
     if(setValue)
-    setValue.func = (str: string) => {        
-        if(InputRef.current)
-            InputRef.current.value = str;
-    };
+        setValue.func = (str: string) => {        
+            if(InputRef.current)
+                InputRef.current.value = str;
+        };
     
+    window.addEventListener('keyup',(e)=>{
+        if(e.key === "Enter"){
+            if(InputRef.current)
+                InputRef.current.value = "";
+        }
+    });
+
     React.useEffect(()=>{
         if(InputRef.current){
             let input = InputRef.current;
@@ -81,9 +88,6 @@ export const InputBox = ({children, onChange, setValue}:Props) => {
                 if(InputRef.current?.value.length === 0)
                     InputFrameRef.current?.classList.remove("focus");
             }
-        }
-        if(InputFrameRef.current){
-
         }
     });
 

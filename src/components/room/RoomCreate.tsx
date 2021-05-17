@@ -12,28 +12,27 @@ const Background = styled.div`
     background-color: #dddddd;
 `;
 
-const Title = styled.div`
-    font-size: 4rem;
-    color: black;
-    text-align: center;
-    margin-top: 3rem;
-`;
-
+const ResponseWidth = 1000;
 
 const CreateArea = styled.div`
-    margin-left: auto;
-    margin-right: auto;    
-    transition: 0.3s;
-    width: 20rem;
-    height: auto;
-    padding: 2rem;
-    padding-top: 1rem;
-    margin-top: 5rem;
-    background-color: white;
-    border-radius: 10px;
-    &:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    @media screen and (min-width: ${ResponseWidth}px){
+        margin-left: auto;
+        margin-right: auto;    
+        transition: 0.3s;
+        width: 20rem;
+        height: auto;
+        padding: 2rem;
+        padding-top: 1rem;
+        margin-top: 5rem;
+        background-color: white;
+        border-radius: 10px;
+        &:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
     }
+    padding: 1rem;
+    background-color: white;
+    height: 100%;
 `;
 
 const InputArea = styled.div`
@@ -56,6 +55,10 @@ const ButtonArea = styled.div`
 `;
 
 const CancelButton = styled.button` 
+    @media screen and (max-width: ${ResponseWidth}px){
+        width: auto;
+        padding: 0.3rem 1rem;
+    }
     position: absolute;
     background-color: #666666;
     color: #dddddd;
@@ -72,6 +75,10 @@ const CancelButton = styled.button`
 `;
 
 const ApplyButton = styled.button`
+    @media screen and (max-width: ${ResponseWidth}px){
+        width: auto;
+        padding: 0.3rem 1rem;
+    }
     position: absolute;
     background-color: #666666;
     color: #dddddd;
@@ -150,7 +157,6 @@ export const RoomCreate = () => {
                     </Description>
                     <Area>
                         <TagInput getTagList={(arr)=>{                            
-                            console.log(arr);
                             tagList = arr;
                         }}></TagInput>
                     </Area>
