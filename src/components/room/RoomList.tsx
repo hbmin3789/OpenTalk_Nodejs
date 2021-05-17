@@ -218,12 +218,12 @@ export const RoomList = () => {
                         onRoomClicked(x);
                     }} roomInfo={x}></RoomListItem>)}
                 </RoomListView>
-            <MessageBox setDisplay={setDisplayMessage} display={displayMessage} message={messageBoxContent}></MessageBox>
-            <PasswordMessage confirm={(room, password)=>enterRoom(room, password)} 
-                            cancel={()=>setDisplayPassword(false)}
-                            room={passwordRoom}
-                            display={displayPassword}></PasswordMessage>
-            <UserName>{Container.curUser.getUserName()}</UserName>
+                <MessageBox setDisplay={setDisplayMessage} display={displayMessage} message={messageBoxContent}></MessageBox>
+                <PasswordMessage confirm={(room, password)=>enterRoom(room, password)} 
+                                cancel={()=>setDisplayPassword(false)}
+                                room={passwordRoom}
+                                display={displayPassword}></PasswordMessage>
+                <UserName>{Container.curUser.getUserName()}</UserName>
             </Background>
             
             }

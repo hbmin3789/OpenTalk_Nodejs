@@ -185,8 +185,7 @@ export const addUserList = (userID: string) => {
     if(!peers.get(userID)){
         let newPC = new RTCPeerConnection(configuration);
         peers.set(userID, newPC);
-        localStream.getTracks().forEach(s=>newPC.addTrack(s, localStream));
-        //videoRefMap.set(userID, new HTMLVideoElement());
+        localStream.getTracks().forEach(s=>newPC.addTrack(s, localStream));        
         setPeerEventListener(userID, newPC);
     } else {
 
@@ -231,7 +230,6 @@ const setPeerEventListener = (userID: string, pc: RTCPeerConnection) => {
     });
 
     pc.ontrack = e => {
-        console.log('received remote stream');
         if(!videoList.get(userID))
             videoList.set(userID, e.streams[0]);
         OnRemoteVideoAdded(userID, e.streams[0]);
