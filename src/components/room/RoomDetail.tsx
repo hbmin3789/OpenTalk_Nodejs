@@ -114,6 +114,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         var newList = videoList?.filter(x=>x.userID !== resp.userID);
         setVideoList(newList);
         userLeave(resp.userID);
+        room.userList = room.userList.filter(x=>x.userID !== resp.userID);
     });
 
     setSocketEvent('userEnter', (resp)=>{
@@ -143,10 +144,10 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         let newList = new Array<VideoItem>();
         let videos = GetRemoteVideos();
         let userList = room.userList;
-        userList.forEach(u=>{
-            let stream = videos.get(u.userID);
-            if(stream)
-                newList.push({ stream: stream, userName: u.userName, userID: u.userID });
+        videos.forEach((stream, userID, map)=>{
+          let user = room.userList.find(x=>x.userID === userID);
+            if(stream && user)
+                newList.push({ stream: stream, userName: user.userName, userID: userID });
         });
         console.log(videos);
         console.log(userList);
@@ -159,7 +160,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             <ContentArea>
                 <Header>
                     <Title>
-                        {room.userList.find(x=>x.userID === room.adminID)?.userName}님의방
+                        {room.roomName}
                     </Title>
                     <QuitButton onClick={()=>{
                         setVideoList(new Array<VideoItem>());
