@@ -60,7 +60,10 @@ const enterRoom = (userID, roomID, password) => {
     if(room){
         var user = room.userList.find(x=>x.userID === userID);
         if(!user){
-            room.userList.push(getUser(userID));
+            let user = getUser(userID);
+            if(!user)
+                return undefined;
+            room.userList.push();
             return room;
         }
     }
