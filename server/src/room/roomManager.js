@@ -63,7 +63,7 @@ const enterRoom = (userID, roomID, password) => {
             let user = getUser(userID);
             if(!user)
                 return undefined;
-            room.userList.push();
+            room.userList.push(user);
             return room;
         }
     }
