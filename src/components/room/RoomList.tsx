@@ -216,7 +216,8 @@ export const RoomList = () => {
             message: 'quitRoom',
             data: {
                 userID: Container.curUser.getUserID(),
-                roomID: selectedRoom?.roomID
+                roomID: selectedRoom?.roomID,
+                userName: Container.curUser.getUserName(),
             }
         }));
 

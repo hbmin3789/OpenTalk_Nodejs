@@ -8,6 +8,7 @@ import sendIcon from '../../assets/send.png';
 
 type Props = {
     room: RoomInfo;
+    onUserEnter: any;
 }
 
 const ResponseWidth = 1000;
@@ -109,11 +110,35 @@ const MyChatContainer = styled.div`
     text-align: right;
 `;
 
-export const ChatControl = ({room}: Props) => {
+const UserEnterChat = styled.div`
+    display: block;
+    text-align: center;
+    padding: 0.5rem 1.5rem;
+    margin: 1rem;
+    font-size: 1.5rem;
+    border-radius: 1rem 1rem 1rem 0rem;
+`;
+
+export const ChatControl = ({onUserEnter, room}: Props) => {
     let [content, setContent] = React.useState<string>("");
     let [chatList, setChatList] = React.useState<Array<ChatItem>>(new Array<ChatItem>());
     let ChatInputRef = React.useRef<HTMLInputElement>(null);
     let ChatListRef = React.useRef<HTMLUListElement>(null);
+
+    onUserEnter.userEnter = (userName: string) => {      
+        let newChat = new ChatItem();
+        newChat.content = userName + "님이 입장하셨습니다.";
+        newChat.userID = "";
+        setChatList([...chatList,newChat]);
+    };
+
+    onUserEnter.userLeave = (userName: string) => {      
+      let newChat = new ChatItem();
+      newChat.content = userName + "님이 퇴장하셨습니다.";
+      newChat.userID = "";
+      setChatList([...chatList,newChat]);
+  };
+    
 
     const OnSendChat = () => {
         
@@ -165,7 +190,9 @@ export const ChatControl = ({room}: Props) => {
                 {chatList ? chatList.map(x=>
                 (x.userID === Container.curUser.getUserID()) ?
                     <MyChatContainer><MyChat>{x.content}</MyChat></MyChatContainer> : 
-                    <div><Chat>{x.userName} : {x.content}</Chat></div>)
+                    (x.userID === "") ? 
+                      <div><UserEnterChat>{x.content}</UserEnterChat></div> : 
+                      <div><Chat>{x.userName} : {x.content}</Chat></div>)
                  : <div></div>}
             </ChatList>
         </ChatArea>

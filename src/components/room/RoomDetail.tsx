@@ -104,6 +104,10 @@ const MyVideoArea = styled.div`
 export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var [videoList, setVideoList] = React.useState<Array<VideoItem>>(new Array<VideoItem>());
+    let onUserEnter: {
+      userEnter: any,
+      userLeave: any,
+    } = {userEnter: ()=>{}, userLeave: () => {}};
 
     useEffect(()=>{
         if(localVideoRef.current)
@@ -115,6 +119,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         setVideoList(newList);
         userLeave(resp.userID);
         room.userList = room.userList.filter(x=>x.userID !== resp.userID);
+        if(onUserEnter.userEnter)
+              onUserEnter.userLeave(resp.userName);
     });
 
     setSocketEvent('userEnter', (resp)=>{
@@ -136,6 +142,9 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             room.userList.push(user);
             addUserList(resp.data.userID);
             Call(resp.data.userID);
+            
+            if(onUserEnter.userEnter)
+              onUserEnter.userEnter(resp.data.userName);
         }
     });
 
@@ -172,7 +181,7 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
                     {videoList?.map((x,idx)=><Video idx={idx} item={x}></Video>)}
                 </VideoArea>
             </ContentArea>
-            <ChatControl room={room}></ChatControl>
+            <ChatControl onUserEnter={onUserEnter} room={room}></ChatControl>
         </Background>
     );
 }
