@@ -125,12 +125,19 @@ export const ChatControl = ({onUserEnter, room}: Props) => {
     let ChatInputRef = React.useRef<HTMLInputElement>(null);
     let ChatListRef = React.useRef<HTMLUListElement>(null);
 
-    onUserEnter.func = (userName: string) => {      
+    onUserEnter.userEnter = (userName: string) => {      
         let newChat = new ChatItem();
         newChat.content = userName + "님이 입장하셨습니다.";
         newChat.userID = "";
         setChatList([...chatList,newChat]);
     };
+
+    onUserEnter.userLeave = (userName: string) => {      
+      let newChat = new ChatItem();
+      newChat.content = userName + "님이 퇴장하셨습니다.";
+      newChat.userID = "";
+      setChatList([...chatList,newChat]);
+  };
     
 
     const OnSendChat = () => {

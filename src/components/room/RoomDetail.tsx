@@ -105,8 +105,9 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
     var localVideoRef = React.useRef<HTMLVideoElement>(null);
     var [videoList, setVideoList] = React.useState<Array<VideoItem>>(new Array<VideoItem>());
     let onUserEnter: {
-      func: any,
-    } = {func: ()=>{}};
+      userEnter: any,
+      userLeave: any,
+    } = {userEnter: ()=>{}, userLeave: () => {}};
 
     useEffect(()=>{
         if(localVideoRef.current)
@@ -118,6 +119,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
         setVideoList(newList);
         userLeave(resp.userID);
         room.userList = room.userList.filter(x=>x.userID !== resp.userID);
+        if(onUserEnter.userEnter)
+              onUserEnter.userLeave(resp.userName);
     });
 
     setSocketEvent('userEnter', (resp)=>{
@@ -140,8 +143,8 @@ export const RoomDetail = ({room, OnQuitBtnPressed}: Props) => {
             addUserList(resp.data.userID);
             Call(resp.data.userID);
             
-            if(onUserEnter.func)
-              onUserEnter.func(resp.data.userName);
+            if(onUserEnter.userEnter)
+              onUserEnter.userEnter(resp.data.userName);
         }
     });
 

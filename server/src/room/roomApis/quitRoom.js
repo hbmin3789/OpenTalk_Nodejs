@@ -11,7 +11,8 @@ const quitRoomApi = (ws, data) => {
             var item = socketList.find(x=>x.userID === user.userID);
             item.socket.send(JSON.stringify({
                 message: 'userLeave',
-                userID: data.userID
+                userID: data.userID,
+                userName: data.userName
             }));
             console.log("userLeave : " + user.userID);
         });
