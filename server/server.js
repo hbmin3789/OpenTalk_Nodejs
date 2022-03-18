@@ -9,6 +9,7 @@ const https = require('https');
 
 app.use(cors());
 app.use('/api',api);
+app.use(express.static('build'))
 
 const options = {
   ca: fs.readFileSync(__dirname + '/cert/prescript.kro.kr_202105031X76.key.pem'),
